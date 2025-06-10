@@ -2,11 +2,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { ToastContainer } from 'react-toastify';
 import AccesLoginSchema, { LoginTypeAccess } from '../../zod/login.zod';
 import { LoginType } from '../../types';
 import ErrorMessage from '../../../shared/components/MessajeError';
 import axiosPost from '../../../shared/requests/basicRequests/post';
 import envs from '../../../configs/envs';
+import { errorAlert } from '../../../shared/alerts';
 
 function FormLogin() {
   const {
@@ -19,15 +21,11 @@ function FormLogin() {
   const { mutate, isPending } = useMutation({
     mutationFn: axiosPost,
     onSuccess: (data: any) => {
-      if (data.error) console.error('Error:', data);
-      else {
-        console.log('Login successful:', data);
-      }
+      if (data.error) errorAlert();
     },
   });
 
   const onSubimit: SubmitHandler<LoginType> = (data: LoginType) => {
-    console.log('Form submitted:', data);
     mutate({
       url: `${envs.API}/login`,
       data,
@@ -38,7 +36,8 @@ function FormLogin() {
   };
 
   return (
-    <div className="hero bg-base-200 min-h-screen">
+    <div className="hero bg-base-200 min-h-[90vh]">
+      <ToastContainer />
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold">Ecommerce Multi Shop</h1>
@@ -59,7 +58,6 @@ function FormLogin() {
                   placeholder="Email"
                   id="email"
                   aria-labelledby="email-label"
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('identifier')}
                 />
               </label>
@@ -72,7 +70,6 @@ function FormLogin() {
                   className="input"
                   placeholder="Contraseña"
                   id="password"
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...register('password')}
                 />
               </label>
@@ -86,7 +83,7 @@ function FormLogin() {
                 {isPending ? (
                   <span className="loading loading-spinner loading-sm" />
                 ) : (
-                  'Login'
+                  'Iniciar Sesión'
                 )}
               </button>
             </form>
