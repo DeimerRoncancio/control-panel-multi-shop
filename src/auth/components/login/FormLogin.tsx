@@ -1,14 +1,16 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
+import Cookies from 'js-cookie';
 import AccesLoginSchema, { LoginTypeAccess } from '../../zod/login.zod';
 import { LoginType } from '../../types';
 import ErrorMessage from '../../../shared/components/MessajeError';
 import axiosPost from '../../../shared/requests/basicRequests/post';
 import envs from '../../../configs/envs';
 import { errorAlert } from '../../../shared/alerts';
+import { Hora } from '../../helpers';
 
 function FormLogin() {
   const {
@@ -17,11 +19,16 @@ function FormLogin() {
     setValue,
     formState: { errors },
   } = useForm<LoginTypeAccess>({ resolver: zodResolver(AccesLoginSchema) });
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: axiosPost,
     onSuccess: (data: any) => {
       if (data.error) errorAlert();
+      else {
+        Cookies.set('accessToken', data.data.token, { expires: Hora });
+        navigate('/dashboard');
+      }
     },
   });
 
