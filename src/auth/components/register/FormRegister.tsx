@@ -1,43 +1,95 @@
-import { useState } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { useRef, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { GrFormView, GrFormViewHide } from 'react-icons/gr';
+import { zodResolver } from '@hookform/resolvers/zod';
+import RegisterSchema, { RegisterTypeAccess } from '../../zod/register.zod';
+import ErrorMessage from '../../../shared/components/MessajeError';
+import { createHandleChange } from '../../../shared/helpers/images';
+import { addRegisterType } from '../../helpers/register.helper';
 
-function FormRegister() {
+function FormRegister({
+  setFormData,
+  pending,
+}: {
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  pending: boolean;
+}) {
+  const file = useRef<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string>('');
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
+  const [errorFile, setErrorFile] = useState<boolean>(false);
+
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterTypeAccess>({
+    resolver: zodResolver(RegisterSchema),
+  });
+
+  const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => {
+    if (file.current === null) {
+      setErrorFile(true);
+    } else {
+      setErrorFile(false);
+    }
+
+    const formData = new FormData();
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { confirm_password, ...formValues } = data;
+    Object.entries(formValues).forEach(([key, value]) => {
+      formData.append(key, value.toString());
+    });
+    formData.append('admin', 'true');
+    if (file.current) {
+      formData.append('profileImage', file.current);
+    }
+    setFormData(formData);
+
+    addRegisterType.forEach((field) => {
+      setValue(field, '');
+    });
+  };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubimit)}>
       <div className="grid gap-6 mb-6 md:grid-cols-2">
         <div>
-          <label htmlFor="first_name" className="flex flex-col">
+          <label htmlFor="name" className="flex flex-col">
             <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Primer nombre
             </span>
             <input
               type="text"
-              id="first_name"
+              id="name"
               className="w-full p-2.5 input input-primary"
               placeholder="John"
-              required
+              {...register('name')}
             />
           </label>
+          <ErrorMessage errors={errors} fieldName="name" />
         </div>
         <div>
-          <label htmlFor="last_name" className="flex flex-col">
+          <label htmlFor="secondName" className="flex flex-col">
             <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Segundo nombre
             </span>
             <input
               type="text"
-              id="last_name"
+              id="secondName"
               className="w-full p-2.5 input input-primary"
               placeholder="Doe"
-              required
+              {...register('secondName')}
             />
           </label>
+          <ErrorMessage errors={errors} fieldName="secondName" />
         </div>
         <div>
-          <label htmlFor="lastname" className="flex flex-col">
+          <label htmlFor="lastnames" className="flex flex-col">
             <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Apellido
             </span>
@@ -45,25 +97,26 @@ function FormRegister() {
               type="text"
               id="company"
               className="w-full p-2.5 input input-primary"
-              placeholder="Flowbite"
-              required
+              placeholder="Sanchez Gavilan"
+              {...register('lastnames')}
             />
           </label>
+          <ErrorMessage errors={errors} fieldName="lastnames" />
         </div>
         <div>
-          <label htmlFor="phone" className="flex flex-col">
+          <label htmlFor="phoneNumber" className="flex flex-col">
             <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Numero de teléfono
             </span>
             <input
               type="tel"
-              id="phone"
+              id="phoneNumber"
               className="w-full p-2.5 input input-primary"
               placeholder="123-45-678"
-              pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-              required
+              {...register('phoneNumber')}
             />
           </label>
+          <ErrorMessage errors={errors} fieldName="phoneNumber" />
         </div>
       </div>
       <div className="mb-6">
@@ -75,12 +128,14 @@ function FormRegister() {
             <select
               defaultValue=""
               className="select select-primary w-full p-2.5"
+              {...register('gender')}
             >
               <option disabled>Selecciona Genero</option>
               <option value="male">Hombre</option>
-              <option value="fame">Mujer</option>
+              <option value="female">Mujer</option>
             </select>
           </label>
+          <ErrorMessage errors={errors} fieldName="gender" />
         </div>
       </div>
       <div className="mb-6">
@@ -93,9 +148,10 @@ function FormRegister() {
             id="email"
             className="w-full p-2.5 input input-primary"
             placeholder="john.doe@company.com"
-            required
+            {...register('email')}
           />
         </label>
+        <ErrorMessage errors={errors} fieldName="email" />
       </div>
       <div className="mb-6">
         <label htmlFor="password" className="flex flex-col">
@@ -108,7 +164,7 @@ function FormRegister() {
               id="password"
               className="w-[90%] p-2.5"
               placeholder="•••••••••"
-              required
+              {...register('password')}
             />
             <button
               className="w-[10%] z-10 flex items-center justify-end"
@@ -123,6 +179,7 @@ function FormRegister() {
             </button>
           </span>
         </label>
+        <ErrorMessage errors={errors} fieldName="password" />
       </div>
       <div className="mb-6">
         <label htmlFor="confirm_password" className="flex flex-col">
@@ -131,11 +188,11 @@ function FormRegister() {
           </span>
           <span className="w-full p-2.5 input input-primary flex">
             <input
-              type={viewPassword ? 'text' : 'password'}
-              id="password"
+              type={viewConfirmPassword ? 'text' : 'password'}
+              id="confirm_password"
               className="w-[90%] p-2.5"
               placeholder="•••••••••"
-              required
+              {...register('confirm_password')}
             />
             <button
               className="w-[10%] z-10 flex items-center justify-end"
@@ -150,12 +207,42 @@ function FormRegister() {
             </button>
           </span>
         </label>
+        <ErrorMessage errors={errors} fieldName="confirm_password" />
       </div>
+      <div className="mb-6">
+        <label className="bg-primary rounded-[5px] px-[7px] py-[13px] w-full flex justify-center items-center text-white font-medium text-md md:w-full">
+          Agregar Imagenes
+          <input
+            hidden
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => createHandleChange(e, setPreviewImage, file)}
+          />
+        </label>
+        {errorFile ? (
+          <span style={{ color: 'red' }}>La imagen es requerida</span>
+        ) : null}
+        {previewImage && (
+          <div className="w-full flex justify-center items-center mt-4">
+            <img
+              className="w-[100px] h-[100px] object-cover rounded-3xl"
+              src={previewImage}
+              alt=""
+            />
+          </div>
+        )}
+      </div>
+
       <button
         type="submit"
-        className="text-white focus:ring-4 text-sm w-full sm:w-auto px-5 py-2.5 btn btn-primary"
+        className="text-white text-sm w-[300px] sm:w-auto px-5 py-2.5 btn btn-primary"
       >
-        Submit
+        {pending ? (
+          <span className="loading loading-spinner loading-sm" />
+        ) : (
+          'Registrar'
+        )}
       </button>
     </form>
   );
