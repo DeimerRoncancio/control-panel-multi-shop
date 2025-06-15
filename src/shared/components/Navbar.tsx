@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 
 function Navbar() {
   return (
-    <div className="navbar bg-base-100 shadow-sm opacity-90">
+    <div className="navbar bg-base-100 shadow-sm opacity-90 border-b-2 border-gray-700">
       <div className="flex-1">
         <Link to="/dashboard" className="btn btn-ghost text-xl">
           Hola Emerson
