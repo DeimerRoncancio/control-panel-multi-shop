@@ -10,7 +10,7 @@ import ErrorMessage from '../../../shared/components/MessajeError';
 import axiosPost from '../../../shared/requests/basicRequests/post';
 import envs from '../../../configs/envs';
 import { errorAlert } from '../../../shared/alerts';
-import { Hora } from '../../helpers';
+import { HorasEnMilisegundos } from '../../helpers';
 
 function FormLogin() {
   const {
@@ -26,7 +26,9 @@ function FormLogin() {
     onSuccess: (data: any) => {
       if (data.error) errorAlert();
       else {
-        Cookies.set('accessToken', data.data.token, { expires: Hora });
+        Cookies.set('accessToken', data.data.token, {
+          expires: HorasEnMilisegundos,
+        });
         navigate('/dashboard');
       }
     },

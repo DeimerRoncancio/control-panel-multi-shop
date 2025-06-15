@@ -1,2 +1,2 @@
-const HorasEnMilisegundos = 1080000;
-export const Hora = new Date(Date.now() + HorasEnMilisegundos);
+export const HorasEnMilisegundos = 1080000;
+// const Hora = new Date(Date.now() + HorasEnMilisegundos);

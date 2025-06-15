@@ -1,4 +1,7 @@
 import { Link, useLocation } from 'react-router';
+import { FaHome, FaStore, FaUsers } from 'react-icons/fa';
+import { IoFolderSharp } from 'react-icons/io5';
+import { GiThreeKeys } from 'react-icons/gi';
 
 function Aside() {
   const location = useLocation();
@@ -12,32 +15,37 @@ function Aside() {
           <li className="w-full flex flex-col items-center">
             <Link
               to="/dashboard"
-              className={`flex items-center gap-2 rounded-xl px-4 py-4 text-sm w-[90%] ${location.pathname === '/dashboard' ? style : 'hover:bg-gray-800'} `}
+              className={`flex items-center gap-4 rounded-xl px-4 py-4 text-[16px] w-[90%] ${location.pathname === '/dashboard' ? style : 'hover:bg-gray-800'} `}
             >
+              <FaHome className="text-white" size={15} />
               <span className="text-white z-10 font-bold ">Inicio</span>
             </Link>
             <Link
               to="/products"
-              className={`flex items-center gap-2 rounded-xl px-4 py-4 text-sm w-[90%] ${location.pathname === '/products' ? style : 'hover:bg-gray-800'} `}
+              className={`flex items-center gap-4 rounded-xl px-4 py-4 text-[16px] w-[90%] ${location.pathname === '/products' ? style : 'hover:bg-gray-800'} `}
             >
+              <FaStore className="text-white" size={15} />
               <span className="text-white z-10 font-bold ">Productos</span>
             </Link>
             <Link
               to="/categories"
-              className={`flex items-center gap-2 rounded-xl px-4 py-4 text-sm w-[90%] ${location.pathname === '/categories' ? style : 'hover:bg-gray-800'} `}
+              className={`flex items-center gap-4 rounded-xl px-4 py-4 text-[16px] w-[90%] ${location.pathname === '/categories' ? style : 'hover:bg-gray-800'} `}
             >
+              <IoFolderSharp className="text-white" size={15} />
               <span className="text-white z-10 font-bold ">Categorías</span>
             </Link>
             <Link
               to="/users"
-              className={`flex items-center gap-2 rounded-xl px-4 py-4 text-sm w-[90%] ${location.pathname === '/users' ? style : 'hover:bg-gray-800'} `}
+              className={`flex items-center gap-4 rounded-xl px-4 py-4 text-[16px] w-[90%] ${location.pathname === '/users' ? style : 'hover:bg-gray-800'} `}
             >
+              <FaUsers className="text-white" size={15} />
               <span className="text-white z-10 font-bold ">Usuarios</span>
             </Link>
             <Link
               to="/admins"
-              className={`flex items-center gap-2 rounded-xl px-4 py-4 text-sm w-[90%] ${location.pathname === '/admins' ? style : 'hover:bg-gray-800'} `}
+              className={`flex items-center gap-4 rounded-xl px-4 py-4 text-[16px] w-[90%] ${location.pathname === '/admins' ? style : 'hover:bg-gray-800'} `}
             >
+              <GiThreeKeys className="text-white" size={15} />
               <span className="text-white z-10 font-bold ">
                 Administradores
               </span>
