@@ -1,10 +1,10 @@
 import { Outlet, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 import Aside from '../shared/components/Aside';
 import Navbar from '../shared/components/Navbar';
 import envs from '../configs/envs';
-import axiosGet from '../shared/requests/basicRequests/get';
 
 function Layout() {
   const token = Cookies.get('accessToken');
@@ -13,7 +13,11 @@ function Layout() {
 
   useEffect(() => {
     setLoading(true);
-    axiosGet({ url: `${envs.API}/app/users/token-validation/${token}` })
+    axios(`${envs.API}/app/users/token-validation`, {
+      headers: {
+        token: token || '',
+      },
+    })
       .then(() => {})
       .catch(() => navigate('/'))
       .finally(() => setLoading(false));
