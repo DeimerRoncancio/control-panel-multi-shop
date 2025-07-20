@@ -37,7 +37,7 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        endOfLine: 'crlf',
+        endOfLine: 'lf',
       },
     ],
     'react/react-in-jsx-scope': 'off',
