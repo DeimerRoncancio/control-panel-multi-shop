@@ -1,56 +1,73 @@
-export function ListUsers() {
+import { ButtonModal } from '../../../shared/components/ButtonModal';
+import { Content } from '../interfaces/get-users-request';
+
+export function ListUsers({ users }: { users: Content[] }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
       <table className="table">
         {/* head */}
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Correo Electronico</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {/* row 1 */}
-          <tr>
-            <td>
-              <div className="flex items-center gap-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle h-12 w-12">
-                    <img
-                      src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                      alt="Avatar Tailwind CSS Component"
-                    />
+          {users.map((user) => (
+            <tr>
+              <td>
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <img
+                        src={`${user.imageUser.imageUrl}`}
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">
+                      {`${user?.name ?? ''} ${user?.secondName ?? ''}`}
+                    </div>
+                    <div className="text-sm opacity-50">
+                      {user?.lastnames ?? ''}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div className="font-bold">Hart Hagerty</div>
-                  <div className="text-sm opacity-50">United States</div>
-                </div>
-              </div>
-            </td>
-            <td>
-              Zemlak, Daniel and Leannon
-              <br />
-              <span className="badge badge-ghost badge-sm">
-                Desktop Support Technician
-              </span>
-            </td>
-            <td>Purple</td>
-            <th>
-              <button type="button" className="btn btn-ghost btn-xs">
-                details
-              </button>
-            </th>
-          </tr>
+              </td>
+              <td>
+                {user?.phoneNumber ? user.phoneNumber : 'No phone number'}
+              </td>
+              <td>{user?.email ? user.email : 'No email'}</td>
+              <th>
+                <details className="dropdown">
+                  <summary className="btn m-1">Detalles</summary>
+                  <ul className="menu dropdown-content bg-base-100 rounded-box z-1 p-2 shadow-sm w-36">
+                    <li>
+                      <ButtonModal idModal="create_user">
+                        Crear Usuario
+                      </ButtonModal>
+                    </li>
+                    <li>
+                      <ButtonModal idModal="update_user">
+                        Actualizar Usuario
+                      </ButtonModal>
+                    </li>
+                  </ul>
+                </details>
+              </th>
+            </tr>
+          ))}
         </tbody>
         {/* foot */}
         <tfoot>
           <tr>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Correo Electronico</th>
             <th>Acciones</th>
           </tr>
         </tfoot>

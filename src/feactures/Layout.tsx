@@ -26,9 +26,9 @@ function Layout() {
   return (
     <main className="w-full h-screen flex flex-col">
       <Navbar />
-      <div className="flex w-full h-full">
+      <div className="flex w-full h-full overflow-y-auto">
         <Aside />
-        <section className="w-[80%] h-full flex flex-col overflow-y-auto">
+        <section className="w-[80%] h-full flex flex-col overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center w-full h-full">
               <span className="loading loading-spinner loading-lg" />
