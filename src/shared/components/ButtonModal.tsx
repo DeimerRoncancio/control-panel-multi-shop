@@ -3,14 +3,16 @@ import React from 'react';
 export function ButtonModal({
   idModal,
   children,
+  className,
 }: {
   idModal: string;
   children: React.ReactNode;
+  className: string;
 }) {
   return (
     <button
       type="button"
-      className="text-[12px] btn btn-secondary btn-sm"
+      className={`${className}`}
       onClick={() => {
         const modal = document.getElementById(
           idModal
