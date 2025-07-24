@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import { ToastContainer } from 'react-toastify';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import ModalUsersUpdate from '../../../shared/components/Modal-user-update';
 import DetailsUser from '../../../shared/components/Details-user';
@@ -26,6 +27,7 @@ function Users() {
       <ModalUserCreate isAdmin={false} />
       <ModalUsersUpdate isAdmin={false} />
       <DeleteUsers isAdmin={false} />
+      <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
           <div>

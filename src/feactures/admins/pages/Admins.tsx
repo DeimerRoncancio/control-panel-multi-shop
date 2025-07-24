@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import { ToastContainer } from 'react-toastify';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import ModalUsersUpdate from '../../../shared/components/Modal-user-update';
 import DetailsUser from '../../../shared/components/Details-user';
@@ -15,7 +16,7 @@ function Admins() {
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: '/app/users/by-role?isAdmin=true&size=5&page=0',
+        url: '/app/users/by-role?isAdmin=true&size=10&page=0',
         token: token || '',
       });
     },
@@ -26,6 +27,7 @@ function Admins() {
       <ModalUserCreate isAdmin />
       <ModalUsersUpdate isAdmin />
       <DeleteUsers isAdmin />
+      <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
           <div>

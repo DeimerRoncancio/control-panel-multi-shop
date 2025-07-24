@@ -44,7 +44,6 @@ function FormRegister({
     Object.entries(formValues).forEach(([key, value]) => {
       formData.append(key, value.toString());
     });
-    formData.append('admin', 'true');
     if (file.current) {
       formData.append('profileImage', file.current);
     }
@@ -53,6 +52,8 @@ function FormRegister({
     addRegisterType.forEach((field) => {
       setValue(field, '');
     });
+    setPreviewImage('');
+    file.current = null;
   };
 
   return (
@@ -241,7 +242,7 @@ function FormRegister({
         {pending ? (
           <span className="loading loading-spinner loading-sm" />
         ) : (
-          'Registrar'
+          'Crear'
         )}
       </button>
     </form>

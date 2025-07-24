@@ -1,33 +1,47 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router';
 import FormRegister from '../components/register/FormRegister';
-import axiosPost from '../../shared/requests/basicRequests/post';
 import envs from '../../configs/envs';
+import axiosPostBearer from '../../shared/requests/protectedRoutes/post';
+import { errorAlertCreate } from '../../shared/alerts/users/error';
+import successAlertCreate from '../../shared/alerts/users/succes';
 
-function Register() {
+function Register({ isAdmin }: { isAdmin: boolean }) {
   const [formData, setFormData] = useState(new FormData());
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: axiosPost,
+    mutationFn: axiosPostBearer,
     onSuccess: (data: any) => {
-      console.log(data);
+      if (data.error) {
+        errorAlertCreate();
+      } else {
+        successAlertCreate();
+
+        setTimeout(() => {
+          navigate(0);
+        }, 5000);
+      }
     },
   });
 
   useEffect(() => {
+    const token = Cookies.get('accessToken');
+
     if (formData.has('name')) {
+      formData.append('admin', isAdmin ? 'true' : 'false');
       mutate({
         url: `${envs.API}/app/users`,
         data: formData,
+        token: token || '',
       });
     }
-  }, [formData, mutate]);
+  }, [formData, mutate, isAdmin]);
 
   return (
-    <main className="flex flex-col items-center justify-center h-auto w-full my-6">
-      <h2 className="text-3xl mb-12 mt-3">
-        Registro de Usuario Administrativo
-      </h2>
+    <main className="flex flex-col items-center justify-center my-6">
       <div className="w-[70%] h-[600%]">
         <FormRegister setFormData={setFormData} pending={isPending} />
       </div>
