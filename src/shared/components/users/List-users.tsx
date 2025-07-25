@@ -1,5 +1,5 @@
-import { Content } from '../interfaces/get-users-request';
-import { ButtonModal } from './ButtonModal';
+import { Content } from '../../interfaces/get-users-request';
+import { ButtonModal } from '../globalComponents/ButtonModal';
 
 export function ListUsers({
   users,

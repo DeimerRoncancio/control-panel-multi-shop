@@ -5,17 +5,17 @@ import { useState } from 'react';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import ModalUsersUpdate from '../../../shared/components/Modal-user-update';
 import DetailsUser from '../../../shared/components/Details-user';
-import { ListUsers } from '../../../shared/components/List-users';
-import { ButtonModal } from '../../../shared/components/ButtonModal';
+import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
 import ModalUserCreate from '../../../shared/components/Modal-user-create';
 import DeleteUsers from '../../../shared/components/Delete-users';
-import SearchUsers from '../../../shared/components/Search-users';
+import SearchUsers from '../../../shared/components/users/Search-users';
 import {
   Content,
   GetUserRequest,
 } from '../../../shared/interfaces/get-users-request';
-import Pagination from '../../../shared/components/Pagination';
-import UpdateUsers from '../../../shared/components/updatesUsers/Update-users';
+import UpdateUsers from '../../../shared/components/users/updatesUsers/Update-users';
+import { ListUsers } from '../../../shared/components/users/List-users';
+import Pagination from '../../../shared/components/globalComponents/Pagination';
 
 function Users() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);

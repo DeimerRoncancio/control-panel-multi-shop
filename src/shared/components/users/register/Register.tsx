@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router';
-import { errorAlertCreate } from '../../alerts/users/error';
-import successAlertCreate from '../../alerts/users/succes';
-import envs from '../../../configs/envs';
-import axiosPostBearer from '../../requests/protectedRoutes/post';
+import { errorAlertCreate } from '../../../alerts/users/error';
+import successAlertCreate from '../../../alerts/users/succes';
+import envs from '../../../../configs/envs';
+import axiosPostBearer from '../../../requests/protectedRoutes/post';
 import FormRegister from './FormRegister';
 
 function Register({ isAdmin }: { isAdmin: boolean }) {

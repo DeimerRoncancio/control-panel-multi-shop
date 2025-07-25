@@ -5,10 +5,10 @@ import { GrFormView, GrFormViewHide } from 'react-icons/gr';
 import { zodResolver } from '@hookform/resolvers/zod';
 import RegisterSchema, {
   RegisterTypeAccess,
-} from '../../../auth/zod/register.zod';
-import { addRegisterType } from '../../../auth/helpers/register.helper';
-import ErrorMessage from '../MessajeError';
-import { createHandleChange } from '../../helpers/images';
+} from '../../../../auth/zod/register.zod';
+import { addRegisterType } from '../../../../auth/helpers/register.helper';
+import ErrorMessage from '../../globalComponents/MessajeError';
+import { createHandleChange } from '../../../helpers/images';
 
 function FormRegister({
   setFormData,

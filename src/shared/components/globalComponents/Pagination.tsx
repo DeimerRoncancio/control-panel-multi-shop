@@ -1,4 +1,4 @@
-import { GetUserRequest } from '../interfaces/get-users-request';
+import { GetUserRequest } from '../../interfaces/get-users-request';
 
 function Pagination({
   pagination,

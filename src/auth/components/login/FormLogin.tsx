@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 import AccesLoginSchema, { LoginTypeAccess } from '../../zod/login.zod';
 import { LoginType } from '../../types';
-import ErrorMessage from '../../../shared/components/MessajeError';
+import ErrorMessage from '../../../shared/components/globalComponents/MessajeError';
 import axiosPost from '../../../shared/requests/basicRequests/post';
 import envs from '../../../configs/envs';
 import { errorAlert } from '../../../shared/alerts';

@@ -4,12 +4,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import RegisterSchema, {
   RegisterTypeAccess,
-} from '../../../auth/zod/register.zod';
-import { addRegisterType } from '../../../auth/helpers/register.helper';
-import ErrorMessage from '../MessajeError';
-import { createHandleChange } from '../../helpers/images';
-import { Content } from '../../interfaces/get-users-request';
-import { setValuesUpdate } from '../../helpers/set-values-update';
+} from '../../../../auth/zod/register.zod';
+import { addRegisterType } from '../../../../auth/helpers/register.helper';
+import ErrorMessage from '../../globalComponents/MessajeError';
+import { createHandleChange } from '../../../helpers/images';
+import { Content } from '../../../interfaces/get-users-request';
+import { setValuesUpdate } from '../../../helpers/set-values-update';
 
 function FormUpdate({
   setFormData,

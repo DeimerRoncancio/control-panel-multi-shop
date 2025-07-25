@@ -1,4 +1,4 @@
-import Register from './register/Register';
+import Register from './users/register/Register';
 
 function ModalUserCreate({ isAdmin }: { isAdmin: boolean }) {
   return (

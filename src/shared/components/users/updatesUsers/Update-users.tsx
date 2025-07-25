@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import Cookies from 'js-cookie';
 import { useMutation } from '@tanstack/react-query';
-import axiosPostBearer from '../../requests/protectedRoutes/post';
-import { errorAlertCreate } from '../../alerts/users/error';
-import successAlertCreate from '../../alerts/users/succes';
-import envs from '../../../configs/envs';
+import axiosPostBearer from '../../../requests/protectedRoutes/post';
+import { errorAlertCreate } from '../../../alerts/users/error';
+import successAlertCreate from '../../../alerts/users/succes';
+import envs from '../../../../configs/envs';
 import FormUpdate from './Form-updtae';
-import { Content } from '../../interfaces/get-users-request';
+import { Content } from '../../../interfaces/get-users-request';
 
 function UpdateUsers({
   isAdmin,
