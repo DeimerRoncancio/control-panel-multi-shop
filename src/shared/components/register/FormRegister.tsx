@@ -3,10 +3,12 @@ import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GrFormView, GrFormViewHide } from 'react-icons/gr';
 import { zodResolver } from '@hookform/resolvers/zod';
-import RegisterSchema, { RegisterTypeAccess } from '../../zod/register.zod';
-import ErrorMessage from '../../../shared/components/MessajeError';
-import { createHandleChange } from '../../../shared/helpers/images';
-import { addRegisterType } from '../../helpers/register.helper';
+import RegisterSchema, {
+  RegisterTypeAccess,
+} from '../../../auth/zod/register.zod';
+import { addRegisterType } from '../../../auth/helpers/register.helper';
+import ErrorMessage from '../MessajeError';
+import { createHandleChange } from '../../helpers/images';
 
 function FormRegister({
   setFormData,
@@ -28,6 +30,7 @@ function FormRegister({
     formState: { errors },
   } = useForm<RegisterTypeAccess>({
     resolver: zodResolver(RegisterSchema),
+    defaultValues: {},
   });
 
   const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => {

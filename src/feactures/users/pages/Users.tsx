@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import { ToastContainer } from 'react-toastify';
+import { useState } from 'react';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import ModalUsersUpdate from '../../../shared/components/Modal-user-update';
 import DetailsUser from '../../../shared/components/Details-user';
@@ -9,14 +10,17 @@ import { ButtonModal } from '../../../shared/components/ButtonModal';
 import ModalUserCreate from '../../../shared/components/Modal-user-create';
 import DeleteUsers from '../../../shared/components/Delete-users';
 import SearchUsers from '../../../shared/components/Search-users';
+import { GetUserRequest } from '../../../shared/interfaces/get-users-request';
+import Pagination from '../../../shared/components/Pagination';
 
 function Users() {
-  const { data } = useQuery({
-    queryKey: ['users'],
+  const [pagination, setPagination] = useState({ page: 0, size: 10 });
+  const { data, isLoading } = useQuery<GetUserRequest>({
+    queryKey: ['users', pagination],
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: '/app/users/by-role?isAdmin=false&size=5&page=0',
+        url: `/app/users/by-role?isAdmin=false&size=${pagination.size}&page=${pagination.page}`,
         token: token || '',
       });
     },
@@ -42,7 +46,16 @@ function Users() {
         </div>
         <DetailsUser isAdmin={false} />
         <SearchUsers />
-        <ListUsers isAdmin={false} users={data?.content || []} />
+        <ListUsers
+          isAdmin={false}
+          users={data?.content || []}
+          isLoading={isLoading}
+        />
+        <Pagination
+          pagination={pagination}
+          setPagination={setPagination}
+          data={data}
+        />
       </div>
     </>
   );

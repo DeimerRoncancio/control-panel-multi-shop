@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router';
 import Login from './auth/pages/Login';
-import Register from './auth/pages/Register';
 import Dashboard from './feactures/dashboard/pages/Dashboard';
 import Layout from './feactures/Layout';
 import Products from './feactures/products/pages/Products';
@@ -12,7 +11,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
