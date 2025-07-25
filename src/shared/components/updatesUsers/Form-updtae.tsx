@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { GrFormView, GrFormViewHide } from 'react-icons/gr';
 import { zodResolver } from '@hookform/resolvers/zod';
 import RegisterSchema, {
   RegisterTypeAccess,
@@ -9,18 +8,21 @@ import RegisterSchema, {
 import { addRegisterType } from '../../../auth/helpers/register.helper';
 import ErrorMessage from '../MessajeError';
 import { createHandleChange } from '../../helpers/images';
+import { Content } from '../../interfaces/get-users-request';
+import { setValuesUpdate } from '../../helpers/set-values-update';
 
-function FormRegister({
+function FormUpdate({
   setFormData,
   pending,
+  user,
 }: {
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
   pending: boolean;
+  user: Content | null;
 }) {
   const file = useRef<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>('');
-  const [viewPassword, setViewPassword] = useState(false);
-  const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
+
   const [errorFile, setErrorFile] = useState<boolean>(false);
 
   const {
@@ -28,7 +30,18 @@ function FormRegister({
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterTypeAccess>({ resolver: zodResolver(RegisterSchema) });
+  } = useForm<RegisterTypeAccess>({
+    resolver: zodResolver(RegisterSchema),
+  });
+
+  useEffect(() => {
+    if (user) {
+      setValuesUpdate.forEach((value) => {
+        const fieldValue = user[value];
+        setValue(value, fieldValue === null ? '' : fieldValue.toString());
+      });
+    }
+  }, [user, setValue]);
 
   const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => {
     if (file.current === null) {
@@ -155,62 +168,6 @@ function FormRegister({
         <ErrorMessage errors={errors} fieldName="email" />
       </div>
       <div className="mb-6">
-        <label htmlFor="password" className="flex flex-col">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Contraseña
-          </span>
-          <span className="w-full p-2.5 input input-primary flex">
-            <input
-              type={viewPassword ? 'text' : 'password'}
-              id="password"
-              className="w-[90%] p-2.5"
-              placeholder="•••••••••"
-              {...register('password')}
-            />
-            <button
-              className="w-[10%] z-10 flex items-center justify-end"
-              type="button"
-              onClick={() => setViewPassword(!viewPassword)}
-            >
-              {viewPassword ? (
-                <GrFormViewHide size={30} />
-              ) : (
-                <GrFormView size={30} />
-              )}
-            </button>
-          </span>
-        </label>
-        <ErrorMessage errors={errors} fieldName="password" />
-      </div>
-      <div className="mb-6">
-        <label htmlFor="confirm_password" className="flex flex-col">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Confirmar contraseña
-          </span>
-          <span className="w-full p-2.5 input input-primary flex">
-            <input
-              type={viewConfirmPassword ? 'text' : 'password'}
-              id="confirm_password"
-              className="w-[90%] p-2.5"
-              placeholder="•••••••••"
-              {...register('confirm_password')}
-            />
-            <button
-              className="w-[10%] z-10 flex items-center justify-end"
-              type="button"
-              onClick={() => setViewConfirmPassword(!viewConfirmPassword)}
-            >
-              {viewConfirmPassword ? (
-                <GrFormViewHide size={30} />
-              ) : (
-                <GrFormView size={30} />
-              )}
-            </button>
-          </span>
-        </label>
-        <ErrorMessage errors={errors} fieldName="confirm_password" />
-      </div>
-      <div className="mb-6">
         <label className="bg-primary rounded-[5px] px-[7px] py-[13px] w-full flex justify-center items-center text-white font-medium text-md md:w-full">
           Agregar Imagenes
           <input
@@ -242,11 +199,11 @@ function FormRegister({
         {pending ? (
           <span className="loading loading-spinner loading-sm" />
         ) : (
-          'Crear'
+          'Actualizar'
         )}
       </button>
     </form>
   );
 }
 
-export default FormRegister;
+export default FormUpdate;

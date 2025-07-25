@@ -11,9 +11,12 @@ import ModalUserCreate from '../../../shared/components/Modal-user-create';
 import DeleteUsers from '../../../shared/components/Delete-users';
 import SearchUsers from '../../../shared/components/Search-users';
 import Pagination from '../../../shared/components/Pagination';
+import { Content } from '../../../shared/interfaces/get-users-request';
+import UpdateUsers from '../../../shared/components/updatesUsers/Update-users';
 
 function Admins() {
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
+  const [userUpdate, setUserUpdate] = useState<Content | null>(null);
   const { data, isLoading } = useQuery({
     queryKey: ['admins', pagination],
     queryFn: async () => {
@@ -28,7 +31,9 @@ function Admins() {
   return (
     <>
       <ModalUserCreate isAdmin />
-      <ModalUsersUpdate isAdmin />
+      <ModalUsersUpdate isAdmin>
+        <UpdateUsers idUser={userUpdate?.id!} isAdmin user={userUpdate} />
+      </ModalUsersUpdate>
       <DeleteUsers isAdmin />
       <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
@@ -45,7 +50,12 @@ function Admins() {
         </div>
         <DetailsUser isAdmin />
         <SearchUsers />
-        <ListUsers isAdmin users={data?.content || []} isLoading={isLoading} />
+        <ListUsers
+          isAdmin
+          users={data?.content || []}
+          isLoading={isLoading}
+          setUserUpdate={setUserUpdate}
+        />
         <Pagination
           pagination={pagination}
           setPagination={setPagination}

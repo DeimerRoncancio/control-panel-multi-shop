@@ -4,10 +4,13 @@ export function ButtonModal({
   idModal,
   children,
   className,
+  onClick,
 }: {
   idModal: string;
   children: React.ReactNode;
   className: string;
+  // eslint-disable-next-line react/require-default-props
+  onClick?: () => void;
 }) {
   return (
     <button
@@ -20,9 +23,12 @@ export function ButtonModal({
         if (modal) {
           modal.showModal();
         }
+        onClick?.();
       }}
     >
       {children}
     </button>
   );
 }
+
+export default ButtonModal;

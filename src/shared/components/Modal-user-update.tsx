@@ -1,13 +1,18 @@
-function ModalUsersUpdate({ isAdmin }: { isAdmin: boolean }) {
+function ModalUsersUpdate({
+  children,
+  isAdmin,
+}: {
+  children: React.ReactNode;
+  isAdmin: boolean;
+}) {
   return (
     <dialog id="update_user" className="modal">
-      <div className="modal-box">
-        <h3 className="font-bold text-lg">
+      <div className="modal-box h-[85vh] w-8/12 max-w-5xl">
+        <h3 className="font-bold text-xl text-center">
           {isAdmin ? 'Actualizar Administrador' : 'Actualizar Usuario'}
         </h3>
-        <p className="py-4">
-          Presiona la tecla ESC o haz clic fuera para cerrar
-        </p>
+
+        {children}
       </div>
       <form method="dialog" className="modal-backdrop">
         <button type="submit">cerrar</button>

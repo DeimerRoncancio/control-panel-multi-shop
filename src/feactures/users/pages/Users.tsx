@@ -10,10 +10,15 @@ import { ButtonModal } from '../../../shared/components/ButtonModal';
 import ModalUserCreate from '../../../shared/components/Modal-user-create';
 import DeleteUsers from '../../../shared/components/Delete-users';
 import SearchUsers from '../../../shared/components/Search-users';
-import { GetUserRequest } from '../../../shared/interfaces/get-users-request';
+import {
+  Content,
+  GetUserRequest,
+} from '../../../shared/interfaces/get-users-request';
 import Pagination from '../../../shared/components/Pagination';
+import UpdateUsers from '../../../shared/components/updatesUsers/Update-users';
 
 function Users() {
+  const [userUpdate, setUserUpdate] = useState<Content | null>(null);
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
   const { data, isLoading } = useQuery<GetUserRequest>({
     queryKey: ['users', pagination],
@@ -29,7 +34,13 @@ function Users() {
   return (
     <>
       <ModalUserCreate isAdmin={false} />
-      <ModalUsersUpdate isAdmin={false} />
+      <ModalUsersUpdate isAdmin={false}>
+        <UpdateUsers
+          idUser={userUpdate?.id!}
+          isAdmin={false}
+          user={userUpdate}
+        />
+      </ModalUsersUpdate>
       <DeleteUsers isAdmin={false} />
       <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
@@ -50,6 +61,7 @@ function Users() {
           isAdmin={false}
           users={data?.content || []}
           isLoading={isLoading}
+          setUserUpdate={setUserUpdate}
         />
         <Pagination
           pagination={pagination}

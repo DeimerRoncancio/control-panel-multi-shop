@@ -5,10 +5,12 @@ export function ListUsers({
   users,
   isAdmin,
   isLoading,
+  setUserUpdate,
 }: {
   users: Content[];
   isAdmin: boolean;
   isLoading: boolean;
+  setUserUpdate: React.Dispatch<React.SetStateAction<Content | null>>;
 }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
@@ -62,6 +64,7 @@ export function ListUsers({
                     <ul className="menu dropdown-content bg-base-100 rounded-box z-1 p-2 shadow-sm w-36">
                       <li>
                         <ButtonModal
+                          onClick={() => setUserUpdate(user)}
                           idModal="update_user"
                           className="text-[12px] btn btn-primary btn-sm"
                         >
