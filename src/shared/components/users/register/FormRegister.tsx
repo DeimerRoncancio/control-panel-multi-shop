@@ -12,11 +12,11 @@ import RegisterSchema, {
 } from '../../../zod/users/register.zod';
 
 function FormRegister({
-  setFormData,
   pending,
+  functionUpdate,
 }: {
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
   pending: boolean;
+  functionUpdate: (formData: FormData) => void;
 }) {
   const file = useRef<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -48,7 +48,7 @@ function FormRegister({
     if (file.current) {
       formData.append('profileImage', file.current);
     }
-    setFormData(formData);
+    functionUpdate(formData);
 
     addRegisterType.forEach((field) => {
       setValue(field, '');
@@ -66,8 +66,8 @@ function FormRegister({
               Primer nombre
             </span>
             <input
-              type="text"
               id="name"
+              type="text"
               className="w-full p-2.5 input input-primary"
               placeholder="John"
               {...register('name')}
@@ -128,6 +128,7 @@ function FormRegister({
               Genero
             </span>
             <select
+              id="gender"
               defaultValue=""
               className="select select-primary w-full p-2.5"
               {...register('gender')}

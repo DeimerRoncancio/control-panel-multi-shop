@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { useMutation } from '@tanstack/react-query';
-import { errorAlertCreate } from '../../../alerts/users/error';
-import successAlertCreate from '../../../alerts/users/succes';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import envs from '../../../../configs/envs';
 import { Content } from '../../../interfaces/get-users-request';
 import FormUpdate from './Form-updtate';
 import axiosPutBearer from '../../../requests/protectedRoutes/put';
+import UserUpdate from '../../../interfaces/user-update';
+import { errorAlertUsers } from '../../../alerts/users/error';
+import successAlertUsers from '../../../alerts/users/succes';
 
 function UpdateUsers({
   isAdmin,
@@ -17,40 +17,42 @@ function UpdateUsers({
   idUser: string;
   user: Content | null;
 }) {
-  const [updateUser, setUpdateUser] = useState({});
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: axiosPutBearer,
     onSuccess: (data: any) => {
       if (data.error) {
-        errorAlertCreate();
+        errorAlertUsers('Error al actualizar usuario');
       } else {
-        successAlertCreate();
+        successAlertUsers('Usuario actualizado con éxito');
+        queryClient.invalidateQueries({
+          queryKey: [`${isAdmin ? 'admins' : 'users'}`],
+        });
       }
     },
   });
 
-  useEffect(() => {
+  const handleUpdateUser = (userUpdates: UserUpdate) => {
     const token = Cookies.get('accessToken');
-    if (Object.keys(updateUser).length === 0) return;
 
     mutate({
       url: `${envs.API}/app/users/${idUser}`,
       data: {
-        ...updateUser,
+        ...userUpdates,
         admin: isAdmin ? 'true' : 'false',
       },
       token: token || '',
     });
-  }, [updateUser, mutate, isAdmin, idUser]);
+  };
 
   return (
     <main className="flex flex-col items-center justify-center my-6">
       <div className="w-[70%] h-[600%]">
         <FormUpdate
-          setUpdateUser={setUpdateUser}
           pending={isPending}
           user={user}
+          functionUpdate={handleUpdateUser}
         />
       </div>
     </main>

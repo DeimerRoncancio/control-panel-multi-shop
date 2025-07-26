@@ -1,27 +1,24 @@
 import axios, { AxiosError } from 'axios';
 
-const axiosPutBearer = async ({
+const axiosPostBearer = async ({
   url,
   data,
   token,
-  headers = {},
 }: {
   url: string;
-  data: object;
+  data: FormData;
   token: string;
-  headers?: Record<string, string>;
 }) => {
   try {
-    const response = await axios.put(url, data, {
+    const response = await axios.post(url, data, {
       headers: {
         Authorization: `Bearer ${token}`,
-        ...headers,
       },
     });
     return response;
   } catch (error) {
-    return (error as AxiosError).response;
+    return (error as AxiosError).response?.data;
   }
 };
 
-export default axiosPutBearer;
+export default axiosPostBearer;

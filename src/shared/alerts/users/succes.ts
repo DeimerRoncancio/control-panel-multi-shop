@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 
-const successAlertCreate = () => {
-  toast.success('Usuario creado con éxito', {
+const successAlertUsers = (message: string) => {
+  toast.success(message, {
     position: 'bottom-right',
     autoClose: 5000,
     hideProgressBar: false,
@@ -12,4 +12,4 @@ const successAlertCreate = () => {
     theme: 'light',
   });
 };
-export default successAlertCreate;
+export default successAlertUsers;

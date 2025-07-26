@@ -30,6 +30,7 @@ function Users() {
       });
     },
   });
+  console.log(data);
 
   return (
     <>

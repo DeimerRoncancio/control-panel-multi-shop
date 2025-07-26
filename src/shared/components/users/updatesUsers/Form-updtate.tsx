@@ -8,13 +8,13 @@ import UpdateSchema, { UpdateTypeAccess } from '../../../zod/users/update.zod';
 import UserUpdate from '../../../interfaces/user-update';
 
 function FormUpdate({
-  setUpdateUser,
   pending,
   user,
+  functionUpdate,
 }: {
-  setUpdateUser: React.Dispatch<React.SetStateAction<UserUpdate>>;
   pending: boolean;
   user: Content | null;
+  functionUpdate: (userUpdates: UserUpdate) => void;
 }) {
   const {
     register,
@@ -26,6 +26,7 @@ function FormUpdate({
   });
 
   useEffect(() => {
+    // Set initial values in the form based on the user data
     if (user) {
       setValuesUpdate.forEach((value) => {
         const fieldValue = user[value];
@@ -35,9 +36,7 @@ function FormUpdate({
   }, [user, setValue]);
 
   const onSubimit: SubmitHandler<UpdateTypeAccess> = (data) => {
-    console.log(data);
-
-    setUpdateUser(data);
+    functionUpdate(data);
   };
 
   return (
@@ -49,8 +48,8 @@ function FormUpdate({
               Primer nombre
             </span>
             <input
-              type="text"
               id="name"
+              type="text"
               className="w-full p-2.5 input input-primary"
               placeholder="John"
               {...register('name')}
@@ -64,8 +63,8 @@ function FormUpdate({
               Segundo nombre
             </span>
             <input
-              type="text"
               id="secondName"
+              type="text"
               className="w-full p-2.5 input input-primary"
               placeholder="Doe"
               {...register('secondName')}
@@ -79,8 +78,8 @@ function FormUpdate({
               Apellido
             </span>
             <input
+              id="lastnames"
               type="text"
-              id="company"
               className="w-full p-2.5 input input-primary"
               placeholder="Sanchez Gavilan"
               {...register('lastnames')}
@@ -94,8 +93,8 @@ function FormUpdate({
               Numero de teléfono
             </span>
             <input
-              type="tel"
               id="phoneNumber"
+              type="tel"
               className="w-full p-2.5 input input-primary"
               placeholder="123-45-678"
               {...register('phoneNumber')}
@@ -111,6 +110,7 @@ function FormUpdate({
               Genero
             </span>
             <select
+              id="gender"
               defaultValue=""
               className="select select-primary w-full p-2.5"
               {...register('gender')}
@@ -129,8 +129,8 @@ function FormUpdate({
             Email
           </span>
           <input
-            type="email"
             id="email"
+            type="email"
             className="w-full p-2.5 input input-primary"
             placeholder="john.doe@company.com"
             {...register('email')}
