@@ -3,12 +3,13 @@ import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GrFormView, GrFormViewHide } from 'react-icons/gr';
 import { zodResolver } from '@hookform/resolvers/zod';
-import RegisterSchema, {
-  RegisterTypeAccess,
-} from '../../../../auth/zod/register.zod';
-import { addRegisterType } from '../../../../auth/helpers/register.helper';
+
+import { addRegisterType } from '../../../helpers/users/register.helper';
 import ErrorMessage from '../../globalComponents/MessajeError';
 import { createHandleChange } from '../../../helpers/images';
+import RegisterSchema, {
+  RegisterTypeAccess,
+} from '../../../zod/users/register.zod';
 
 function FormRegister({
   setFormData,

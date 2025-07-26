@@ -2,8 +2,8 @@ import { Outlet, useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import Aside from '../shared/components/Aside';
-import Navbar from '../shared/components/Navbar';
+import Aside from '../shared/components/globalComponents/Aside';
+import Navbar from '../shared/components/globalComponents/Navbar';
 import envs from '../configs/envs';
 
 function Layout() {

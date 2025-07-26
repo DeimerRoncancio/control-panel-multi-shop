@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { errorAlertCreate } from '../../../alerts/users/error';
 import successAlertCreate from '../../../alerts/users/succes';
 import envs from '../../../../configs/envs';
-import axiosPostBearer from '../../../requests/protectedRoutes/post';
+import axiosPostBearer from '../../../requests/protectedRoutes/put';
 import FormRegister from './FormRegister';
 
 function Register({ isAdmin }: { isAdmin: boolean }) {

@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
-import ModalUsersUpdate from '../../../shared/components/Modal-user-update';
-import DetailsUser from '../../../shared/components/Details-user';
+import ModalUsersUpdate from '../../../shared/components/users/updatesUsers/Modal-user-update';
+import DetailsUser from '../../../shared/components/users/Details-user';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
-import ModalUserCreate from '../../../shared/components/Modal-user-create';
+import ModalUserCreate from '../../../shared/components/users/register/Modal-user-create';
 import DeleteUsers from '../../../shared/components/Delete-users';
 import SearchUsers from '../../../shared/components/users/Search-users';
 import {

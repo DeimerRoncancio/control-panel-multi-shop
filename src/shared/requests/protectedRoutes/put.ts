@@ -1,18 +1,21 @@
 import axios, { AxiosError } from 'axios';
 
-const axiosPostBearer = async ({
+const axiosPutBearer = async ({
   url,
   data,
   token,
+  headers = {},
 }: {
   url: string;
   data: object;
   token: string;
+  headers?: Record<string, string>;
 }) => {
   try {
-    const response = await axios.post(url, data, {
+    const response = await axios.put(url, data, {
       headers: {
         Authorization: `Bearer ${token}`,
+        ...headers,
       },
     });
     return response;
@@ -21,4 +24,4 @@ const axiosPostBearer = async ({
   }
 };
 
-export default axiosPostBearer;
+export default axiosPutBearer;

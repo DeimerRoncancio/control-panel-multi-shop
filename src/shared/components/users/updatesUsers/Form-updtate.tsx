@@ -1,37 +1,28 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import RegisterSchema, {
-  RegisterTypeAccess,
-} from '../../../../auth/zod/register.zod';
-import { addRegisterType } from '../../../../auth/helpers/register.helper';
 import ErrorMessage from '../../globalComponents/MessajeError';
-import { createHandleChange } from '../../../helpers/images';
 import { Content } from '../../../interfaces/get-users-request';
 import { setValuesUpdate } from '../../../helpers/set-values-update';
+import UpdateSchema, { UpdateTypeAccess } from '../../../zod/users/update.zod';
+import UserUpdate from '../../../interfaces/user-update';
 
 function FormUpdate({
-  setFormData,
+  setUpdateUser,
   pending,
   user,
 }: {
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  setUpdateUser: React.Dispatch<React.SetStateAction<UserUpdate>>;
   pending: boolean;
   user: Content | null;
 }) {
-  const file = useRef<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string>('');
-
-  const [errorFile, setErrorFile] = useState<boolean>(false);
-
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterTypeAccess>({
-    resolver: zodResolver(RegisterSchema),
+  } = useForm<UpdateTypeAccess>({
+    resolver: zodResolver(UpdateSchema),
   });
 
   useEffect(() => {
@@ -43,30 +34,10 @@ function FormUpdate({
     }
   }, [user, setValue]);
 
-  const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => {
-    if (file.current === null) {
-      setErrorFile(true);
-    } else {
-      setErrorFile(false);
-    }
+  const onSubimit: SubmitHandler<UpdateTypeAccess> = (data) => {
+    console.log(data);
 
-    const formData = new FormData();
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { confirm_password, ...formValues } = data;
-    Object.entries(formValues).forEach(([key, value]) => {
-      formData.append(key, value.toString());
-    });
-    if (file.current) {
-      formData.append('profileImage', file.current);
-    }
-    setFormData(formData);
-
-    addRegisterType.forEach((field) => {
-      setValue(field, '');
-    });
-    setPreviewImage('');
-    file.current = null;
+    setUpdateUser(data);
   };
 
   return (
@@ -167,34 +138,10 @@ function FormUpdate({
         </label>
         <ErrorMessage errors={errors} fieldName="email" />
       </div>
-      <div className="mb-6">
-        <label className="bg-primary rounded-[5px] px-[7px] py-[13px] w-full flex justify-center items-center text-white font-medium text-md md:w-full">
-          Agregar Imagenes
-          <input
-            hidden
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(e) => createHandleChange(e, setPreviewImage, file)}
-          />
-        </label>
-        {errorFile ? (
-          <span style={{ color: 'red' }}>La imagen es requerida</span>
-        ) : null}
-        {previewImage && (
-          <div className="w-full flex justify-center items-center mt-4">
-            <img
-              className="w-[100px] h-[100px] object-cover rounded-3xl"
-              src={previewImage}
-              alt=""
-            />
-          </div>
-        )}
-      </div>
 
       <button
         type="submit"
-        className="text-white text-sm w-[300px] sm:w-auto px-5 py-2.5 btn btn-primary"
+        className="text-white text-sm w-[300px] px-5 py-2.5 btn btn-primary"
       >
         {pending ? (
           <span className="loading loading-spinner loading-sm" />
