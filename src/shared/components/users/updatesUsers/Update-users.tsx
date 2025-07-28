@@ -40,7 +40,6 @@ function UpdateUsers({
       url: `${envs.API}/app/users/${idUser}`,
       data: {
         ...userUpdates,
-        admin: isAdmin ? 'true' : 'false',
       },
       token: token || '',
     });

@@ -20,6 +20,9 @@ const UpdateSchema = z.object({
     .email({
       message: 'El correo es invalido',
     }),
+  admin: z.enum(['true', 'false'], {
+    message: 'El rol es requerido',
+  }),
 });
 
 export default UpdateSchema;

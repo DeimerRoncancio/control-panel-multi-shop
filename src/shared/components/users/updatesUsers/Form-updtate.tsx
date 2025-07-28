@@ -139,6 +139,25 @@ function FormUpdate({
         <ErrorMessage errors={errors} fieldName="email" />
       </div>
 
+      <div>
+        <label htmlFor="admin" className="flex flex-col mb-6">
+          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Rol
+          </span>
+          <select
+            id="admin"
+            defaultValue=""
+            className="select select-primary w-full p-2.5"
+            {...register('admin')}
+          >
+            <option disabled>Selecciona Rol</option>
+            <option value="true">Administrador</option>
+            <option value="false">Usuario</option>
+          </select>
+        </label>
+        <ErrorMessage errors={errors} fieldName="admin" />
+      </div>
+
       <button
         type="submit"
         className="text-white text-sm w-[300px] px-5 py-2.5 btn btn-primary"

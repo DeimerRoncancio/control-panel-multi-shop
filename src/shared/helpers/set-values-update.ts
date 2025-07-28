@@ -4,7 +4,8 @@ type SetValuesUpdate =
   | 'lastnames'
   | 'phoneNumber'
   | 'email'
-  | 'gender';
+  | 'gender'
+  | 'admin';
 
 export const setValuesUpdate: SetValuesUpdate[] = [
   'name',
@@ -13,4 +14,5 @@ export const setValuesUpdate: SetValuesUpdate[] = [
   'phoneNumber',
   'email',
   'gender',
+  'admin',
 ];
