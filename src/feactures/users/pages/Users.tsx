@@ -16,6 +16,8 @@ import {
 import UpdateUsers from '../../../shared/components/users/updatesUsers/Update-users';
 import { ListUsers } from '../../../shared/components/users/List-users';
 import Pagination from '../../../shared/components/globalComponents/Pagination';
+import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
+import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 
 function Users() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
@@ -30,10 +32,12 @@ function Users() {
       });
     },
   });
-  console.log(data);
 
   return (
     <>
+      <ModalUsersAvatar isAdmin={false}>
+        <FormUpdateAvatar isAdmin={false} user={userUpdate} />
+      </ModalUsersAvatar>
       <ModalUserCreate isAdmin={false} />
       <ModalUsersUpdate isAdmin={false}>
         <UpdateUsers

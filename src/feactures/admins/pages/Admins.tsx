@@ -13,6 +13,8 @@ import { Content } from '../../../shared/interfaces/get-users-request';
 import UpdateUsers from '../../../shared/components/users/updatesUsers/Update-users';
 import Pagination from '../../../shared/components/globalComponents/Pagination';
 import { ListUsers } from '../../../shared/components/users/List-users';
+import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
+import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 
 function Admins() {
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
@@ -30,6 +32,9 @@ function Admins() {
 
   return (
     <>
+      <ModalUsersAvatar isAdmin>
+        <FormUpdateAvatar isAdmin user={userUpdate} />
+      </ModalUsersAvatar>
       <ModalUserCreate isAdmin />
       <ModalUsersUpdate isAdmin>
         <UpdateUsers idUser={userUpdate?.id!} isAdmin user={userUpdate} />

@@ -19,7 +19,7 @@ function FormRegister({
   functionUpdate: (formData: FormData) => void;
 }) {
   const file = useRef<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string>('');
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
   const [errorFile, setErrorFile] = useState<boolean>(false);

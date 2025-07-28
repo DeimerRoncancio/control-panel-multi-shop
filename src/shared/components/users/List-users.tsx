@@ -1,3 +1,4 @@
+import { FaPencilAlt } from 'react-icons/fa';
 import { Content } from '../../interfaces/get-users-request';
 import { ButtonModal } from '../globalComponents/ButtonModal';
 
@@ -36,14 +37,22 @@ export function ListUsers({
               <tr key={user.id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle h-12 w-12">
+                    <ButtonModal
+                      onClick={() => setUserUpdate(user)}
+                      idModal="user_avatar"
+                      className="avatar relative group cursor-pointer"
+                    >
+                      <div className="mask mask-squircle h-12 w-12 relative overflow-hidden">
                         <img
                           src={`${user.imageUser.imageUrl}`}
                           alt="Avatar Tailwind CSS Component"
+                          className="transition-all duration-200 group-hover:blur-sm"
                         />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          <FaPencilAlt className="text-white text-lg drop-shadow-lg" />
+                        </div>
                       </div>
-                    </div>
+                    </ButtonModal>
                     <div>
                       <div className="font-bold">
                         {`${user?.name ?? ''} ${user?.secondName ?? ''}`}
