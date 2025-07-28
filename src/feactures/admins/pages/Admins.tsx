@@ -44,7 +44,7 @@ function Admins() {
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold">Gestion de Usuarios</h1>
+            <h1 className="text-2xl font-bold">Gestion de Administradores</h1>
             <p className="mt-2 text-sm text-gray-400 mb-4">
               Administra los usuarios de la aplicacion.
             </p>
