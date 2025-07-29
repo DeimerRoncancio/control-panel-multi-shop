@@ -7,7 +7,7 @@ import ModalUsersUpdate from '../../../shared/components/users/updatesUsers/Moda
 import DetailsUser from '../../../shared/components/users/Details-user';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
 import ModalUserCreate from '../../../shared/components/users/register/Modal-user-create';
-import DeleteUsers from '../../../shared/components/Delete-users';
+import DeleteUsers from '../../../shared/components/users/deleteUsers/Delete-users';
 import SearchUsers from '../../../shared/components/users/Search-users';
 import {
   Content,
@@ -18,6 +18,7 @@ import { ListUsers } from '../../../shared/components/users/List-users';
 import Pagination from '../../../shared/components/globalComponents/Pagination';
 import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
 import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
+import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
 
 function Users() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
@@ -46,7 +47,9 @@ function Users() {
           user={userUpdate}
         />
       </ModalUsersUpdate>
-      <DeleteUsers isAdmin={false} />
+      <DeleteUsers isAdmin={false}>
+        <FormDeleteUsers id={userUpdate?.id!} isAdmin={false} />
+      </DeleteUsers>
       <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">

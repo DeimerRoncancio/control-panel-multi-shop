@@ -29,6 +29,12 @@ function UpdateUsers({
         queryClient.invalidateQueries({
           queryKey: [`${isAdmin ? 'admins' : 'users'}`],
         });
+        const modal = document.getElementById(
+          'update_user'
+        ) as HTMLDialogElement | null;
+        if (modal) {
+          modal.close();
+        }
       }
     },
   });

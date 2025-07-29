@@ -88,7 +88,11 @@ function FormLogin() {
                   Olvidaste tu contraseña?
                 </Link>
               </div>
-              <button type="submit" className="btn btn-neutral mt-4">
+              <button
+                disabled={isPending}
+                type="submit"
+                className="btn btn-neutral mt-4"
+              >
                 {isPending ? (
                   <span className="loading loading-spinner loading-sm" />
                 ) : (

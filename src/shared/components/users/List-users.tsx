@@ -84,6 +84,7 @@ export function ListUsers({
                       </li>
                       <li>
                         <ButtonModal
+                          onClick={() => setUserUpdate(user)}
                           idModal="delete_user"
                           className="text-[12px] btn btn-warning btn-sm"
                         >

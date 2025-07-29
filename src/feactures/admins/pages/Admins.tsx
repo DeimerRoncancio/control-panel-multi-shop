@@ -7,7 +7,7 @@ import ModalUsersUpdate from '../../../shared/components/users/updatesUsers/Moda
 import DetailsUser from '../../../shared/components/users/Details-user';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
 import ModalUserCreate from '../../../shared/components/users/register/Modal-user-create';
-import DeleteUsers from '../../../shared/components/Delete-users';
+import DeleteUsers from '../../../shared/components/users/deleteUsers/Delete-users';
 import SearchUsers from '../../../shared/components/users/Search-users';
 import { Content } from '../../../shared/interfaces/get-users-request';
 import UpdateUsers from '../../../shared/components/users/updatesUsers/Update-users';
@@ -15,6 +15,7 @@ import Pagination from '../../../shared/components/globalComponents/Pagination';
 import { ListUsers } from '../../../shared/components/users/List-users';
 import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
 import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
+import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
 
 function Admins() {
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
@@ -39,7 +40,9 @@ function Admins() {
       <ModalUsersUpdate isAdmin>
         <UpdateUsers idUser={userUpdate?.id!} isAdmin user={userUpdate} />
       </ModalUsersUpdate>
-      <DeleteUsers isAdmin />
+      <DeleteUsers isAdmin>
+        <FormDeleteUsers id={userUpdate?.id!} isAdmin />
+      </DeleteUsers>
       <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
