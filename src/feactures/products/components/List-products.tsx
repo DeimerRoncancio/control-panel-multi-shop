@@ -104,7 +104,7 @@ export function ListProducts({
                         <ButtonModal
                           onClick={() => setProductUpdate(product)}
                           idModal="delete_product"
-                          className="text-[12px] btn btn-warning btn-sm"
+                          className="text-sm btn-sm btn-warning"
                         >
                           Eliminar Producto
                         </ButtonModal>
