@@ -1,16 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CategoriesRequest } from '../../../categories/interfaces/categories-response';
 
 export function SelectCategories({
   categoriesData,
   categoriesLoading,
+  defectSelectedCategories,
+  setSelectedCategories,
+  selectedCategories,
 }: {
   categoriesData: CategoriesRequest | undefined;
   categoriesLoading: boolean;
+  defectSelectedCategories: { categoryName: string }[];
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedCategories: string[];
 }) {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // Initialize selected categories from defectSelectedCategories
+  useEffect(() => {
+    if (defectSelectedCategories.length > 0) {
+      const initialCategories = defectSelectedCategories.map(
+        (category) => category.categoryName
+      );
+      setSelectedCategories(initialCategories);
+    }
+  }, [defectSelectedCategories, setSelectedCategories]);
 
   const handleCategoryChange = (categoryId: string) => {
+    console.log('Category ID:', categoryId);
     setSelectedCategories((prev) =>
       prev.includes(categoryId)
         ? // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -20,8 +35,8 @@ export function SelectCategories({
   };
 
   return (
-    <div className="xl:col-span-1 border rounded-lg border-gray-600 flex flex-col">
-      <div className="card">
+    <div className="xl:col-span-1flex flex-col">
+      <div className="card h-auto shadow-xl border border-gray-600 rounded-lg">
         <div className="card-body">
           <h2 className="card-title text-xl mb-6">Categorías *</h2>
 
@@ -39,16 +54,16 @@ export function SelectCategories({
             <div className="flex flex-col gap-3 max-h-96 overflow-y-auto">
               {categoriesData?.content.map((category) => (
                 <label
-                  htmlFor={`category-${category.id}`}
-                  key={category.id}
+                  htmlFor={`category-${category.categoryName}`}
+                  key={category.categoryName}
                   className="label cursor-pointer justify-start gap-3 hover:bg-base-200 rounded-lg p-2 transition-colors"
                 >
                   <input
                     type="checkbox"
-                    id={`category-${category.id}`}
+                    id={`category-${category.categoryName}`}
                     className="checkbox checkbox-primary"
-                    checked={selectedCategories.includes(category.id)}
-                    onChange={() => handleCategoryChange(category.id)}
+                    checked={selectedCategories.includes(category.categoryName)}
+                    onChange={() => handleCategoryChange(category.categoryName)}
                   />
                   <span className="">{category.categoryName}</span>
                 </label>

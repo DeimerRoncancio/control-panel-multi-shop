@@ -1,24 +1,24 @@
 import {
   FieldErrors,
-  FieldValues,
   UseFormHandleSubmit,
   UseFormRegister,
 } from 'react-hook-form';
+import { RequestProductID } from '../../interface/response-productid';
 
 export function FormUpdate({
   register,
   handleSubmit,
-  formState: { errors },
+  fieldErrors: { errors },
 }: {
-  register: UseFormRegister<FieldValues>;
-  handleSubmit: UseFormHandleSubmit<FieldValues, FieldValues>;
-  formState: FieldErrors<FieldValues>;
+  register: UseFormRegister<RequestProductID>;
+  handleSubmit: UseFormHandleSubmit<RequestProductID>;
+  fieldErrors: FieldErrors<RequestProductID>;
 }) {
   return (
     <div className="xl:col-span-2 space-y-6 border rounded-lg border-gray-600 flex flex-col">
       <div className="card  shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-xl mb-6">Información Principal</h2>
+          <h2 className="card-title text-xl">Información Principal</h2>
 
           <div className="space-y-4">
             {/* Product Name */}
@@ -42,7 +42,7 @@ export function FormUpdate({
               <label htmlFor="product-description" className="flex flex-col">
                 <span className="label-text font-semibold">Descripción *</span>
                 <textarea
-                  {...register('productDescription')}
+                  {...register('description')}
                   id="product-description"
                   className="textarea textarea-bordered h-32 w-full"
                   defaultValue="Mando personalizado, purpura para consola X-BOX"
