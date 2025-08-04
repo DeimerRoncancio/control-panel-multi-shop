@@ -15,8 +15,10 @@ const axiosGetBearer = async ({
       },
     });
 
+    console.log('Response from axiosGetBearer:', response.data);
     return response.data;
   } catch (error) {
+    console.log('Error in axiosGetBearer:', error);
     throw new Error(
       error instanceof AxiosError
         ? error.message

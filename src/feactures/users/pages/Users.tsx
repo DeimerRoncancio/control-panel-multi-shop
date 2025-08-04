@@ -19,14 +19,26 @@ import Pagination from '../../../shared/components/globalComponents/Pagination';
 import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
 import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
+import { SearchProducts } from '../../products/interface/search-products';
 
 function Users() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
+  const [searchUsers, setsearchUsers] = useState<SearchProducts | null>(null);
   const { data, isLoading } = useQuery<GetUserRequest>({
-    queryKey: ['users', pagination],
+    queryKey: ['users', pagination, searchUsers],
     queryFn: async () => {
       const token = Cookies.get('accessToken');
+
+      if (searchUsers) {
+        console.log('searchUsers', searchUsers);
+
+        return axiosGetBearer({
+          url: `/app/users/search?identifier=${searchUsers.identifier}&isAdmin=false&isEnabled=${searchUsers.isEnabled}&field=${searchUsers.field}&size=${pagination.size}&page=${pagination.page}`,
+          token: token || '',
+        });
+      }
+
       return axiosGetBearer({
         url: `/app/users/by-role?isAdmin=false&size=${pagination.size}&page=${pagination.page}`,
         token: token || '',
@@ -64,7 +76,7 @@ function Users() {
           </ButtonModal>
         </div>
         <DetailsUser isAdmin={false} />
-        <SearchUsers />
+        <SearchUsers setSearchUsers={setsearchUsers} />
         <ListUsers
           isAdmin={false}
           users={data?.content || []}
