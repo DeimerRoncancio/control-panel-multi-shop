@@ -57,7 +57,7 @@ function Admins() {
           </ButtonModal>
         </div>
         <DetailsUser isAdmin />
-        <SearchUsers />
+        <SearchUsers setSearchUsers={() => {}} />
         <ListUsers
           isAdmin
           users={data?.content || []}

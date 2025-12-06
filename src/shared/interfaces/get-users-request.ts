@@ -15,7 +15,7 @@ export interface GetUserRequest {
 export interface Content {
   id: string;
   name: string;
-  imageUser: ImageUser;
+  imageUser: ImageUser | null;
   secondName: null | string;
   lastnames: string;
   phoneNumber: number | null;

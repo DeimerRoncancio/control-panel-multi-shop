@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 
-const successAlert = () => {
-  toast.success('Bienvenido', {
+const successAlert = (message?: string) => {
+  toast.success(message || 'Bienvenido', {
     position: 'bottom-right',
     autoClose: 5000,
     hideProgressBar: false,
@@ -12,4 +12,5 @@ const successAlert = () => {
     theme: 'light',
   });
 };
+
 export default successAlert;

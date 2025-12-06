@@ -24,7 +24,7 @@ function FormLogin() {
   const { mutate, isPending } = useMutation({
     mutationFn: axiosPost,
     onSuccess: (data: any) => {
-      if (data.error) errorAlert();
+      if (data.error) errorAlert({});
       else {
         Cookies.set('accessToken', data.data.token, {
           expires: HorasEnMilisegundos,
@@ -47,12 +47,12 @@ function FormLogin() {
   return (
     <div className="hero bg-base-200 min-h-[90vh]">
       <ToastContainer />
-      <div className="hero-content flex-col lg:flex-row-reverse">
+      <div className="hero-content w-[900px] flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Ecommerce Multi Shop</h1>
+          <h1 className="text-5xl font-bold">Nicki Best Deals</h1>
           <p className="py-6">
             ¡Bienvenido al panel administrativo de nuestra plataforma de
-            ecommerce multi tienda! Por favor, inicia sesión para acceder a tu
+            drop shipping Nicki Best Deals! Por favor, inicia sesión para acceder a tu
             cuenta y comenzar a gestionar tus tiendas.
           </p>
         </div>

@@ -1,10 +1,12 @@
-export function UpdateImages() {
+import { ProductImage } from "../../interface/response-products";
+
+export function UpdateImages({ images }: { images: ProductImage[] }) {
   return (
     <div className="mt-12 border rounded-lg border-gray-600 col-span-2">
       <div className="card shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-2xl mb-6 flex items-center gap-2">
-            🖼️ Imágenes del Producto
+            Imágenes del Producto
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -12,12 +14,12 @@ export function UpdateImages() {
             <div className="relative group">
               <div className="aspect-square bg-gray-100 rounded-lg border-2 border-gray-200 overflow-hidden hover:border-primary transition-colors">
                 <img
-                  src="https://via.placeholder.com/300x300/e5e7eb/6b7280?text=Imagen+1"
+                  src={images[0]?.imageUrl}
                   alt="Imagen del producto"
                   className="w-full h-full object-cover"
                 />
                 {/* Overlay con botones */}
-                <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-50 transition-opacity flex items-center justify-center gap-2">
                   <button type="button" className="btn btn-sm btn-error">
                     🗑️
                   </button>
@@ -80,7 +82,7 @@ export function UpdateImages() {
                 <p className="font-medium text-info mb-1">
                   Información sobre las imágenes:
                 </p>
-                <ul className="text-gray-600 space-y-1">
+                <ul className="text-gray-400 space-y-1">
                   <li>• Máximo 10 imágenes por producto</li>
                   <li>• Formatos permitidos: PNG, JPG, JPEG</li>
                   <li>• Tamaño máximo: 10MB por imagen</li>

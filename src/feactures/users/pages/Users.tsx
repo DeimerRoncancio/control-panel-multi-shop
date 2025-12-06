@@ -31,8 +31,6 @@ function Users() {
       const token = Cookies.get('accessToken');
 
       if (searchUsers) {
-        console.log('searchUsers', searchUsers);
-
         return axiosGetBearer({
           url: `/app/users/search?identifier=${searchUsers.identifier}&isAdmin=false&isEnabled=${searchUsers.isEnabled}&field=${searchUsers.field}&size=${pagination.size}&page=${pagination.page}`,
           token: token || '',

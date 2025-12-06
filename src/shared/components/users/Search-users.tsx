@@ -1,10 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { SearchProducts } from '../../../feactures/products/interface/search-products';
 
-function SearchUsers({
-  setSearchUsers,
-}: {
-  setSearchUsers: React.Dispatch<React.SetStateAction<SearchProducts | null>>;
+function SearchUsers({ setSearchUsers }: { 
+  setSearchUsers: React.Dispatch<React.SetStateAction<SearchProducts | null>>
 }) {
   const { register, handleSubmit } = useForm();
 

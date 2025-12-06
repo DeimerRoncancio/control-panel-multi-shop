@@ -1,5 +1,5 @@
 {
-  "name": "control-panel-multi-shop",
+  "name": "control-panel-drop-shipping-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -22,6 +22,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.57.0",
     "react-icons": "^5.5.0",
+    "react-number-format": "^5.4.4",
     "react-router": "^7.6.2",
     "react-toastify": "^11.0.5",
     "tailwindcss": "^4.1.8",

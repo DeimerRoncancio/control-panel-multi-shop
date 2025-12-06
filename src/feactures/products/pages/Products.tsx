@@ -14,6 +14,7 @@ import ModalProductDelete from '../components/delete/Modal-delete-product';
 function Products() {
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
   const [productUpdate, setProductUpdate] = useState<Content | null>(null);
+
   const { data, isLoading } = useQuery({
     queryKey: ['products', pagination],
     queryFn: async () => {

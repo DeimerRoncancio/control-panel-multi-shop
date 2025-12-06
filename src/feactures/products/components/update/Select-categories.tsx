@@ -38,7 +38,7 @@ export function SelectCategories({
     <div className="xl:col-span-1flex flex-col">
       <div className="card h-auto shadow-xl border border-gray-600 rounded-lg">
         <div className="card-body">
-          <h2 className="card-title text-xl mb-6">Categorías *</h2>
+          <h2 className="card-title text-xl mb-6">Categorías</h2>
 
           {categoriesLoading ? (
             <div className="space-y-3">

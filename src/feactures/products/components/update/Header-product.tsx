@@ -1,11 +1,13 @@
-import React from 'react';
+import { useNavigate } from 'react-router';
 
 export function HeaderProduct() {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button type="button" className="btn btn-ghost btn-sm">
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => navigate("/products")}>
             <svg
               className="w-5 h-5"
               fill="none"
@@ -21,7 +23,7 @@ export function HeaderProduct() {
             </svg>
           </button>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-purple-500 bg-clip-text text-transparent">
               Actualizar Producto
             </h1>
             <p className="text-sm opacity-70">
@@ -33,7 +35,7 @@ export function HeaderProduct() {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            className="btn btn-primary bg-gradient-to-r from-purple-500 to-pink-500 border-none"
+            className="btn btn-primary bg-purple-500 border-none"
           >
             Guardar Cambios
           </button>

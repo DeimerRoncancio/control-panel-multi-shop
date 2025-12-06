@@ -2,17 +2,14 @@ import { FaPencilAlt } from 'react-icons/fa';
 import { Content } from '../../interfaces/get-users-request';
 import { ButtonModal } from '../globalComponents/ButtonModal';
 
-export function ListUsers({
-  users,
-  isAdmin,
-  isLoading,
-  setUserUpdate,
-}: {
+type ListUsersProps = {
   users: Content[];
   isAdmin: boolean;
   isLoading: boolean;
   setUserUpdate: React.Dispatch<React.SetStateAction<Content | null>>;
-}) {
+};
+
+export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUsersProps) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
       <table className="table">
@@ -44,7 +41,7 @@ export function ListUsers({
                     >
                       <div className="mask mask-squircle h-12 w-12 relative overflow-hidden">
                         <img
-                          src={`${user.imageUser.imageUrl}`}
+                          src={`${user.imageUser?.imageUrl}`}
                           alt="Avatar Tailwind CSS Component"
                           className="transition-all duration-200 group-hover:blur-sm"
                         />

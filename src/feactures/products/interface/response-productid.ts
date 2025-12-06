@@ -2,7 +2,7 @@ export interface RequestProductID {
   id: string;
   productName: string;
   description: string;
-  price: number;
+  price: string;
   productImages: ProductImage[];
   categories: Category[];
 }
