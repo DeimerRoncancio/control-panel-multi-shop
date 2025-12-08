@@ -1,21 +1,21 @@
 import {
+  Control,
   Controller,
   FieldErrors,
-  UseFormHandleSubmit,
+  UseFormClearErrors,
   UseFormRegister,
 } from 'react-hook-form';
 import { UpdateProductType } from '../../../../shared/zod/products/update.zod';
 import { NumericFormat } from "react-number-format";
 
 type FormUpdateProps = {
-  control: any;
-  clearErrors: any;
-  register: UseFormRegister<UpdateProductType>;
-  handleSubmit: UseFormHandleSubmit<UpdateProductType>;
+  control: Control<UpdateProductType>;
   fieldErrors: FieldErrors<UpdateProductType>;
+  clearErrors: UseFormClearErrors<UpdateProductType>;
+  register: UseFormRegister<UpdateProductType>;
 };
 
-export function FormUpdate({ control, clearErrors, register, fieldErrors }: FormUpdateProps) {
+export function FormUpdate({ control, fieldErrors, clearErrors, register }: FormUpdateProps) {
   return (
     <div className="xl:col-span-2 space-y-6 border rounded-lg border-gray-600 flex flex-col">
       <div className="card  shadow-xl">
@@ -82,7 +82,7 @@ export function FormUpdate({ control, clearErrors, register, fieldErrors }: Form
                         className="input input-bordered w-full pl-8"
                         style={fieldErrors.price && { borderColor: '#fb2c36' }}
                         onValueChange={(values) => {
-                          field.onChange(values.floatValue);
+                          field.onChange(values.formattedValue);
                           clearErrors('price');
                         }}
                       />
