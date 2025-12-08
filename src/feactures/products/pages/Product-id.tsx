@@ -1,9 +1,5 @@
-import Cookies from 'js-cookie';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
-import { CategoriesRequest } from '../../categories/interfaces/categories-response';
 import { SelectCategories } from '../components/update/Select-categories';
 import { FormUpdate } from '../components/update/Form-update';
 import { HeaderProduct } from '../components/update/Header-product';
@@ -16,31 +12,17 @@ import useProducts from '../hooks/useProducts';
 import { toUpdateProductType } from '../mappers/products.mapper';
 
 export function ProductId() {
-  const { productData, updateProduct } = useProducts();
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const { productData, categoriesData, categoriesLoading, updateProduct } = useProducts();
 
   const {
     control,
+    watch,
     reset,
     register,
     handleSubmit,
     clearErrors,
     formState: { errors },
-  } = useForm<UpdateProductType>({
-    resolver: zodResolver(UpdateProductSchema),
-  });
-
-  const { data: categoriesData, isLoading: categoriesLoading } = useQuery<CategoriesRequest>({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      const token = Cookies.get('accessToken');
-      return axiosGetBearer({
-        url: '/app/categories',
-        token: token || '',
-        params: { page: 0, size: 20 }
-      });
-    },
-  });
+  } = useForm<UpdateProductType>({ resolver: zodResolver(UpdateProductSchema) });
 
   useEffect(() => {
     if (productData) reset(toUpdateProductType({ product: productData }));
@@ -68,11 +50,10 @@ export function ProductId() {
           </div>
 
           <SelectCategories
-            selectedCategories={selectedCategories}
-            setSelectedCategories={setSelectedCategories}
-            categoriesData={categoriesData}
-            categoriesLoading={categoriesLoading}
-            defectSelectedCategories={productData?.categories || []}
+            watch={watch}
+            register={register}
+            categories={categoriesData}
+            loading={categoriesLoading}
           />
         </div>
       </div>

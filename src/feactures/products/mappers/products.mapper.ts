@@ -9,5 +9,6 @@ export const toUpdateProductType = ({ product }: ProductTypeParams): UpdateProdu
   return {
     ...product,
     price: product.price.toString(),
+    categoriesList: product.categories.map(category => category.categoryName),
   };
 }

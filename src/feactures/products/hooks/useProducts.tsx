@@ -9,10 +9,11 @@ import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
 import axiosPutBearer from "../../../shared/requests/protectedRoutes/put";
 import { UpdateProductType } from "../../../shared/zod/products/update.zod";
+import { CategoriesRequest } from "../../categories/interfaces/categories-response";
 
 export default function useProducts() {
   const { id } = useParams();
-
+  
   const { data: productData } = useQuery<RequestProductID>({
     queryKey: ['products'],
     queryFn: async () => {
@@ -20,6 +21,18 @@ export default function useProducts() {
       return axiosGetBearer({
         url: `/app/products/${id}`,
         token: token || '',
+      });
+    },
+  });
+
+  const { data: categoriesData, isLoading: categoriesLoading } = useQuery<CategoriesRequest>({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const token = Cookies.get('accessToken');
+      return axiosGetBearer({
+        url: '/app/categories',
+        token: token || '',
+        params: { page: 0, size: 20 }
       });
     },
   });
@@ -40,8 +53,7 @@ export default function useProducts() {
       productName: data.productName,
       description: data.description,
       price: parseInt(integerPart),
-      categoriesList: 'Gamer, Videojuegos',
-      variantsList: 'talla-fc-barcelona-1',
+      categoriesList: data.categoriesList.join(', '),
     };
 
     mutate({
@@ -51,5 +63,5 @@ export default function useProducts() {
     });
   };
 
-  return { productData, updateProduct };
+  return { productData, categoriesData, categoriesLoading, updateProduct };
 }
