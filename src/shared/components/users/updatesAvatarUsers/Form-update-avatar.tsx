@@ -54,7 +54,7 @@ export default function FormUpdateAvatar({
       <div className="w-full flex justify-center items-center mt-4">
         <img
           className="w-[250px] h-[250px] object-cover rounded-3xl"
-          src={previewImage || user?.imageUser.imageUrl}
+          src={previewImage || user?.imageUser?.imageUrl}
           alt=""
         />
       </div>

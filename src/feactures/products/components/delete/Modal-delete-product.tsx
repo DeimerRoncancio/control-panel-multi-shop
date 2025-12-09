@@ -11,4 +11,5 @@ function ModalProductDelete() {
     </dialog>
   );
 }
+
 export default ModalProductDelete;

@@ -1,16 +1,13 @@
 import React from 'react';
 
-export function ButtonModal({
-  idModal,
-  children,
-  className,
-  onClick,
-}: {
+type Props = {
   idModal: string;
   children: React.ReactNode;
   className: string;
   onClick?: () => void;
-}) {
+}
+
+export function ButtonModal({ idModal, children, className, onClick }: Props) {
   return (
     <button
       type="button"

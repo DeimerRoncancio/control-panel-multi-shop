@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { RequestProductID } from "../interface/response-productid";
 import axiosGetBearer from "../../../shared/requests/protectedRoutes/get";
 import Cookies from 'js-cookie';
@@ -14,13 +14,20 @@ import { useState } from "react";
 
 export default function useProducts() {
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
 
-  const deleteImage = (imageId: string) => setImagesToRemove(prev => [...prev, imageId]);
+  const handleRemoveImages = (imageIds: string[], clean = false) => {
+    if (clean === true) setImagesToRemove([]);
+    setImagesToRemove((prevImages) => [...prevImages, ...imageIds]);
+  }
 
   const { mutate } = useMutation({
     mutationFn: axiosPutBearer,
-    onSuccess: () => successAlert("Producto actualizado con éxito"),
+    onSuccess: () => {
+      successAlert("Producto actualizado con éxito")
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
     onError: (error: any) => errorAlert({ message: 'Error al actualizar el producto' + error.message }),
   });
 
@@ -69,5 +76,12 @@ export default function useProducts() {
     },
   });
 
-  return { productData, categoriesData, categoriesLoading, deleteImage, updateProduct };
+  return {
+    productData,
+    categoriesData,
+    categoriesLoading,
+    imagesToRemove,
+    handleRemoveImages,
+    updateProduct
+  };
 }

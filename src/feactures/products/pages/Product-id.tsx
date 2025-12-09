@@ -12,8 +12,6 @@ import useProducts from '../hooks/useProducts';
 import { toUpdateProductType } from '../mappers/products.mapper';
 
 export function ProductId() {
-  const { productData, categoriesData, categoriesLoading, deleteImage, updateProduct } = useProducts();
-
   const {
     control,
     watch,
@@ -24,6 +22,15 @@ export function ProductId() {
     clearErrors,
     formState: { errors },
   } = useForm<UpdateProductType>({ resolver: zodResolver(UpdateProductSchema) });
+
+  const {
+    productData,
+    categoriesData,
+    categoriesLoading,
+    imagesToRemove,
+    handleRemoveImages,
+    updateProduct 
+  } = useProducts();
 
   useEffect(() => {
     if (productData) reset(toUpdateProductType({ product: productData }));
@@ -49,9 +56,10 @@ export function ProductId() {
             />
             <UpdateImages
               images={productData?.productImages || []}
+              imagesToRemove={imagesToRemove}
+              removeImages={handleRemoveImages}
               watch={watch}
               setValue={setValue}
-              deleteImage={deleteImage}
             />
           </div>
 

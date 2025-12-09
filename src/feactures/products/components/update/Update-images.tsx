@@ -7,26 +7,44 @@ import { UpdateProductType } from "../../../../shared/zod/products/update.zod";
 
 type Props = {
   images: ProductImage[];
+  imagesToRemove?: string[];
   watch: UseFormWatch<UpdateProductType>;
   setValue: UseFormSetValue<UpdateProductType>;
-  deleteImage: (imageId: string) => void;
+  removeImages: (imageIds: string[], clean?: boolean) => void;
 };
 
-export function UpdateImages({ images, watch, setValue, deleteImage }: Props) {
+export function UpdateImages({ images, imagesToRemove, watch, setValue, removeImages }: Props) {
   const newImages = watch("images");
+
+  const deleteImages = (evt: React.MouseEvent<HTMLButtonElement>, imageId: string) => {
+    evt.preventDefault();
+    removeImages([imageId]);
+  }
+
+  const cleanDeletedImages = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    setValue("images", []);
+    removeImages([], true);
+  }
 
   return (
     <div className="mt-12 border rounded-lg border-gray-600 col-span-2">
       <div className="card shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-2xl mb-6 flex items-center gap-2">
-            Imágenes del Producto
-          </h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="card-title text-2xl flex items-center gap-2">
+              Imágenes del Producto
+            </h2>
+            <button className="btn btn-outline btn-primary" onClick={cleanDeletedImages}>
+              Deshacer cambios
+            </button>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {/* Imagen existente */}
             {images.map((image) => (
-              <div className="relative group" key={image.imageId}>
+              <div className="relative group" key={image.imageId}
+              style={{ display: imagesToRemove?.includes(image.imageId) ? 'none' : 'block' }}>
                 <div className="aspect-square bg-gray-100 rounded-lg outline-2 outline-gray-200 
                 overflow-hidden hover:outline-primary transition-colors">
                   <img
@@ -38,10 +56,10 @@ export function UpdateImages({ images, watch, setValue, deleteImage }: Props) {
                   <div className="absolute hover:opacity-100 opacity-0 inset-0 flex items-center 
                   justify-center gap-2 transition-all z-100">
                     <div className="absolute bg-[#1c1c1c7c] h-full w-full -z-10 rounded-lg"></div>
-                    <button className="btn btn-sm btn-error" onClick={(evt) => {
-                      evt.preventDefault();
-                      deleteImage(image.imageId);
-                    }}>
+                    <button
+                      className="btn btn-sm btn-error"
+                      onClick={(evt) => deleteImages(evt, image.imageId)}
+                    >
                       <MdDelete size={20} />
                     </button>
                     <ButtonModal idModal="" className="btn btn-sm btn-primary">
@@ -92,7 +110,9 @@ export function UpdateImages({ images, watch, setValue, deleteImage }: Props) {
             <div className="aspect-square">
               <label
                 htmlFor="new-image"
-                className="w-full h-full border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all group"
+                className="w-full h-full border-2 border-dashed border-gray-300 rounded-lg flex 
+                flex-col items-center justify-center cursor-pointer hover:border-primary 
+                hover:bg-primary/5 transition-all group"
               >
                 <input
                   id="new-image"
@@ -105,6 +125,7 @@ export function UpdateImages({ images, watch, setValue, deleteImage }: Props) {
                     const currentFiles = watch("images") || [];
                     const newFiles = Array.from(e.target.files || []);
                     setValue("images", [...currentFiles, ...newFiles]);
+                    e.target.value = "";
                   }}
                 />
                 <div className="text-center">
