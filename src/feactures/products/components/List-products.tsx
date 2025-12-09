@@ -1,4 +1,3 @@
-import { FaPencilAlt } from 'react-icons/fa';
 import { CiImageOn } from 'react-icons/ci';
 import { Link } from 'react-router';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
@@ -20,7 +19,7 @@ export function ListProducts({
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Categorías</th>
+            <th>Primeras categorías</th>
             <th>Precio</th>
             <th>Imagenes</th>
             <th>Descripción</th>
@@ -39,45 +38,40 @@ export function ListProducts({
               <tr key={product.id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <ButtonModal
-                      onClick={() => setProductUpdate(product)}
-                      idModal="user_avatar"
-                      className="avatar relative group cursor-pointer"
-                    >
+                    <div className="avatar relative">
                       <div className="mask mask-squircle h-12 w-12 relative overflow-hidden">
                         <img
                           src={`${product.productImages[0]?.imageUrl}`}
                           alt="Avatar Tailwind CSS Component"
-                          className="transition-all duration-200 group-hover:blur-sm"
+                          className="transition-all duration-200"
                         />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <FaPencilAlt className="text-white text-lg drop-shadow-lg" />
-                        </div>
                       </div>
-                    </ButtonModal>
+                    </div>
                     <div>
                       <Link
-                        className="font-bold hover:underline"
+                        className="font-bold hover:underline w-48"
                         to={`/products/${product.id}`}
                       >
-                        {`${product?.productName ?? ''}`}
+                        {product.productName}
                       </Link>
                     </div>
                   </div>
                 </td>
                 <td>
                   <div className="flex flex-col gap-1">
-                    {product?.categories.map((category) => (
+                    {product?.categories.slice(0, 3).map((category) => (
                       <span
                         key={category.categoryName}
-                        className="text-sm badge badge-info p-2 rounded-lg"
+                        className="text-sm badge badge-info p-2 rounded-lg max-w-[120px]"
                       >
-                        {category.categoryName}
+                        <p className="truncate">
+                          {category.categoryName}
+                        </p> 
                       </span>
                     ))}
                   </div>
                 </td>
-                <td>$ {product?.price ? product.price : 'No price'}</td>
+                <td className='w-28'>$ {new Intl.NumberFormat("es-ES").format(product.price)}</td>
                 <td>
                   <div className="flex gap-2">
                     <CiImageOn size={20} /> {product.productImages.length}
@@ -85,7 +79,9 @@ export function ListProducts({
                 </td>
                 <td>
                   <div className="text-sm text-gray-400">
-                    {product.description.slice(0, 30)}...
+                    <p className="truncate w-48">
+                      {product.description}
+                    </p>
                   </div>
                 </td>
                 <th>
@@ -116,17 +112,6 @@ export function ListProducts({
             ))
           )}
         </tbody>
-        {/* foot */}
-        <tfoot>
-          <tr>
-            <th>Producto</th>
-            <th>Categorías</th>
-            <th>Precio</th>
-            <th>Imagenes</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-          </tr>
-        </tfoot>
       </table>
     </div>
   );

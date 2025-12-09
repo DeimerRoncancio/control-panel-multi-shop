@@ -28,7 +28,7 @@ export function SelectCategories({ categories, loading, watch, register }: Selec
               ))}
             </div>
           ) : (
-            <div className="flex flex-col gap-3 max-h-96 overflow-y-auto">
+            <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto">
               {categories?.content.map((category) => (
                 <label
                   htmlFor={`category-${category.categoryName}`}

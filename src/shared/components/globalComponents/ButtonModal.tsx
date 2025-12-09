@@ -9,7 +9,6 @@ export function ButtonModal({
   idModal: string;
   children: React.ReactNode;
   className: string;
-  // eslint-disable-next-line react/require-default-props
   onClick?: () => void;
 }) {
   return (

@@ -12,13 +12,14 @@ import useProducts from '../hooks/useProducts';
 import { toUpdateProductType } from '../mappers/products.mapper';
 
 export function ProductId() {
-  const { productData, categoriesData, categoriesLoading, updateProduct } = useProducts();
+  const { productData, categoriesData, categoriesLoading, deleteImage, updateProduct } = useProducts();
 
   const {
     control,
     watch,
     reset,
     register,
+    setValue,
     handleSubmit,
     clearErrors,
     formState: { errors },
@@ -46,7 +47,12 @@ export function ProductId() {
               register={register}
               fieldErrors={errors}
             />
-            <UpdateImages images={productData?.productImages || []} />
+            <UpdateImages
+              images={productData?.productImages || []}
+              watch={watch}
+              setValue={setValue}
+              deleteImage={deleteImage}
+            />
           </div>
 
           <SelectCategories

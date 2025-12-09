@@ -20,7 +20,7 @@ function Products() {
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: '/app/products?size=10&page=0',
+        url: '/app/products?size=12&page=0',
         token: token || '',
       });
     },
@@ -42,7 +42,7 @@ function Products() {
             Crear Producto
           </ButtonModal>
         </div>
-        <DetailsProduct />
+        <DetailsProduct totalProducts={data?.totalElements} />
         <SearchProducts />
         <ListProducts
           products={data?.content || []}

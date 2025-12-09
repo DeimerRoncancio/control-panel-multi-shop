@@ -8,6 +8,7 @@ const UpdateProductSchema = z.object({
         return numericValue > 0;
     }, { message: 'El precio no debe ser negativo' }),
     categoriesList: z.array(z.string()).min(1, { message: 'Seleccione al menos una categoría' }),
+    images: z.array(z.instanceof(File)).optional()
 })
 
 export default UpdateProductSchema;
