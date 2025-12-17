@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { SelectCategories } from '../components/update/Select-categories';
 import { FormUpdate } from '../components/update/Form-update';
 import { HeaderProduct } from '../components/update/Header-product';
 import { UpdateImages } from '../components/update/Update-images';
 // import { setValuesUpdateProduct } from '../helpers/set-values';
-import UpdateProductSchema, { UpdateProductType } from '../../../shared/zod/products/update.zod';
+import ProductSchema, { ProductType } from '../../../shared/zod/products/update.zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastContainer } from 'react-toastify';
 import useProducts from '../hooks/useProducts';
@@ -21,7 +21,7 @@ export function ProductId() {
     handleSubmit,
     clearErrors,
     formState: { errors },
-  } = useForm<UpdateProductType>({ resolver: zodResolver(UpdateProductSchema) });
+  } = useForm<ProductType>({ resolver: zodResolver(ProductSchema) });
 
   const {
     productData,
@@ -29,8 +29,12 @@ export function ProductId() {
     categoriesLoading,
     imagesToRemove,
     handleRemoveImages,
-    updateProduct 
+    sendProduct 
   } = useProducts();
+
+  const onSubmit: SubmitHandler<ProductType> = (data) => {
+    sendProduct(data);
+  }
 
   useEffect(() => {
     if (productData) reset(toUpdateProductType({ product: productData }));
@@ -38,7 +42,7 @@ export function ProductId() {
 
   return (
     <form
-      onSubmit={handleSubmit(updateProduct)}
+      onSubmit={handleSubmit(onSubmit)}
       className="min-h-screen transition-colors duration-300"
     >
       <ToastContainer />

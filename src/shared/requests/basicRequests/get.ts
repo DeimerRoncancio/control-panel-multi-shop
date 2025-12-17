@@ -1,9 +1,20 @@
 import axios, { AxiosError } from 'axios';
+import envs from '../../../configs/envs';
 
-const axiosGet = async ({ url }: { url: string }) => {
+type Props = {
+  url: string;
+  params?: {
+    page: number;
+    size: number;
+  };
+}
+
+const axiosGet = async ({ url, params = { page: 0, size: 10 } }: Props) => {
   try {
-    const response = await axios.get(url);
-    return response;
+    const response = await axios.get(`${envs.API}${url}`, {
+      params,
+    });
+    return response.data;
   } catch (error) {
     throw new Error(
       error instanceof AxiosError

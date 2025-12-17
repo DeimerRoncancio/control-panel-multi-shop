@@ -3,13 +3,13 @@ import { ProductImage } from "../../interface/response-products";
 import { MdDelete } from "react-icons/md";
 import ButtonModal from "../../../../shared/components/globalComponents/ButtonModal";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { UpdateProductType } from "../../../../shared/zod/products/update.zod";
+import { ProductType } from "../../../../shared/zod/products/update.zod";
 
 type Props = {
   images: ProductImage[];
   imagesToRemove?: string[];
-  watch: UseFormWatch<UpdateProductType>;
-  setValue: UseFormSetValue<UpdateProductType>;
+  watch: UseFormWatch<ProductType>;
+  setValue: UseFormSetValue<ProductType>;
   removeImages: (imageIds: string[], clean?: boolean) => void;
 };
 

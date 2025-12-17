@@ -85,22 +85,23 @@ export function ListProducts({
                   </div>
                 </td>
                 <th>
-                  <details className="dropdown">
+                  <details className="dropdown dropdown-center">
                     <summary className="btn m-1">Detalles</summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 p-2 shadow-sm w-36">
+                    <ul className="menu dropdown-content bg-base-100 border border-gray-700 rounded-box z-1
+                    p-2 shadow-sm w-36 gap-2">
                       <li>
                         <Link
                           to={`/products/${product.id}`}
-                          className="text-[12px] btn btn-primary btn-sm"
+                          className="text-[12px] btn btn-sm"
                         >
-                          Actualizar Producto
+                          Editar Producto
                         </Link>
                       </li>
                       <li>
                         <ButtonModal
                           onClick={() => setProductUpdate(product)}
                           idModal="delete_product"
-                          className="text-sm btn-sm btn-warning"
+                          className="text-xs btn btn-sm btn-error"
                         >
                           Eliminar Producto
                         </ButtonModal>

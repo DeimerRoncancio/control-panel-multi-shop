@@ -10,6 +10,7 @@ import { ButtonModal } from '../../../shared/components/globalComponents/ButtonM
 import Pagination from '../../../shared/components/globalComponents/Pagination';
 import ModalProductCreate from '../components/create/Modal-create-product';
 import ModalProductDelete from '../components/delete/Modal-delete-product';
+import axiosGet from '../../../shared/requests/basicRequests/get';
 
 function Products() {
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
@@ -26,9 +27,18 @@ function Products() {
     },
   });
 
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      return axiosGet({
+        url: '/app/categories',
+      });
+    }
+  });
+
   return (
     <>
-      <ModalProductCreate />
+      <ModalProductCreate categories={categoriesData?.content || []} />
       <ModalProductDelete />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">

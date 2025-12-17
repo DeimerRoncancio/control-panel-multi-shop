@@ -1,12 +1,12 @@
 import { CategoriesRequest } from '../../../categories/interfaces/categories-response';
 import { UseFormRegister, UseFormWatch } from 'react-hook-form';
-import { UpdateProductType } from '../../../../shared/zod/products/update.zod';
+import { ProductType } from '../../../../shared/zod/products/update.zod';
 
 type SelectCategoriesProps = {
   categories: CategoriesRequest | undefined;
   loading: boolean;
-  watch: UseFormWatch<UpdateProductType>;
-  register: UseFormRegister<UpdateProductType>;
+  watch: UseFormWatch<ProductType>;
+  register: UseFormRegister<ProductType>;
 };
 
 export function SelectCategories({ categories, loading, watch, register }: SelectCategoriesProps) {

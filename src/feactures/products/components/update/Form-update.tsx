@@ -5,14 +5,14 @@ import {
   UseFormClearErrors,
   UseFormRegister,
 } from 'react-hook-form';
-import { UpdateProductType } from '../../../../shared/zod/products/update.zod';
+import { ProductType } from '../../../../shared/zod/products/update.zod';
 import { NumericFormat } from "react-number-format";
 
 type FormUpdateProps = {
-  control: Control<UpdateProductType>;
-  fieldErrors: FieldErrors<UpdateProductType>;
-  clearErrors: UseFormClearErrors<UpdateProductType>;
-  register: UseFormRegister<UpdateProductType>;
+  control: Control<ProductType>;
+  fieldErrors: FieldErrors<ProductType>;
+  clearErrors: UseFormClearErrors<ProductType>;
+  register: UseFormRegister<ProductType>;
 };
 
 export function FormUpdate({ control, fieldErrors, clearErrors, register }: FormUpdateProps) {

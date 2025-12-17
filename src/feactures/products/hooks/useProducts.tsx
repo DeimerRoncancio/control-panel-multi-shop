@@ -4,11 +4,10 @@ import axiosGetBearer from "../../../shared/requests/protectedRoutes/get";
 import Cookies from 'js-cookie';
 import { useParams } from "react-router";
 import envs from "../../../configs/envs";
-import { SubmitHandler } from "react-hook-form";
 import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
 import axiosPutBearer from "../../../shared/requests/protectedRoutes/put";
-import { UpdateProductType } from "../../../shared/zod/products/update.zod";
+import { ProductType } from "../../../shared/zod/products/update.zod";
 import { CategoriesRequest } from "../../categories/interfaces/categories-response";
 import { useState } from "react";
 
@@ -17,6 +16,8 @@ export default function useProducts() {
   const queryClient = useQueryClient();
   const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
 
+
+  
   const handleRemoveImages = (imageIds: string[], clean = false) => {
     if (clean === true) setImagesToRemove([]);
     setImagesToRemove((prevImages) => [...prevImages, ...imageIds]);
@@ -31,7 +32,7 @@ export default function useProducts() {
     onError: (error: any) => errorAlert({ message: 'Error al actualizar el producto' + error.message }),
   });
 
-  const updateProduct: SubmitHandler<UpdateProductType> = (data) => {
+  const sendProduct = (data: ProductType) => {
     const token = Cookies.get('accessToken');
 
     const lastSeparator = Math.max(data.price.lastIndexOf(","));
@@ -82,6 +83,6 @@ export default function useProducts() {
     categoriesLoading,
     imagesToRemove,
     handleRemoveImages,
-    updateProduct
+    sendProduct
   };
 }
