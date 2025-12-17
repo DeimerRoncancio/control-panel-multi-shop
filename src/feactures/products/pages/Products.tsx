@@ -11,6 +11,7 @@ import Pagination from '../../../shared/components/globalComponents/Pagination';
 import ModalProductCreate from '../components/create/Modal-create-product';
 import ModalProductDelete from '../components/delete/Modal-delete-product';
 import axiosGet from '../../../shared/requests/basicRequests/get';
+import { ToastContainer } from 'react-toastify';
 
 function Products() {
   const [pagination, setPagination] = useState({ page: 0, size: 10 });
@@ -39,7 +40,7 @@ function Products() {
   return (
     <>
       <ModalProductCreate categories={categoriesData?.content || []} />
-      <ModalProductDelete />
+      <ModalProductDelete productId={productUpdate?.id || ''} />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -65,6 +66,7 @@ function Products() {
           data={data}
         />
       </div>
+      <ToastContainer />
     </>
   );
 }

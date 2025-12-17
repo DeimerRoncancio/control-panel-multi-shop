@@ -11,18 +11,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosPostBearer from "../../../../shared/requests/protectedRoutes/post";
 import successAlert from "../../../../shared/alerts/login/succes.alert";
 import { errorAlert } from "../../../../shared/alerts";
-import { ToastContainer } from "react-toastify";
 
 type Props = {
   categories: Category[];
 };
 
 function ModalProductCreate({ categories }: Props) {
+  const modal = document.getElementById("create_product") as HTMLDialogElement;
+  
   const {
     control,
     watch,
     setValue,
     register,
+    clearErrors,
     formState: { errors },
     handleSubmit,
   } = useForm<ProductType>({
@@ -39,11 +41,12 @@ function ModalProductCreate({ categories }: Props) {
   const newImages = watch("images");
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending: loading } = useMutation({
     mutationFn: axiosPostBearer,
     onSuccess: () => {
       successAlert("Producto creado con éxito")
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      modal.close();
     },
     onError: (error: any) => {
       errorAlert({ message: 'Error al crear el producto: ' + error.message });
@@ -88,7 +91,6 @@ function ModalProductCreate({ categories }: Props) {
               defaultValue=""
               placeholder="Ej: Mando X-BOX Series X"
               className="input input-bordered w-full"
-            // style={ fieldErrors.productName && { borderColor: "#fb2c36" } }
             />
             {errors.productName && (
               <p className="text-sm text-error">
@@ -131,7 +133,7 @@ function ModalProductCreate({ categories }: Props) {
                     className="input input-bordered w-full pl-8"
                     onValueChange={(values) => {
                       field.onChange(values.formattedValue);
-                      // clearErrors('price');
+                      clearErrors('price');
                     }}
                   />
                 )}
@@ -215,7 +217,6 @@ function ModalProductCreate({ categories }: Props) {
                       alt="Imagen del producto"
                       className="w-full h-full object-cover"
                     />
-                    {/* Overlay con botones */}
                     <div className="absolute hover:opacity-100 opacity-0 inset-0 flex items-center 
                     justify-center gap-2 transition-all z-100">
                       <div className="absolute bg-[#1c1c1c7c] h-full w-full -z-10 rounded-lg"></div>
@@ -248,8 +249,12 @@ function ModalProductCreate({ categories }: Props) {
             <button type="submit" className="btn btn-error btn-outline">
               Cancelar
             </button>
-            <button type="submit" className="btn btn-primary">
-              Crear Producto
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? (
+                <span className="loading loading-spinner loading-sm" />
+              ) : (
+                'Crear Producto'
+              )}
             </button>
           </div>
         </form>
@@ -257,7 +262,6 @@ function ModalProductCreate({ categories }: Props) {
       <form method="dialog" className="modal-backdrop">
         <button type="submit">cerrar</button>
       </form>
-      <ToastContainer />
     </dialog>
   );
 }
