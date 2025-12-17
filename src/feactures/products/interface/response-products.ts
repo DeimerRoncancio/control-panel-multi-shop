@@ -19,6 +19,15 @@ export interface Content {
   price: number;
   productImages: ProductImage[];
   categories: Category[];
+  variants: Variant[];
+}
+
+export interface Variant {
+  id: string;
+  name: string;
+  type: string;
+  tag: string;
+  listValues: string[];
 }
 
 export interface Category {

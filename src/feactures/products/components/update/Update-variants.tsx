@@ -1,9 +1,10 @@
 import { MdAdd, MdInfoOutline } from "react-icons/md";
-import { Variants } from "../../interface/response-productid";
-import VariantItem from "./variants/Variant-item";
+import VariantItem from "../variants/Variant-item";
+import ButtonModal from "../../../../shared/components/globalComponents/ButtonModal";
+import { VariantType } from "../../../../shared/zod/products/variant.zod";
 
 type Props = {
-  variants?: Variants[];
+  variants?: VariantType[];
 }
 
 export default function UpdateVariant({ variants }: Props) {
@@ -20,10 +21,10 @@ export default function UpdateVariant({ variants }: Props) {
                 Gestiona las diferentes opciones disponibles para este producto.
               </p>
             </div>
-            <button type="button" className="btn btn-primary gap-2">
+            <ButtonModal idModal="create_variant" className="btn btn-primary gap-2">
               <MdAdd size={20} />
               Crear variante
-            </button>
+            </ButtonModal>
           </div>
 
           <div className="flex flex-col gap-4">

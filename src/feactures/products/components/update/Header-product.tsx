@@ -24,7 +24,7 @@ export function HeaderProduct() {
           </button>
           <div>
             <h1 className="text-2xl font-bold bg-purple-500 bg-clip-text text-transparent">
-              Actualizar Producto
+              Editar Producto
             </h1>
             <p className="text-sm opacity-70">
               Modificando: Mando X-BOX Series X

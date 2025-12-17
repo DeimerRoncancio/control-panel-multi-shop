@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { VariantSchema } from "./variant.zod";
 
 const ProductSchema = z.object({
     productName: z.string().min(1, { message: 'El nombre del producto es requerido' }),
@@ -8,7 +9,8 @@ const ProductSchema = z.object({
         return numericValue > 0;
     }, { message: 'El precio no debe ser negativo' }),
     categoriesList: z.array(z.string()).min(1, { message: 'Seleccione al menos una categoría' }),
-    images: z.array(z.instanceof(File)).optional()
+    images: z.array(z.instanceof(File)).optional(),
+    variants: z.array(VariantSchema).optional(),
 })
 
 export default ProductSchema;

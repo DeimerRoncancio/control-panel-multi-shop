@@ -1,7 +1,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
 import { Category } from "../../interface/response-products";
-import ProductSchema, { ProductType } from "../../../../shared/zod/products/update.zod";
+import ProductSchema, { ProductType } from "../../../../shared/zod/products/product.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonModal from "../../../../shared/components/globalComponents/ButtonModal";
 import { FaEye } from "react-icons/fa";

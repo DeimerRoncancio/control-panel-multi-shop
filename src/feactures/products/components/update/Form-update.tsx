@@ -5,7 +5,7 @@ import {
   UseFormClearErrors,
   UseFormRegister,
 } from 'react-hook-form';
-import { ProductType } from '../../../../shared/zod/products/update.zod';
+import { ProductType } from '../../../../shared/zod/products/product.zod';
 import { NumericFormat } from "react-number-format";
 
 type FormUpdateProps = {

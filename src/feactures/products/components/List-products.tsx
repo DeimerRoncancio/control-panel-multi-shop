@@ -3,15 +3,13 @@ import { Link } from 'react-router';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
 import { Content } from '../interface/response-products';
 
-export function ListProducts({
-  products,
-  isLoading,
-  setProductUpdate,
-}: {
+type Props = {
   products: Content[];
   isLoading: boolean;
   setProductUpdate: React.Dispatch<React.SetStateAction<Content | null>>;
-}) {
+}
+
+export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
       <table className="table">
@@ -79,9 +77,11 @@ export function ListProducts({
                 </td>
                 <td>
                   <div className="text-sm text-gray-400">
-                    <p className="truncate w-48">
-                      {product.description}
-                    </p>
+                    {product.variants.length > 0 ? (
+                      <span className='badge badge-primary badge-soft'>{product.variants.length} variantes</span>
+                    ) : (
+                      <span className='text-sm'>No hay variantes</span>
+                    )}
                   </div>
                 </td>
                 <th>

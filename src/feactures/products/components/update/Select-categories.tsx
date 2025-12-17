@@ -1,6 +1,6 @@
 import { CategoriesRequest } from '../../../categories/interfaces/categories-response';
 import { UseFormRegister, UseFormWatch } from 'react-hook-form';
-import { ProductType } from '../../../../shared/zod/products/update.zod';
+import { ProductType } from '../../../../shared/zod/products/product.zod';
 
 type SelectCategoriesProps = {
   categories: CategoriesRequest | undefined;

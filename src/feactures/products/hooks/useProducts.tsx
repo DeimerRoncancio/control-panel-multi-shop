@@ -7,7 +7,7 @@ import envs from "../../../configs/envs";
 import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
 import axiosPutBearer from "../../../shared/requests/protectedRoutes/put";
-import { ProductType } from "../../../shared/zod/products/update.zod";
+import { ProductType } from "../../../shared/zod/products/product.zod";
 import { CategoriesRequest } from "../../categories/interfaces/categories-response";
 import { useState } from "react";
 
@@ -16,8 +16,6 @@ export default function useProducts() {
   const queryClient = useQueryClient();
   const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
 
-
-  
   const handleRemoveImages = (imageIds: string[], clean = false) => {
     if (clean === true) setImagesToRemove([]);
     setImagesToRemove((prevImages) => [...prevImages, ...imageIds]);
@@ -46,6 +44,16 @@ export default function useProducts() {
     formData.append('categoriesList', data.categoriesList.join(', '));
     data.images?.forEach((file) => formData.append('images', file));
     if (imagesToRemove.length > 0) formData.append('imagesToRemove', imagesToRemoveString);
+
+    data.variants?.forEach((variant, index) => {
+      if (variant.id) formData.append(`variants[${index}].id`, variant.id);
+      formData.append(`variants[${index}].name`, variant.name);
+      formData.append(`variants[${index}].tag`, variant.tag);
+      formData.append(`variants[${index}].type`, variant.type);
+      variant.listValues.forEach((value, valueIndex) => {
+        formData.append(`variants[${index}].listValues[${valueIndex}]`, value);
+      });
+    });
 
     mutate({
       url: `${envs.API}/app/products/${id}`,
@@ -78,10 +86,8 @@ export default function useProducts() {
   });
 
   return {
-    productData,
-    categoriesData,
+    data: { productData, categoriesData, imagesToRemove },
     categoriesLoading,
-    imagesToRemove,
     handleRemoveImages,
     sendProduct
   };

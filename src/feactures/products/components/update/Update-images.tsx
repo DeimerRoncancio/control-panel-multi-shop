@@ -3,7 +3,7 @@ import { ProductImage } from "../../interface/response-products";
 import { MdDelete } from "react-icons/md";
 import ButtonModal from "../../../../shared/components/globalComponents/ButtonModal";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-import { ProductType } from "../../../../shared/zod/products/update.zod";
+import { ProductType } from "../../../../shared/zod/products/product.zod";
 
 type Props = {
   images: ProductImage[];

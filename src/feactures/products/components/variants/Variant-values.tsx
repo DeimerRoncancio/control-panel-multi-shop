@@ -1,0 +1,131 @@
+import { useState, useEffect } from "react";
+import { HexColorInput, HexColorPicker } from "react-colorful";
+import { UseFormSetValue } from "react-hook-form";
+
+type Props = {
+  type?: string;
+  setValue: UseFormSetValue<any>;
+}
+
+export default function VariantValues({ type = "select", setValue }: Props) {
+  const [textValues, setTextValues] = useState<string[]>([]);
+  const [colorValues, setColorValues] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [colorValue, setColorValue] = useState("#2368b1");
+
+  useEffect(() => {
+    if (type === "text") setValue("listValues", textValues);
+    if (type === "color") setValue("listValues", colorValues);
+  }, [type, setValue, textValues, colorValues]);
+
+  const handleAddText = () => {
+    if (!inputValue.trim()) return;
+    if (!textValues.includes(inputValue.trim()))
+      setTextValues([...textValues, inputValue.trim()]);
+    setInputValue("");
+  };
+
+  const handleAddColor = () => {
+    if (!colorValue) return;
+    if (!colorValues.includes(colorValue))
+      setColorValues([...colorValues, colorValue]);
+  };
+
+  const removeTextValue = (index: number) => {
+    setTextValues(textValues.filter((_, i) => i !== index));
+  };
+
+  const removeColorValue = (index: number) => {
+    setColorValues(colorValues.filter((_, i) => i !== index));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddText();
+    }
+  };
+
+  if (type === "select") {
+    return <span className="text-sm text-gray-400">Seleccionar un tipo de variante</span>;
+  }
+
+  return (
+    <div className="space-y-4 mt-4">
+      {type === "text" ? (
+        <div className="flex flex-col gap-2">
+          <span className="">Escribe un valor</span>
+          <div className="flex gap-4 w-full">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Escribe un valor y presiona Enter"
+              className="input input-bordered w-full"
+            />
+            <button
+              type="button"
+              onClick={handleAddText}
+              className="btn btn-primary"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <span className="">Selecciona un color</span>
+          <div className="flex gap-8 items-start">
+            <HexColorPicker className="w-1/2" color={colorValue} onChange={setColorValue} />
+            <div className="flex flex-col w-1/2 gap-2">
+              <HexColorInput color={colorValue} onChange={setColorValue} prefixed className="input input-bordered w-full" />
+              <div className="w-full h-20 rounded-lg border" style={{ backgroundColor: colorValue }}></div>
+              <button
+                type="button"
+                onClick={handleAddColor}
+                className="btn btn-primary w-full"
+              >
+                Agregar Color
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {type === "text" && textValues.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {textValues.map((val, index) => (
+            <div key={index} className="badge badge-primary badge-soft gap-2 py-4">
+              <span>{val}</span>
+              <button
+                type="button"
+                onClick={() => removeTextValue(index)}
+                className="btn btn-ghost btn-xs btn-circle"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {type === "color" && colorValues.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {colorValues.map((val, index) => (
+            <div key={index} className="badge badge-primary badge-soft gap-2 py-4">
+              <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: val }} title={val}></div>
+              <button
+                type="button"
+                onClick={() => removeColorValue(index)}
+                className="btn btn-ghost btn-xs btn-circle"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

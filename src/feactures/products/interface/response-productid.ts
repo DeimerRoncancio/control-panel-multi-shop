@@ -13,7 +13,7 @@ export interface Category {
 }
 
 export interface Variants {
-  id: string;
+  id?: string;
   name: string;
   type: 'color' | 'text';
   tag: string;

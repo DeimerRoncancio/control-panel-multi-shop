@@ -1,4 +1,4 @@
-import { ProductType } from "../../../shared/zod/products/update.zod";
+import { ProductType } from "../../../shared/zod/products/product.zod";
 import { RequestProductID } from "../interface/response-productid";
 
 type ProductTypeParams = {

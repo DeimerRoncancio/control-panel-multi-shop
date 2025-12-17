@@ -5,12 +5,13 @@ import { FormUpdate } from '../components/update/Form-update';
 import { HeaderProduct } from '../components/update/Header-product';
 import { UpdateImages } from '../components/update/Update-images';
 // import { setValuesUpdateProduct } from '../helpers/set-values';
-import ProductSchema, { ProductType } from '../../../shared/zod/products/update.zod';
+import ProductSchema, { ProductType } from '../../../shared/zod/products/product.zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastContainer } from 'react-toastify';
 import useProducts from '../hooks/useProducts';
 import { toUpdateProductType } from '../mappers/products.mapper';
 import UpdateVariant from '../components/update/Update-variants';
+import ModalCreateVariant from '../components/create/Modal-create-variant';
 
 export function ProductId() {
   const {
@@ -25,12 +26,10 @@ export function ProductId() {
   } = useForm<ProductType>({ resolver: zodResolver(ProductSchema) });
 
   const {
-    productData,
-    categoriesData,
     categoriesLoading,
-    imagesToRemove,
+    data: { productData, categoriesData, imagesToRemove },
     handleRemoveImages,
-    sendProduct 
+    sendProduct
   } = useProducts();
 
   const onSubmit: SubmitHandler<ProductType> = (data) => {
@@ -42,42 +41,45 @@ export function ProductId() {
   }, [productData, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="min-h-screen transition-colors duration-300"
-    >
-      <ToastContainer />
-      <div className="shadow-lg">
-        <HeaderProduct />
-      </div>
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          <div className="xl:col-span-2 space-y-6 rounded-lg flex flex-col">
-            <FormUpdate
-              clearErrors={clearErrors}
-              control={control}
-              register={register}
-              fieldErrors={errors}
-            />
-            <UpdateImages
-              images={productData?.productImages || []}
-              imagesToRemove={imagesToRemove}
-              removeImages={handleRemoveImages}
-              watch={watch}
-              setValue={setValue}
-            />
-
-            <UpdateVariant variants={productData?.variants} />
-          </div>
-
-          <SelectCategories
-            watch={watch}
-            register={register}
-            categories={categoriesData}
-            loading={categoriesLoading}
-          />
+    <>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="min-h-screen transition-colors duration-300"
+      >
+        <div className="shadow-lg">
+          <HeaderProduct />
         </div>
-      </div>
-    </form>
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div className="xl:col-span-2 space-y-6 rounded-lg flex flex-col">
+              <FormUpdate
+                clearErrors={clearErrors}
+                control={control}
+                register={register}
+                fieldErrors={errors}
+              />
+              <UpdateImages
+                images={productData?.productImages || []}
+                imagesToRemove={imagesToRemove}
+                removeImages={handleRemoveImages}
+                watch={watch}
+                setValue={setValue}
+              />
+
+              <UpdateVariant variants={watch('variants')} />
+            </div>
+
+            <SelectCategories
+              watch={watch}
+              register={register}
+              categories={categoriesData}
+              loading={categoriesLoading}
+            />
+          </div>
+        </div>
+      </form>
+      <ModalCreateVariant setValue={setValue} watch={watch} />
+      <ToastContainer />
+    </>
   );
 }

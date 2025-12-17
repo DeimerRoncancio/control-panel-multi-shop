@@ -1,15 +1,15 @@
 import { MdEdit, MdDelete } from 'react-icons/md';
-import { Variants } from '../../../interface/response-productid';
+import { VariantType } from '../../../../shared/zod/products/variant.zod';
 
 type Props = {
-  variant: Variants;
+  variant: VariantType;
 }
 
 export default function VariantItem({ variant }: Props) {
   return (
     <div
-      key={variant.id}
-      className="card bg-base-200 border border-base-300 hover:border-primary/50 transition-colors duration-200"
+      className={`card bg-base-200 border border-base-300 hover:border-primary/50 ${!variant.id && 'border-success'} 
+      transition-colors duration-200`}
     >
       <div className="card-body p-3 sm:p-4">
         <div className="flex items-start justify-between mb-2">
