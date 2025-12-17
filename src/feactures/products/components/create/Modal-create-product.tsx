@@ -21,6 +21,7 @@ function ModalProductCreate({ categories }: Props) {
   
   const {
     control,
+    reset,
     watch,
     setValue,
     register,
@@ -72,7 +73,6 @@ function ModalProductCreate({ categories }: Props) {
       token: token || '',
     });
   }
-  
 
   return (
     <dialog id="create_product" className="modal">
@@ -246,7 +246,12 @@ function ModalProductCreate({ categories }: Props) {
             </p>
           )}
           <div className="modal-action grid grid-cols-2 gap-4 mt-15">
-            <button type="submit" className="btn btn-error btn-outline">
+            <button type="button" className="btn btn-error btn-outline"
+              onClick={() => {
+                reset();
+                modal.close();
+              }
+            }>
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary" disabled={loading}>
@@ -259,7 +264,7 @@ function ModalProductCreate({ categories }: Props) {
           </div>
         </form>
       </div>
-      <form method="dialog" className="modal-backdrop">
+      <form method="dialog" className="modal-backdrop" onClick={() => reset()}>
         <button type="submit">cerrar</button>
       </form>
     </dialog>

@@ -44,7 +44,11 @@ function ModalProductDelete({ productId }: Props) {
         </p>
         <div className="modal-action">
           <form method="dialog">
-            <button type="submit" className="btn btn-success">
+            <button type="button" className="btn btn-success"
+              onClick={() =>{
+                modal.close();
+              }
+            }>
               Cancelar
             </button>
           </form>
