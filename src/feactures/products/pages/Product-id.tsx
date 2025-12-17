@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastContainer } from 'react-toastify';
 import useProducts from '../hooks/useProducts';
 import { toUpdateProductType } from '../mappers/products.mapper';
+import UpdateVariant from '../components/update/Update-variants';
 
 export function ProductId() {
   const {
@@ -65,6 +66,8 @@ export function ProductId() {
               watch={watch}
               setValue={setValue}
             />
+
+            <UpdateVariant variants={productData?.variants} />
           </div>
 
           <SelectCategories

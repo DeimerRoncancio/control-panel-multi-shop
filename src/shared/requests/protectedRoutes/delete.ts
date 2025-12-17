@@ -1,13 +1,12 @@
 import axios, { AxiosError } from 'axios';
 import envs from '../../../configs/envs';
 
-const axiosDeleteBearer = async ({
-  url,
-  token,
-}: {
+type Props = {
   url: string;
   token: string;
-}) => {
+}
+
+const axiosDeleteBearer = async ({ url, token }: Props) => {
   try {
     const response = await axios.delete(`${envs.API}${url}`, {
       headers: {
