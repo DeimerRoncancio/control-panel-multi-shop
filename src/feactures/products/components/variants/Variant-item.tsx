@@ -1,14 +1,17 @@
 import { MdEdit, MdDelete } from 'react-icons/md';
 import { VariantType } from '../../../../shared/zod/products/variant.zod';
+import ButtonModal from '../../../../shared/components/globalComponents/ButtonModal';
 
 type Props = {
   variant: VariantType;
+  setVariantSelected: () => void;
 }
 
-export default function VariantItem({ variant }: Props) {
+export default function VariantItem({ variant, setVariantSelected }: Props) {
   return (
     <div
-      className={`card bg-base-200 border border-base-300 hover:border-primary/50 ${!variant.id && 'border-success'} 
+      className={`card bg-base-200 border border-base-300 hover:border-primary/50
+      ${!variant.id && 'border-success hover:border-success/50'} 
       transition-colors duration-200`}
     >
       <div className="card-body p-3 sm:p-4">
@@ -35,13 +38,19 @@ export default function VariantItem({ variant }: Props) {
             >
               <MdEdit size={16} />
             </button>
-            <button
+            <ButtonModal idModal='delete_variant' className="btn btn-square btn-md btn-ghost hover:bg-error/10 hover:text-error rounded-lg"
+              onClick={setVariantSelected}
+            >
+              <MdDelete size={16} />
+            </ButtonModal>
+            {/* <button
               type="button"
               className="btn btn-square btn-md btn-ghost hover:bg-error/10 hover:text-error rounded-lg"
               title="Eliminar variante"
+              onClick={setVariantSelected}
             >
               <MdDelete size={16} />
-            </button>
+            </button> */}
           </div>
         </div>
 

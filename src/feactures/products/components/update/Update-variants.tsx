@@ -5,9 +5,13 @@ import { VariantType } from "../../../../shared/zod/products/variant.zod";
 
 type Props = {
   variants?: VariantType[];
+  setVariantSelected: (variant: VariantType) => void;
 }
 
-export default function UpdateVariant({ variants }: Props) {
+export default function UpdateVariant({ variants, setVariantSelected }: Props) {
+  const handleVariantSelected = (variant: VariantType) =>
+    setVariantSelected(variant);
+
   return (
     <div className="mt-12 border rounded-lg border-gray-600 col-span-2 bg-base-100">
       <div className="card shadow-xl">
@@ -28,8 +32,12 @@ export default function UpdateVariant({ variants }: Props) {
           </div>
 
           <div className="flex flex-col gap-4">
-            {variants && variants.length > 0 ? variants.map((variant) => (
-              <VariantItem key={variant.id} variant={variant} />
+            {variants && variants.length > 0 ? variants.map((variant, index) => (
+              <VariantItem
+                key={variant.id ?? index}
+                variant={variant}
+                setVariantSelected={() => handleVariantSelected(variant)}
+              />
             )) : (
               <div className="flex flex-col items-center justify-center py-8 bg-base-200 border border-base-300 rounded-lg text-base-content/60">
                 <MdInfoOutline size={24} className="mb-2 opacity-50" />

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SelectCategories } from '../components/update/Select-categories';
 import { FormUpdate } from '../components/update/Form-update';
@@ -12,8 +12,12 @@ import useProducts from '../hooks/useProducts';
 import { toUpdateProductType } from '../mappers/products.mapper';
 import UpdateVariant from '../components/update/Update-variants';
 import ModalCreateVariant from '../components/create/Modal-create-variant';
+import { VariantType } from '../../../shared/zod/products/variant.zod';
+import ModalDeleteVariant from '../components/delete/Modal-delete-variant';
 
 export function ProductId() {
+  const [variantSelected, setVariantSelected] = useState<VariantType>({} as VariantType);
+
   const {
     control,
     watch,
@@ -28,13 +32,13 @@ export function ProductId() {
   const {
     categoriesLoading,
     data: { productData, categoriesData, imagesToRemove },
-    handleRemoveImages,
+    remove: { removeImages, removeVariants },
     sendProduct
   } = useProducts();
 
-  const onSubmit: SubmitHandler<ProductType> = (data) => {
-    sendProduct(data);
-  }
+  const onSubmit: SubmitHandler<ProductType> = (data) => sendProduct(data);
+
+  const handleVariantSelected = (variant: VariantType) => setVariantSelected(variant);
 
   useEffect(() => {
     if (productData) reset(toUpdateProductType({ product: productData }));
@@ -61,12 +65,12 @@ export function ProductId() {
               <UpdateImages
                 images={productData?.productImages || []}
                 imagesToRemove={imagesToRemove}
-                removeImages={handleRemoveImages}
+                removeImages={removeImages}
                 watch={watch}
                 setValue={setValue}
               />
 
-              <UpdateVariant variants={watch('variants')} />
+              <UpdateVariant variants={watch('variants')} setVariantSelected={handleVariantSelected} />
             </div>
 
             <SelectCategories
@@ -79,6 +83,12 @@ export function ProductId() {
         </div>
       </form>
       <ModalCreateVariant setValue={setValue} watch={watch} />
+      <ModalDeleteVariant
+        variant={variantSelected}
+        watch={watch}
+        setValue={setValue}
+        remove={removeVariants}
+      />
       <ToastContainer />
     </>
   );

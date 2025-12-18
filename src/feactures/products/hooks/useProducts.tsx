@@ -15,11 +15,15 @@ export default function useProducts() {
   const { id } = useParams();
   const queryClient = useQueryClient();
   const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
+  const [variantsToRemove, setVariantsToRemove] = useState<string[]>([]);
 
-  const handleRemoveImages = (imageIds: string[], clean = false) => {
+  const removeImages = (imageIds: string[], clean = false) => {
     if (clean === true) setImagesToRemove([]);
     setImagesToRemove((prevImages) => [...prevImages, ...imageIds]);
   }
+
+  const removeVariants = (variantIds: string[]) =>
+    setVariantsToRemove((prevVariants) => [...prevVariants, ...variantIds]);
 
   const { mutate } = useMutation({
     mutationFn: axiosPutBearer,
@@ -37,6 +41,7 @@ export default function useProducts() {
     const integerPart = data.price.slice(0, lastSeparator).replace(/\D/g, "");
     const formData = new FormData();
     const imagesToRemoveString = imagesToRemove.join(', ');
+    const variantsToRemoveString = variantsToRemove.join(', ');
 
     formData.append('productName', data.productName);
     if (data.description) formData.append('description', data.description);
@@ -44,6 +49,7 @@ export default function useProducts() {
     formData.append('categoriesList', data.categoriesList.join(', '));
     data.images?.forEach((file) => formData.append('images', file));
     if (imagesToRemove.length > 0) formData.append('imagesToRemove', imagesToRemoveString);
+    if (variantsToRemove.length > 0) formData.append('variantsToRemove', variantsToRemoveString);
 
     data.variants?.forEach((variant, index) => {
       if (variant.id) formData.append(`variants[${index}].id`, variant.id);
@@ -54,6 +60,7 @@ export default function useProducts() {
         formData.append(`variants[${index}].listValues[${valueIndex}]`, value);
       });
     });
+
 
     mutate({
       url: `${envs.API}/app/products/${id}`,
@@ -88,7 +95,7 @@ export default function useProducts() {
   return {
     data: { productData, categoriesData, imagesToRemove },
     categoriesLoading,
-    handleRemoveImages,
+    remove: { removeImages, removeVariants },
     sendProduct
   };
 }

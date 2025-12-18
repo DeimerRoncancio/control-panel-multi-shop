@@ -3,14 +3,26 @@ import VariantValues from "../variants/Variant-values";
 import { VariantSchema, VariantType } from "../../../../shared/zod/products/variant.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductType } from "../../../../shared/zod/products/product.zod";
+import { useState } from "react";
 
 type Props = {
   setValue: UseFormSetValue<ProductType>;
   watch: UseFormWatch<ProductType>;
 }
 
-export default function ModalCreateVariant({  setValue: setProductValue, watch: productWatch }: Props) {
-  const { control, register, setValue, handleSubmit, formState: { errors } } = useForm<VariantType>({
+export default function ModalCreateVariant({  setValue: setProductValue, watch: productWatch}: Props) {
+  const modal = document.getElementById("create_variant") as HTMLDialogElement;
+  const [textValues, setTextValues] = useState<string[]>([]);
+  const [colorValues, setColorValues] = useState<string[]>([]);
+
+  const {
+    control,
+    reset,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<VariantType>({
     resolver: zodResolver(VariantSchema)
   });
 
@@ -19,8 +31,20 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
 
   const onSubmit: SubmitHandler<VariantType> = (data) => {
     setProductValue("variants", [ ...variants, data ]);
-    const modal = document.getElementById("create_variant") as HTMLDialogElement;
     modal.close();
+    setColorValues([]);
+    setTextValues([]);
+    reset();
+  }
+
+  const handleTextValue = (val?: string[]): string[] => {
+    val && setTextValues([ ...val ]);
+    return textValues;
+  }
+
+  const handleColorValue = (val?: string[]): string[] => {
+    val && setColorValues([ ...val ]);
+    return colorValues;
   }
 
   return (
@@ -65,13 +89,22 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
             {errors.type && (
               <span className="text-sm text-red-500">{errors.type.message}</span>
             )}
-            <VariantValues type={type} setValue={setValue} />
+            <VariantValues
+              type={type}
+              setValue={setValue}
+              handleTextValue={handleTextValue}
+              handleColorValue={handleColorValue}
+            />
           </div>
           {errors.listValues && (
             <span className="text-sm text-red-500">{errors.listValues.message}</span>
           )}
           <div className="modal-action mt-10 grid grid-cols-2 gap-4">
-            <button type="button" className="btn btn-error btn-soft">
+            <button type="button" className="btn btn-error btn-soft"
+            onClick={() => {
+              modal.close();
+              reset();
+            }}>
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary">
@@ -81,7 +114,7 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button type="submit" />
+        <button type="submit" onClick={() => reset()} />
       </form>
     </dialog>
   );

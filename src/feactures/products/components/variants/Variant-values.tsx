@@ -5,13 +5,16 @@ import { UseFormSetValue } from "react-hook-form";
 type Props = {
   type?: string;
   setValue: UseFormSetValue<any>;
+  handleTextValue: (val?: string[]) => string[];
+  handleColorValue: (val?: string[]) => string[];
 }
 
-export default function VariantValues({ type = "select", setValue }: Props) {
-  const [textValues, setTextValues] = useState<string[]>([]);
-  const [colorValues, setColorValues] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState("");
+export default function VariantValues({ type = "select", setValue, handleTextValue, handleColorValue }: Props) {
   const [colorValue, setColorValue] = useState("#2368b1");
+  const [inputValue, setInputValue] = useState("");
+
+  const textValues = handleTextValue();
+  const colorValues = handleColorValue();
 
   useEffect(() => {
     if (type === "text") setValue("listValues", textValues);
@@ -20,24 +23,22 @@ export default function VariantValues({ type = "select", setValue }: Props) {
 
   const handleAddText = () => {
     if (!inputValue.trim()) return;
-    if (!textValues.includes(inputValue.trim()))
-      setTextValues([...textValues, inputValue.trim()]);
+    if (!textValues?.includes(inputValue.trim()))
+      handleTextValue([ ...textValues, inputValue.trim() ]);
     setInputValue("");
   };
 
   const handleAddColor = () => {
     if (!colorValue) return;
     if (!colorValues.includes(colorValue))
-      setColorValues([...colorValues, colorValue]);
+      handleColorValue([...colorValues, colorValue]);
   };
 
-  const removeTextValue = (index: number) => {
-    setTextValues(textValues.filter((_, i) => i !== index));
-  };
+  const removeTextValue = (index: number) =>
+    handleTextValue(textValues.filter((_, i) => i !== index));
 
-  const removeColorValue = (index: number) => {
-    setColorValues(colorValues.filter((_, i) => i !== index));
-  };
+  const removeColorValue = (index: number) =>
+    handleColorValue(colorValues.filter((_, i) => i !== index));
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -95,7 +96,7 @@ export default function VariantValues({ type = "select", setValue }: Props) {
 
       {type === "text" && textValues.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {textValues.map((val, index) => (
+          {textValues?.map((val, index) => (
             <div key={index} className="badge badge-primary badge-soft gap-2 py-4">
               <span>{val}</span>
               <button
