@@ -11,7 +11,7 @@ type Props = {
   watch: UseFormWatch<ProductType>;
 }
 
-export default function ModalUpdateVariant({ variant, setValue: setProductValue, watch: productWatch}: Props) {
+export default function ModalUpdateVariant({ variant, setValue: setProductValue, watch: productWatch }: Props) {
   const modal = document.getElementById("update_variant") as HTMLDialogElement;
   const [textValues, setTextValues] = useState<string[]>([]);
   const [colorValues, setColorValues] = useState<string[]>([]);
@@ -19,6 +19,8 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
   const {
     control,
     reset,
+    setError,
+    clearErrors,
     register,
     setValue,
     handleSubmit,
@@ -39,6 +41,14 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
     reset();
   }
 
+  const handleError = (clear?: boolean, val?: string) => {
+    if (clear) {
+      clearErrors("listValues");
+      return;
+    }
+    setError("listValues", { type: "manual", message: val });
+  }
+
   const handleTextValue = (val?: string[]): string[] => {
     val && setTextValues([...val]);
     return textValues;
@@ -49,7 +59,7 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
     return colorValues;
   }
 
-  useEffect(() => {
+  const resetForm = () => {
     reset({
       id: variant.id,
       name: variant.name,
@@ -60,6 +70,10 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
 
     setTextValues(variant.type === 'text' ? variant.listValues : []);
     setColorValues(variant.type === 'color' ? variant.listValues : []);
+  }
+
+  useEffect(() => {
+    resetForm();
   }, [variant, reset]);
 
   return (
@@ -109,6 +123,7 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
             <VariantValues
               type={type}
               setValue={setValue}
+              errors={handleError}
               handleTextValue={handleTextValue}
               handleColorValue={handleColorValue}
             />
@@ -118,7 +133,10 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
           )}
           <div className="modal-action mt-10 grid grid-cols-2 gap-4">
             <button type="button" className="btn btn-error btn-soft"
-              onClick={() => modal.close()}>
+              onClick={() => {
+                resetForm();
+                modal.close()
+              }}>
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary">
@@ -128,7 +146,7 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button type="submit" />
+        <button type="submit" onClick={() => resetForm()} />
       </form>
     </dialog>
   );

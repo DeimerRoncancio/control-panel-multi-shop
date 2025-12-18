@@ -38,7 +38,7 @@ export default function useProducts() {
     const token = Cookies.get('accessToken');
     let integerPart = "";
 
-    if (data.price.includes('.')) {
+    if (data.price.includes(',')) {
       const lastSeparator = Math.max(data.price.lastIndexOf(","));
       integerPart = data.price.slice(0, lastSeparator).replace(/\D/g, "");
     }

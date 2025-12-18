@@ -5,11 +5,12 @@ import { UseFormSetValue } from "react-hook-form";
 type Props = {
   type?: string;
   setValue: UseFormSetValue<any>;
+  errors: (clear?: boolean, val?: string) => void;
   handleTextValue: (val?: string[]) => string[];
   handleColorValue: (val?: string[]) => string[];
 }
 
-export default function VariantValues({ type, setValue, handleTextValue, handleColorValue }: Props) {
+export default function VariantValues({ type, setValue, errors, handleTextValue, handleColorValue }: Props) {
   const [colorValue, setColorValue] = useState("#2368b1");
   const [inputValue, setInputValue] = useState("");
 
@@ -23,22 +24,36 @@ export default function VariantValues({ type, setValue, handleTextValue, handleC
 
   const handleAddText = () => {
     if (!inputValue.trim()) return;
-    if (!textValues?.includes(inputValue.trim()))
-      handleTextValue([ ...textValues, inputValue.trim() ]);
+    if (textValues?.includes(inputValue.trim())) {
+      errors(false, "Ningún valor debe repetirse");
+      return;
+    }
+
+    handleTextValue([ ...textValues, inputValue.trim() ]);
     setInputValue("");
+    errors(true);
   };
 
   const handleAddColor = () => {
     if (!colorValue) return;
-    if (!colorValues.includes(colorValue))
-      handleColorValue([...colorValues, colorValue]);
+    if (colorValues.includes(colorValue)) {
+      errors(false, "Ningún valor debe repetirse");
+      return;
+    }
+
+    handleColorValue([...colorValues, colorValue]);
+    errors(true);
   };
 
-  const removeTextValue = (index: number) =>
+  const removeTextValue = (index: number) => {
     handleTextValue(textValues.filter((_, i) => i !== index));
+    errors(true);
+  }
 
-  const removeColorValue = (index: number) =>
+  const removeColorValue = (index: number) => {
     handleColorValue(colorValues.filter((_, i) => i !== index));
+    errors(true);
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -55,11 +70,14 @@ export default function VariantValues({ type, setValue, handleTextValue, handleC
           <div className="flex gap-4 w-full">
             <input
               type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
               placeholder="Escribe un valor y presiona Enter"
               className="input input-bordered w-full"
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value)
+                errors(true);
+              }}
+              onKeyDown={handleKeyDown}
             />
             <button
               type="button"
@@ -74,9 +92,24 @@ export default function VariantValues({ type, setValue, handleTextValue, handleC
         <div className="flex flex-col gap-4">
           <span className="">Selecciona un color</span>
           <div className="flex gap-8 items-start">
-            <HexColorPicker className="w-1/2" color={colorValue} onChange={setColorValue} />
+            <HexColorPicker
+              className="w-1/2"
+              color={colorValue}
+              onChange={(color) => {
+                setColorValue(color);
+                errors(true);
+              }}
+            />
             <div className="flex flex-col w-1/2 gap-2">
-              <HexColorInput color={colorValue} onChange={setColorValue} prefixed className="input input-bordered w-full" />
+              <HexColorInput
+                color={colorValue}
+                onChange={(color) => {
+                  setColorValue(color);
+                  errors(true);
+                }}
+                prefixed
+                className="input input-bordered w-full"
+              />
               <div className="w-full h-20 rounded-lg border" style={{ backgroundColor: colorValue }}></div>
               <button
                 type="button"
@@ -111,7 +144,7 @@ export default function VariantValues({ type, setValue, handleTextValue, handleC
         <div className="flex flex-wrap gap-2">
           {colorValues.map((val, index) => (
             <div key={index} className="badge badge-primary badge-soft gap-2 py-4">
-              <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: val }} title={val}></div>
+              <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: val }} title={val} />
               <span>{val}</span>
               <button
                 type="button"

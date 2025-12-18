@@ -20,6 +20,8 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
     reset,
     register,
     setValue,
+    setError,
+    clearErrors,
     handleSubmit,
     formState: { errors }
   } = useForm<VariantType>({
@@ -32,8 +34,8 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
     }
   });
 
-  const type = useWatch({ name: "type", control });
   const variants = productWatch("variants") || [];
+  const type = useWatch({ name: "type", control });
 
   const onSubmit: SubmitHandler<VariantType> = (data) => {
     setProductValue("variants", [ ...variants, data ]);
@@ -41,6 +43,14 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
     setColorValues([]);
     setTextValues([]);
     reset();
+  }
+
+  const handleError = (clear?: boolean, val?: string) => {
+    if (clear) {
+      clearErrors("listValues");
+      return;
+    }
+    setError("listValues", { type: "manual", message: val });
   }
 
   const handleTextValue = (val?: string[]): string[] => {
@@ -67,10 +77,10 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
               placeholder="Ej: Color, Tamaño, Material"
               {...register("name")}
             />
+            {errors.name && (
+              <span className="text-sm text-red-500">{errors.name.message}</span>
+            )}
           </label>
-          {errors.name && (
-            <span className="text-sm text-red-500">{errors.name.message}</span>
-          )}
           <label className="flex flex-col gap-2">
             <span className="font-normal">Tag de la Variante</span>
             <input
@@ -79,10 +89,10 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
               placeholder="Ej: color, size, material"
               {...register("tag")}
             />
+            {errors.tag && (
+              <span className="text-sm text-red-500">{errors.tag.message}</span>
+            )}
           </label>
-          {errors.tag && (
-            <span className="text-sm text-red-500">{errors.tag.message}</span>
-          )}
           <div>
             <label className="flex flex-col gap-2">
               <span className="font-normal">Tipo de Variante</span>
@@ -99,6 +109,7 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
             )}
             <VariantValues
               type={type}
+              errors={handleError}
               setValue={setValue}
               handleTextValue={handleTextValue}
               handleColorValue={handleColorValue}
