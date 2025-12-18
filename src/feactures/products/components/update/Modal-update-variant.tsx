@@ -1,17 +1,18 @@
 import { SubmitHandler, useForm, UseFormSetValue, UseFormWatch, useWatch } from "react-hook-form";
 import VariantValues from "../variants/Variant-values";
 import { VariantSchema, VariantType } from "../../../../shared/zod/products/variant.zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductType } from "../../../../shared/zod/products/product.zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Props = {
+  variant: VariantType;
   setValue: UseFormSetValue<ProductType>;
   watch: UseFormWatch<ProductType>;
 }
 
-export default function ModalCreateVariant({  setValue: setProductValue, watch: productWatch}: Props) {
-  const modal = document.getElementById("create_variant") as HTMLDialogElement;
+export default function ModalUpdateVariant({ variant, setValue: setProductValue, watch: productWatch}: Props) {
+  const modal = document.getElementById("update_variant") as HTMLDialogElement;
   const [textValues, setTextValues] = useState<string[]>([]);
   const [colorValues, setColorValues] = useState<string[]>([]);
 
@@ -23,20 +24,15 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
     handleSubmit,
     formState: { errors }
   } = useForm<VariantType>({
-    resolver: zodResolver(VariantSchema),
-    defaultValues: {
-      name: '',
-      tag: '',
-      type: 'select',
-      listValues: [],
-    }
+    resolver: zodResolver(VariantSchema)
   });
 
   const type = useWatch({ name: "type", control });
   const variants = productWatch("variants") || [];
 
+
   const onSubmit: SubmitHandler<VariantType> = (data) => {
-    setProductValue("variants", [ ...variants, data ]);
+    setProductValue("variants", [...variants.filter(v => v.id !== variant.id), data]);
     modal.close();
     setColorValues([]);
     setTextValues([]);
@@ -44,17 +40,30 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
   }
 
   const handleTextValue = (val?: string[]): string[] => {
-    val && setTextValues([ ...val ]);
+    val && setTextValues([...val]);
     return textValues;
   }
 
   const handleColorValue = (val?: string[]): string[] => {
-    val && setColorValues([ ...val ]);
+    val && setColorValues([...val]);
     return colorValues;
   }
 
+  useEffect(() => {
+    reset({
+      id: variant.id,
+      name: variant.name,
+      tag: variant.tag,
+      type: variant.type,
+      listValues: variant.listValues,
+    });
+
+    setTextValues(variant.type === 'text' ? variant.listValues : []);
+    setColorValues(variant.type === 'color' ? variant.listValues : []);
+  }, [variant, reset]);
+
   return (
-    <dialog id="create_variant" className="modal">
+    <dialog id="update_variant" className="modal">
       <div className="modal-box max-h-[95vh]">
         <h3 className="font-semibold text-lg">Crear Nuevo Producto</h3>
         <p className="mb-4 font-thin">Completa los datos del producto que deseas crear</p>
@@ -109,20 +118,17 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
           )}
           <div className="modal-action mt-10 grid grid-cols-2 gap-4">
             <button type="button" className="btn btn-error btn-soft"
-            onClick={() => {
-              modal.close();
-              reset();
-            }}>
+              onClick={() => modal.close()}>
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary">
-              Crear Variante
+              Actualizar Variante
             </button>
           </div>
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button type="submit" onClick={() => reset()} />
+        <button type="submit" />
       </form>
     </dialog>
   );

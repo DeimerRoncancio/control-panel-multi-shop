@@ -31,26 +31,16 @@ export default function VariantItem({ variant, setVariantSelected }: Props) {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button
-              type="button"
-              className="btn btn-square btn-md btn-ghost hover:bg-base-300 text-base-content/70 rounded-lg"
-              title="Editar variante"
+            <ButtonModal idModal='update_variant' className="btn btn-square btn-md btn-ghost hover:bg-base-300 text-base-content/70 rounded-lg"
+              onClick={setVariantSelected}
             >
               <MdEdit size={16} />
-            </button>
+            </ButtonModal>
             <ButtonModal idModal='delete_variant' className="btn btn-square btn-md btn-ghost hover:bg-error/10 hover:text-error rounded-lg"
               onClick={setVariantSelected}
             >
               <MdDelete size={16} />
             </ButtonModal>
-            {/* <button
-              type="button"
-              className="btn btn-square btn-md btn-ghost hover:bg-error/10 hover:text-error rounded-lg"
-              title="Eliminar variante"
-              onClick={setVariantSelected}
-            >
-              <MdDelete size={16} />
-            </button> */}
           </div>
         </div>
 

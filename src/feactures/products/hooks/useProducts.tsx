@@ -36,18 +36,23 @@ export default function useProducts() {
 
   const sendProduct = (data: ProductType) => {
     const token = Cookies.get('accessToken');
+    let integerPart = "";
 
-    const lastSeparator = Math.max(data.price.lastIndexOf(","));
-    const integerPart = data.price.slice(0, lastSeparator).replace(/\D/g, "");
-    const formData = new FormData();
+    if (data.price.includes('.')) {
+      const lastSeparator = Math.max(data.price.lastIndexOf(","));
+      integerPart = data.price.slice(0, lastSeparator).replace(/\D/g, "");
+    }
+
     const imagesToRemoveString = imagesToRemove.join(', ');
     const variantsToRemoveString = variantsToRemove.join(', ');
 
+    const formData = new FormData();
+
     formData.append('productName', data.productName);
-    if (data.description) formData.append('description', data.description);
     formData.append('price', parseInt(integerPart).toString());
     formData.append('categoriesList', data.categoriesList.join(', '));
     data.images?.forEach((file) => formData.append('images', file));
+    if (data.description) formData.append('description', data.description);
     if (imagesToRemove.length > 0) formData.append('imagesToRemove', imagesToRemoveString);
     if (variantsToRemove.length > 0) formData.append('variantsToRemove', variantsToRemoveString);
 

@@ -9,7 +9,7 @@ type Props = {
   handleColorValue: (val?: string[]) => string[];
 }
 
-export default function VariantValues({ type = "select", setValue, handleTextValue, handleColorValue }: Props) {
+export default function VariantValues({ type, setValue, handleTextValue, handleColorValue }: Props) {
   const [colorValue, setColorValue] = useState("#2368b1");
   const [inputValue, setInputValue] = useState("");
 
@@ -47,10 +47,6 @@ export default function VariantValues({ type = "select", setValue, handleTextVal
     }
   };
 
-  if (type === "select") {
-    return <span className="text-sm text-gray-400">Seleccionar un tipo de variante</span>;
-  }
-
   return (
     <div className="space-y-4 mt-4">
       {type === "text" ? (
@@ -74,7 +70,7 @@ export default function VariantValues({ type = "select", setValue, handleTextVal
             </button>
           </div>
         </div>
-      ) : (
+      ) : type === "color" && (
         <div className="flex flex-col gap-4">
           <span className="">Selecciona un color</span>
           <div className="flex gap-8 items-start">
@@ -116,6 +112,7 @@ export default function VariantValues({ type = "select", setValue, handleTextVal
           {colorValues.map((val, index) => (
             <div key={index} className="badge badge-primary badge-soft gap-2 py-4">
               <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: val }} title={val}></div>
+              <span>{val}</span>
               <button
                 type="button"
                 onClick={() => removeColorValue(index)}

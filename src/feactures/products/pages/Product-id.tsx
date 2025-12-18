@@ -14,6 +14,7 @@ import UpdateVariant from '../components/update/Update-variants';
 import ModalCreateVariant from '../components/create/Modal-create-variant';
 import { VariantType } from '../../../shared/zod/products/variant.zod';
 import ModalDeleteVariant from '../components/delete/Modal-delete-variant';
+import ModalUpdateVariant from '../components/update/Modal-update-variant';
 
 export function ProductId() {
   const [variantSelected, setVariantSelected] = useState<VariantType>({} as VariantType);
@@ -83,6 +84,7 @@ export function ProductId() {
         </div>
       </form>
       <ModalCreateVariant setValue={setValue} watch={watch} />
+      <ModalUpdateVariant variant={variantSelected} setValue={setValue} watch={watch} />
       <ModalDeleteVariant
         variant={variantSelected}
         watch={watch}
