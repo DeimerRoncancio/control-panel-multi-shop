@@ -1,13 +1,19 @@
 import axios, { AxiosError } from 'axios';
 import envs from '../../../configs/envs';
 
-type Props = {
+type PropsFormData = {
   url: string;
   data: FormData;
   token: string;
 }
 
-const axiosPostBearer = async ({ url, data, token }: Props) => {
+type Props = {
+  url: string;
+  data: any;
+  token: string;
+}
+
+const axiosPostFormDataBearer = async ({ url, data, token }: PropsFormData) => {
   try {
     const response = await axios.post(`${envs.API}${url}`, data, {
       headers: {
@@ -22,4 +28,20 @@ const axiosPostBearer = async ({ url, data, token }: Props) => {
   }
 };
 
-export default axiosPostBearer;
+export const axiosPostBearer = async ({ url, data, token }: Props) => {
+  try {
+    const response = await axios.post(`${envs.API}${url}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(response);
+
+    return response;
+  } catch (error) {
+    return (error as AxiosError).response?.data;
+  }
+};
+
+export default axiosPostFormDataBearer;

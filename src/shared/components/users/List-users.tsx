@@ -13,7 +13,6 @@ export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUser
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
       <table className="table">
-        {/* head */}
         <thead>
           <tr>
             <th>Nombre</th>
@@ -65,25 +64,26 @@ export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUser
                 </td>
                 <td>{user?.email ? user.email : 'No email'}</td>
                 <th>
-                  <details className="dropdown">
+                  <details className="dropdown dropdown-center">
                     <summary className="btn m-1">Detalles</summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 p-2 shadow-sm w-36">
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 border border-gray-700
+                    p-2 shadow-sm w-44 space-y-2">
                       <li>
                         <ButtonModal
                           onClick={() => setUserUpdate(user)}
                           idModal="update_user"
-                          className="text-[12px] btn btn-primary btn-sm"
+                          className="text-[12px] btn btn-sm"
                         >
                           {isAdmin
-                            ? 'Actualizar Administrador'
-                            : 'Actualizar Usuario'}
+                            ? 'Editar Administrador'
+                            : 'Editar Usuario'}
                         </ButtonModal>
                       </li>
                       <li>
                         <ButtonModal
                           onClick={() => setUserUpdate(user)}
                           idModal="delete_user"
-                          className="text-[12px] btn btn-warning btn-sm"
+                          className="text-[12px] btn btn-error btn-sm"
                         >
                           {isAdmin
                             ? 'Eliminar Administrador'
@@ -97,15 +97,6 @@ export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUser
             ))
           )}
         </tbody>
-        {/* foot */}
-        <tfoot>
-          <tr>
-            <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Correo Electronico</th>
-            <th>Acciones</th>
-          </tr>
-        </tfoot>
       </table>
     </div>
   );

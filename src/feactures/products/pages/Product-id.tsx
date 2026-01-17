@@ -71,7 +71,10 @@ export function ProductId() {
                 setValue={setValue}
               />
 
-              <UpdateVariant variants={watch('variants')} setVariantSelected={handleVariantSelected} />
+              <UpdateVariant
+                variants={watch('variants')}
+                setVariantSelected={handleVariantSelected}
+              />
             </div>
 
             <SelectCategories

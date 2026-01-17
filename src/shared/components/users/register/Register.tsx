@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import envs from '../../../../configs/envs';
-import axiosPostBearer from '../../../requests/protectedRoutes/post';
+import axiosPostFormDataBearer from '../../../requests/protectedRoutes/post';
 import FormRegister from './FormRegister';
 import successAlert from '../../../alerts/users/succes';
 import { errorAlertUsers } from '../../../alerts/users/error';
@@ -10,7 +10,7 @@ function Register({ isAdmin }: { isAdmin: boolean }) {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: axiosPostBearer,
+    mutationFn: axiosPostFormDataBearer,
     onSuccess: (data: any) => {
       if (data.error) {
         errorAlertUsers('Error al crear usuario');

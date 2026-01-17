@@ -32,7 +32,7 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
               </td>
             </tr>
           ) : (
-            products.map((product) => (
+            products.map((product, index) => (
               <tr key={product.id}>
                 <td>
                   <div className="flex items-center gap-3">
@@ -57,16 +57,21 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
                 </td>
                 <td>
                   <div className="flex flex-col gap-1">
-                    {product?.categories.slice(0, 3).map((category) => (
+                    {product?.categories.slice(0, 2).map((category) => (
                       <span
                         key={category.categoryName}
-                        className="text-sm badge badge-info p-2 rounded-lg max-w-[120px]"
+                        className="text-sm badge badge-primary p-2 rounded-lg max-w-[120px]"
                       >
                         <p className="truncate">
                           {category.categoryName}
                         </p> 
                       </span>
                     ))}
+                    {product.categories.length > 2 && (
+                      <span className="text-sm badge badge-secondary p-2 rounded-lg">
+                        +{product.categories.length - 2} más
+                      </span>
+                    )}
                   </div>
                 </td>
                 <td className='w-28'>$ {new Intl.NumberFormat("es-ES").format(product.price)}</td>
@@ -85,7 +90,7 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
                   </div>
                 </td>
                 <th>
-                  <details className="dropdown dropdown-center">
+                  <details className={`dropdown dropdown-center ${index === products.length - 1 ? 'dropdown-top' : 'dropdown-bottom'}`}>
                     <summary className="btn m-1">Detalles</summary>
                     <ul className="menu dropdown-content bg-base-100 border border-gray-700 rounded-box z-1
                     p-2 shadow-sm w-36 gap-2">

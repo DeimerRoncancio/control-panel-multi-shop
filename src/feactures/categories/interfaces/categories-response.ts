@@ -15,6 +15,20 @@ export interface CategoriesRequest {
 export interface Content {
   id: string;
   categoryName: string;
+  products: Product[];
+}
+
+export interface Product {
+  id: string;
+  productName: string;
+  price: number;
+  mainImage: ProductImage;
+}
+
+export interface ProductImage {
+  name: string;
+  imageUrl: string;
+  imageId: string;
 }
 
 export interface Pageable {

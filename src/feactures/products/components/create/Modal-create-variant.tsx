@@ -4,6 +4,7 @@ import { VariantSchema, VariantType } from "../../../../shared/zod/products/vari
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductType } from "../../../../shared/zod/products/product.zod";
 import { useState } from "react";
+import { initialValues } from "../../helpers/variant-initial-values";
 
 type Props = {
   setValue: UseFormSetValue<ProductType>;
@@ -26,12 +27,7 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
     formState: { errors }
   } = useForm<VariantType>({
     resolver: zodResolver(VariantSchema),
-    defaultValues: {
-      name: '',
-      tag: '',
-      type: 'select',
-      listValues: [],
-    }
+    defaultValues: initialValues
   });
 
   const variants = productWatch("variants") || [];

@@ -1,16 +1,12 @@
-import { GetUserRequest } from '../../interfaces/get-users-request';
+import { CategoriesRequest } from '../../../feactures/categories/interfaces/categories-response';
 
-function Pagination({
-  pagination,
-  setPagination,
-  data,
-}: {
+type Props = {
   pagination: { page: number; size: number };
-  setPagination: React.Dispatch<
-    React.SetStateAction<{ page: number; size: number }>
-  >;
-  data: GetUserRequest | undefined;
-}) {
+  setPagination: React.Dispatch<React.SetStateAction<{ page: number; size: number }>>;
+  data: CategoriesRequest | undefined;
+}
+
+function Pagination({ pagination, setPagination, data }: Props) {
   return (
     <div className="flex items-center justify-center mt-4">
       <div className="join">

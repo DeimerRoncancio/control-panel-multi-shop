@@ -8,7 +8,7 @@ import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import Cookies from "js-cookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axiosPostBearer from "../../../../shared/requests/protectedRoutes/post";
+import axiosPostFormDataBearer from "../../../../shared/requests/protectedRoutes/post";
 import successAlert from "../../../../shared/alerts/login/succes.alert";
 import { errorAlert } from "../../../../shared/alerts";
 
@@ -43,9 +43,9 @@ function ModalProductCreate({ categories }: Props) {
   const queryClient = useQueryClient();
 
   const { mutate, isPending: loading } = useMutation({
-    mutationFn: axiosPostBearer,
+    mutationFn: axiosPostFormDataBearer,
     onSuccess: () => {
-      successAlert("Producto creado con éxito")
+      successAlert("Producto creado con éxito");
       queryClient.invalidateQueries({ queryKey: ["products"] });
       modal.close();
     },

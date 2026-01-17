@@ -4,6 +4,7 @@ import { VariantSchema, VariantType } from "../../../../shared/zod/products/vari
 import { ProductType } from "../../../../shared/zod/products/product.zod";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toVariantType } from "../../mappers/products.mapper";
 
 type Props = {
   variant: VariantType;
@@ -32,7 +33,6 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
   const type = useWatch({ name: "type", control });
   const variants = productWatch("variants") || [];
 
-
   const onSubmit: SubmitHandler<VariantType> = (data) => {
     setProductValue("variants", [...variants.filter(v => v.id !== variant.id), data]);
     modal.close();
@@ -60,21 +60,12 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
   }
 
   const resetForm = () => {
-    reset({
-      id: variant.id,
-      name: variant.name,
-      tag: variant.tag,
-      type: variant.type,
-      listValues: variant.listValues,
-    });
-
+    reset(toVariantType(variant));
     setTextValues(variant.type === 'text' ? variant.listValues : []);
     setColorValues(variant.type === 'color' ? variant.listValues : []);
   }
 
-  useEffect(() => {
-    resetForm();
-  }, [variant, reset]);
+  useEffect(() => resetForm(), [variant, reset]);
 
   return (
     <dialog id="update_variant" className="modal">
