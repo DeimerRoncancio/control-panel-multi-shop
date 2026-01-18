@@ -90,7 +90,7 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
                   </div>
                 </td>
                 <th>
-                  <details className={`dropdown dropdown-center ${index === products.length - 1 ? 'dropdown-top' : 'dropdown-bottom'}`}>
+                  <details className={`dropdown dropdown-center ${index === products.length - 1 && 'dropdown-top'}`}>
                     <summary className="btn m-1">Detalles</summary>
                     <ul className="menu dropdown-content bg-base-100 border border-gray-700 rounded-box z-1
                     p-2 shadow-sm w-36 gap-2">

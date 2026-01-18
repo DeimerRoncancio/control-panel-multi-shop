@@ -23,8 +23,8 @@ const axiosPostFormDataBearer = async ({ url, data, token }: PropsFormData) => {
     });
 
     return response;
-  } catch (error) {
-    return (error as AxiosError).response?.data;
+  } catch (error: AxiosError | any) {
+    throw error;
   }
 };
 
@@ -38,7 +38,7 @@ export const axiosPostBearer = async ({ url, data, token }: Props) => {
 
     return response;
   } catch (error) {
-    return (error as AxiosError).response?.data;
+    throw (error as AxiosError).response?.data;
   }
 };
 

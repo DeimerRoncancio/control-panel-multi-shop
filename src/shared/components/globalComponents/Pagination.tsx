@@ -9,6 +9,10 @@ type Props = {
 }
 
 function Pagination({ page, setPagination, data }: Props) {
+  if (data?.totalPages === 0 || data?.totalPages === 1) {
+    return null;
+  }
+  
   return (
     <div className="flex items-center justify-center mt-4">
       <div className="join">

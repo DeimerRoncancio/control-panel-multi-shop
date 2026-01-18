@@ -50,6 +50,7 @@ function Users() {
 
   return (
     <>
+      <ToastContainer style={{ zIndex: 1000 }} />
       <ModalUsersAvatar isAdmin={false}>
         <FormUpdateAvatar isAdmin={false} user={userUpdate} />
       </ModalUsersAvatar>
@@ -64,7 +65,6 @@ function Users() {
       <DeleteUsers isAdmin={false}>
         <FormDeleteUsers id={userUpdate?.id!} isAdmin={false} />
       </DeleteUsers>
-      <ToastContainer />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
           <div>

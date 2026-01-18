@@ -5,14 +5,14 @@ import axiosDeleteBearer from '../../../requests/protectedRoutes/delete';
 import { errorAlertUsers } from '../../../alerts/users/error';
 import successAlertUsers from '../../../alerts/users/succes';
 
-export function FormDeleteUsers({
-  id,
-  isAdmin,
-}: {
+type Props = {
   id: string;
   isAdmin: boolean;
-}) {
+}
+
+export function FormDeleteUsers({ id, isAdmin }: Props) {
   const queryClient = useQueryClient();
+  const modal = document.getElementById('delete_user') as HTMLDialogElement | null;
   const [loading, setLoading] = useState(false);
 
   const handleDelete = () => {
@@ -24,16 +24,8 @@ export function FormDeleteUsers({
     })
       .then(() => {
         successAlertUsers('Usuario eliminado con éxito');
-        queryClient.invalidateQueries({
-          queryKey: [`${isAdmin ? 'admins' : 'users'}`],
-        });
-
-        const modal = document.getElementById(
-          'delete_user'
-        ) as HTMLDialogElement | null;
-        if (modal) {
-          modal.close();
-        }
+        queryClient.invalidateQueries({ queryKey: [`${isAdmin ? 'admins' : 'users'}`] });
+        modal?.close();
       })
       .catch(() => errorAlertUsers('Error al eliminar usuario'))
       .finally(() => setLoading(false));

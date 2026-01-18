@@ -1,61 +1,28 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GrFormView, GrFormViewHide } from 'react-icons/gr';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import { addRegisterType } from '../../../helpers/users/register.helper';
 import ErrorMessage from '../../globalComponents/MessajeError';
-import { createHandleChange } from '../../../helpers/images';
 import RegisterSchema, {
   RegisterTypeAccess,
 } from '../../../zod/users/register.zod';
 
-function FormRegister({
-  pending,
-  functionUpdate,
-}: {
+type Props = {
   pending: boolean;
-  functionUpdate: (formData: FormData) => void;
-}) {
-  const file = useRef<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  functionUpdate: (data: RegisterTypeAccess) => void;
+}
+
+function FormRegister({ pending, functionUpdate }: Props) {
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
-  const [errorFile, setErrorFile] = useState<boolean>(false);
 
   const {
     register,
-    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterTypeAccess>({ resolver: zodResolver(RegisterSchema) });
 
-  const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => {
-    if (file.current === null) {
-      setErrorFile(true);
-    } else {
-      setErrorFile(false);
-    }
-
-    const formData = new FormData();
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { confirm_password, ...formValues } = data;
-    Object.entries(formValues).forEach(([key, value]) => {
-      formData.append(key, value.toString());
-    });
-    if (file.current) {
-      formData.append('profileImage', file.current);
-    }
-    functionUpdate(formData);
-
-    addRegisterType.forEach((field) => {
-      setValue(field, '');
-    });
-    setPreviewImage('');
-    file.current = null;
-  };
+  const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => functionUpdate(data);
 
   return (
     <form onSubmit={handleSubmit(onSubimit)}>
@@ -211,30 +178,6 @@ function FormRegister({
           </span>
         </label>
         <ErrorMessage errors={errors} fieldName="confirm_password" />
-      </div>
-      <div className="mb-6">
-        <label className="bg-primary rounded-[5px] px-[7px] py-[13px] w-full flex justify-center items-center text-white font-medium text-md md:w-full">
-          Agregar Imagenes
-          <input
-            hidden
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(e) => createHandleChange(e, setPreviewImage, file)}
-          />
-        </label>
-        {errorFile ? (
-          <span style={{ color: 'red' }}>La imagen es requerida</span>
-        ) : null}
-        {previewImage && (
-          <div className="w-full flex justify-center items-center mt-4">
-            <img
-              className="w-[100px] h-[100px] object-cover rounded-3xl"
-              src={previewImage}
-              alt=""
-            />
-          </div>
-        )}
       </div>
 
       <button

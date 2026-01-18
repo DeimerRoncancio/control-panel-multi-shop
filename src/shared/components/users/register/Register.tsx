@@ -1,37 +1,33 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
-import envs from '../../../../configs/envs';
-import axiosPostFormDataBearer from '../../../requests/protectedRoutes/post';
+import { axiosPostBearer } from '../../../requests/protectedRoutes/post';
 import FormRegister from './FormRegister';
 import successAlert from '../../../alerts/users/succes';
 import { errorAlertUsers } from '../../../alerts/users/error';
+import { AxiosError } from 'axios';
+import { RegisterTypeAccess } from '../../../zod/users/register.zod';
 
 function Register({ isAdmin }: { isAdmin: boolean }) {
+  const modal = document.getElementById('create_user') as HTMLDialogElement;
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: axiosPostFormDataBearer,
-    onSuccess: (data: any) => {
-      if (data.error) {
-        errorAlertUsers('Error al crear usuario');
-      } else {
-        successAlert('Usuario creado con éxito');
-
-        queryClient.invalidateQueries({
-          queryKey: [`${isAdmin ? 'admins' : 'users'}`],
-        });
-      }
+    mutationFn: axiosPostBearer,
+    onSuccess: () => {
+      successAlert('Usuario creado con éxito');
+      queryClient.invalidateQueries({ queryKey: [`${isAdmin ? 'admins' : 'users'}`] });
+      modal.close();
     },
+    onError: (error: AxiosError) => errorAlertUsers(error.message),
   });
 
-  const handleFormDataChange = (newFormData: FormData) => {
+  const handleFormDataChange = (data: RegisterTypeAccess) => {
     const token = Cookies.get('accessToken');
 
-    if (newFormData.has('name')) {
-      newFormData.append('admin', isAdmin ? 'true' : 'false');
+    if (data.name) {
       mutate({
-        url: `${envs.API}/app/users`,
-        data: newFormData,
+        url: '/app/users',
+        data: { ...data, admin: isAdmin },
         token: token || '',
       });
     }

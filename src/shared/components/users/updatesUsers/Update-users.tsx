@@ -1,52 +1,38 @@
 import Cookies from 'js-cookie';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import envs from '../../../../configs/envs';
 import { Content } from '../../../interfaces/get-users-request';
 import FormUpdate from './Form-updtate';
-import axiosPutFormDataBearer from '../../../requests/protectedRoutes/put';
+import { axiosPutBearer } from '../../../requests/protectedRoutes/put';
 import UserUpdate from '../../../interfaces/user-update';
 import { errorAlertUsers } from '../../../alerts/users/error';
 import successAlertUsers from '../../../alerts/users/succes';
 
-function UpdateUsers({
-  isAdmin,
-  idUser,
-  user,
-}: {
+type Props = {
   isAdmin: boolean;
   idUser: string;
   user: Content | null;
-}) {
+}
+
+function UpdateUsers({ isAdmin, idUser, user }: Props) {
+  const modal = document.getElementById('update_user') as HTMLDialogElement | null;
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: axiosPutFormDataBearer,
-    onSuccess: (data: any) => {
-      if (data.error) {
-        errorAlertUsers('Error al actualizar usuario');
-      } else {
-        successAlertUsers('Usuario actualizado con éxito');
-        queryClient.invalidateQueries({
-          queryKey: [`${isAdmin ? 'admins' : 'users'}`],
-        });
-        const modal = document.getElementById(
-          'update_user'
-        ) as HTMLDialogElement | null;
-        if (modal) {
-          modal.close();
-        }
-      }
+    mutationFn: axiosPutBearer,
+    onSuccess: () => {
+      successAlertUsers('Usuario actualizado con éxito');
+      queryClient.invalidateQueries({ queryKey: [`${isAdmin ? 'admins' : 'users'}`] });
+      modal?.close();
     },
+    onError: () => errorAlertUsers('Error al actualizar usuario'),
   });
 
   const handleUpdateUser = (userUpdates: UserUpdate) => {
     const token = Cookies.get('accessToken');
 
     mutate({
-      url: `${envs.API}/app/users/${idUser}`,
-      data: {
-        ...userUpdates,
-      },
+      url: `/app/users/${idUser}`,
+      data: { ...userUpdates },
       token: token || '',
     });
   };
