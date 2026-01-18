@@ -1,4 +1,3 @@
-import { Link } from "react-router";
 import ButtonModal from "../../../shared/components/globalComponents/ButtonModal";
 import { Content } from "../interfaces/categories-response";
 import { AiFillProduct } from "react-icons/ai";
@@ -7,9 +6,10 @@ import { IoPricetagsOutline } from "react-icons/io5";
 type Props = {
   categories: Content[] | undefined;
   isLoading: boolean;
+  selectCategory: (category: Content) => void;
 }
 
-export default function ListCategories({ categories, isLoading }: Props) {
+export default function ListCategories({ categories, isLoading, selectCategory }: Props) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
       <table className="table">
@@ -61,19 +61,20 @@ export default function ListCategories({ categories, isLoading }: Props) {
                     <ul className="menu dropdown-content bg-base-100 border border-gray-700 rounded-box z-1
                     p-2 shadow-sm w-36 gap-2">
                       <li>
-                        <Link
-                          to={`/products/`}
-                          className="text-[12px] btn btn-sm"
+                        <ButtonModal
+                          idModal="update_product"
+                          className="text-xs btn btn-sm btn-warning"
                         >
                           Editar Producto
-                        </Link>
+                        </ButtonModal>
                       </li>
                       <li>
                         <ButtonModal
-                          idModal="delete_product"
+                          idModal="delete_category"
                           className="text-xs btn btn-sm btn-error"
+                          onClick={() => selectCategory(category)}
                         >
-                          Eliminar Producto
+                          Eliminar Categoria
                         </ButtonModal>
                       </li>
                     </ul>

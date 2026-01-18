@@ -36,8 +36,6 @@ export const axiosPostBearer = async ({ url, data, token }: Props) => {
       },
     });
 
-    console.log(response);
-
     return response;
   } catch (error) {
     return (error as AxiosError).response?.data;

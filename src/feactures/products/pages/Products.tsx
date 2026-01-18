@@ -12,18 +12,20 @@ import ModalProductCreate from '../components/create/Modal-create-product';
 import ModalProductDelete from '../components/delete/Modal-delete-product';
 import axiosGet from '../../../shared/requests/basicRequests/get';
 import { ToastContainer } from 'react-toastify';
+import usePagination from '../../../shared/hooks/usePagination';
 
 function Products() {
-  const [pagination, setPagination] = useState({ page: 0, size: 10 });
   const [productUpdate, setProductUpdate] = useState<Content | null>(null);
+  const { pagination, setSearchParams } = usePagination();
 
   const { data, isLoading } = useQuery({
     queryKey: ['products', pagination],
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: '/app/products?size=12&page=0',
+        url: '/app/products',
         token: token || '',
+        params: { page: Number(pagination.page), size: Number(pagination.size) }
       });
     },
   });
@@ -61,8 +63,8 @@ function Products() {
           setProductUpdate={setProductUpdate}
         />
         <Pagination
-          pagination={pagination}
-          setPagination={setPagination}
+          page={pagination.page}
+          setPagination={setSearchParams}
           data={data}
         />
       </div>

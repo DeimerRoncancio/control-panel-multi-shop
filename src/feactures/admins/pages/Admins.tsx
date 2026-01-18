@@ -16,16 +16,19 @@ import { ListUsers } from '../../../shared/components/users/List-users';
 import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
 import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
+import usePagination from '../../../shared/hooks/usePagination';
 
 function Admins() {
-  const [pagination, setPagination] = useState({ page: 0, size: 10 });
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
+  const { pagination, setSearchParams } = usePagination();
+
   const { data, isLoading } = useQuery({
     queryKey: ['admins', pagination],
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: '/app/users/by-role?isAdmin=true&size=10&page=0',
+        url: '/app/users/by-role?isAdmin=true',
+        params: { page: Number(pagination.page), size: Number(pagination.size) },
         token: token || '',
       });
     },
@@ -65,8 +68,8 @@ function Admins() {
           setUserUpdate={setUserUpdate}
         />
         <Pagination
-          pagination={pagination}
-          setPagination={setPagination}
+          page={pagination.page}
+          setPagination={setSearchParams}
           data={data}
         />
       </div>

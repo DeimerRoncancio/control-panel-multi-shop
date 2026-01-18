@@ -3,17 +3,17 @@ import envs from '../../../configs/envs';
 
 type Props = {
   url: string;
-  params?: {
-    page: number;
-    size: number;
-  };
+  params?: ParamsType
+}
+
+type ParamsType = {
+  page: number;
+  size: number;
 }
 
 const axiosGet = async ({ url, params = { page: 0, size: 10 } }: Props) => {
   try {
-    const response = await axios.get(`${envs.API}${url}`, {
-      params,
-    });
+    const response = await axios.get(`${envs.API}${url}`, { params });
     return response.data;
   } catch (error) {
     throw new Error(

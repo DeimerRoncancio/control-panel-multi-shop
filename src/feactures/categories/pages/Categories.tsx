@@ -6,25 +6,32 @@ import ListCategories from "../components/List-categories";
 import SearchCategories from "../components/Search-categories";
 import { useState } from "react";
 import Pagination from "../../../shared/components/globalComponents/Pagination";
-import { CategoriesRequest } from "../interfaces/categories-response";
+import { CategoriesRequest, Content } from "../interfaces/categories-response";
 import ModalCreateCategory from "../components/Modal-create-category";
 import { ToastContainer } from "react-toastify";
+import ModalDeleteCategory from "../components/Modal-delete-category";
+import usePagination from "../../../shared/hooks/usePagination";
 
 function Categories() {
-  const [pagination, setPagination] = useState({ page: 0, size: 10 });
+  const [categorySelected, setCategorySelected] = useState<Content>({} as Content);
+  const { pagination, setSearchParams } = usePagination();
 
   const { data: categoriesData } = useQuery<CategoriesRequest>({
-    queryKey: ['categories'],
+    queryKey: ['categories', pagination],
     queryFn: async () => {
       return axiosGet({
         url: '/app/categories',
+        params: { page: Number(pagination.page), size: Number(pagination.size) }
       });
     }
   });
 
+  const selectCategory = (category: Content) => setCategorySelected(category);
+
   return (
     <>
       <ModalCreateCategory />
+      <ModalDeleteCategory category={categorySelected} />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -39,10 +46,14 @@ function Categories() {
         </div>
         <DetailsCategories />
         <SearchCategories />
-        <ListCategories categories={categoriesData?.content} isLoading={false} />
+        <ListCategories
+          categories={categoriesData?.content}
+          selectCategory={selectCategory}
+          isLoading={false}
+        />
         <Pagination
-          pagination={pagination}
-          setPagination={setPagination}
+          page={pagination.page}
+          setPagination={setSearchParams}
           data={categoriesData}
         />
       </div>

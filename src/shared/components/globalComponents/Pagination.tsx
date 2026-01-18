@@ -1,35 +1,37 @@
+import { SetURLSearchParams } from 'react-router';
 import { CategoriesRequest } from '../../../feactures/categories/interfaces/categories-response';
+import { GetUserRequest } from '../../interfaces/get-users-request';
 
 type Props = {
-  pagination: { page: number; size: number };
-  setPagination: React.Dispatch<React.SetStateAction<{ page: number; size: number }>>;
-  data: CategoriesRequest | undefined;
+  page: number;
+  setPagination: SetURLSearchParams;
+  data: CategoriesRequest | GetUserRequest | undefined;
 }
 
-function Pagination({ pagination, setPagination, data }: Props) {
+function Pagination({ page, setPagination, data }: Props) {
   return (
     <div className="flex items-center justify-center mt-4">
       <div className="join">
         <button
           onClick={() =>
-            setPagination({ ...pagination, page: pagination.page - 1 })
+            setPagination && setPagination({ page: String(Number(page) - 1) })
           }
           type="button"
           className="join-item btn"
-          disabled={pagination.page === 0}
+          disabled={page === 0}
         >
           «
         </button>
         <button type="button" className="join-item btn">
-          {pagination.page + 1}
+          {page + 1}
         </button>
         <button
           onClick={() =>
-            setPagination({ ...pagination, page: pagination.page + 1 })
+            setPagination && setPagination({ page: String(page + 1) })
           }
           type="button"
           className="join-item btn"
-          disabled={data?.totalPages === pagination.page + 1}
+          disabled={data?.totalPages === page + 1}
         >
           »
         </button>

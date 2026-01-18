@@ -20,11 +20,13 @@ import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUser
 import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
 import { SearchProducts } from '../../products/interface/search-products';
+import usePagination from '../../../shared/hooks/usePagination';
 
 function Users() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
-  const [pagination, setPagination] = useState({ page: 0, size: 10 });
   const [searchUsers, setsearchUsers] = useState<SearchProducts | null>(null);
+  const { pagination, setSearchParams } = usePagination();
+  
   const { data, isLoading } = useQuery<GetUserRequest>({
     queryKey: ['users', pagination, searchUsers],
     queryFn: async () => {
@@ -32,13 +34,15 @@ function Users() {
 
       if (searchUsers) {
         return axiosGetBearer({
-          url: `/app/users/search?identifier=${searchUsers.identifier}&isAdmin=false&isEnabled=${searchUsers.isEnabled}&field=${searchUsers.field}&size=${pagination.size}&page=${pagination.page}`,
+          url: `/app/users/search?identifier=${searchUsers.identifier}&isAdmin=false&isEnabled=${searchUsers.isEnabled}&field=${searchUsers.field}`,
+          params: { page: Number(pagination.page), size: Number(pagination.size) },
           token: token || '',
         });
       }
 
       return axiosGetBearer({
-        url: `/app/users/by-role?isAdmin=false&size=${pagination.size}&page=${pagination.page}`,
+        url: `/app/users/by-role?isAdmin=false`,
+        params: { page: Number(pagination.page), size: Number(pagination.size) },
         token: token || '',
       });
     },
@@ -82,8 +86,8 @@ function Users() {
           setUserUpdate={setUserUpdate}
         />
         <Pagination
-          pagination={pagination}
-          setPagination={setPagination}
+          page={pagination.page}
+          setPagination={setSearchParams}
           data={data}
         />
       </div>
