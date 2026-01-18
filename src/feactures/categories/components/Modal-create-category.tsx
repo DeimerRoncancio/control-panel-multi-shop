@@ -48,7 +48,7 @@ export default function ModalCreateCategory() {
             <input
               type="text"
               placeholder="Nombre de la categoría"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-gray-700"
               {...register("categoryName")}
             />
             {errors.categoryName && (
@@ -57,10 +57,10 @@ export default function ModalCreateCategory() {
               </span>
             )}
           </label>
-          <div className="modal-action grid grid-cols-2 gap-4 mt-10">
+          <div className="modal-action flex gap-4 mt-10">
             <button
               type="button"
-              className="btn btn-error btn-outline"
+              className="btn"
               onClick={closeModal}
             >
               Cancelar

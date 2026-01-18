@@ -6,7 +6,7 @@ import { Content } from '../../../interfaces/get-users-request';
 import envs from '../../../../configs/envs';
 import successAlertUsers from '../../../alerts/users/succes';
 import { errorAlertUsers } from '../../../alerts/users/error';
-import axiosPutBearer from '../../../requests/protectedRoutes/put';
+import axiosPutFormDataBearer from '../../../requests/protectedRoutes/put';
 
 export default function FormUpdateAvatar({
   user,
@@ -31,7 +31,7 @@ export default function FormUpdateAvatar({
     formData.append('file', file.current!);
     setLoading(true);
 
-    axiosPutBearer({
+    axiosPutFormDataBearer({
       data: formData,
       url: `${envs.API}/app/users/update/profile-image/${user?.id}`,
       token: Cookies.get('accessToken') || '',

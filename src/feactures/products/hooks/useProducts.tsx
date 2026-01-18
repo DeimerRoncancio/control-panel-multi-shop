@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 import envs from "../../../configs/envs";
 import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
-import axiosPutBearer from "../../../shared/requests/protectedRoutes/put";
+import axiosPutFormDataBearer from "../../../shared/requests/protectedRoutes/put";
 import { ProductType } from "../../../shared/zod/products/product.zod";
 import { CategoriesRequest } from "../../categories/interfaces/categories-response";
 import { useState } from "react";
@@ -26,7 +26,7 @@ export default function useProducts() {
     setVariantsToRemove((prevVariants) => [...prevVariants, ...variantIds]);
 
   const { mutate } = useMutation({
-    mutationFn: axiosPutBearer,
+    mutationFn: axiosPutFormDataBearer,
     onSuccess: () => {
       successAlert("Producto actualizado con éxito")
       queryClient.invalidateQueries({ queryKey: ["products"] });

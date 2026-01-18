@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import envs from '../../../../configs/envs';
 import { Content } from '../../../interfaces/get-users-request';
 import FormUpdate from './Form-updtate';
-import axiosPutBearer from '../../../requests/protectedRoutes/put';
+import axiosPutFormDataBearer from '../../../requests/protectedRoutes/put';
 import UserUpdate from '../../../interfaces/user-update';
 import { errorAlertUsers } from '../../../alerts/users/error';
 import successAlertUsers from '../../../alerts/users/succes';
@@ -20,7 +20,7 @@ function UpdateUsers({
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: axiosPutBearer,
+    mutationFn: axiosPutFormDataBearer,
     onSuccess: (data: any) => {
       if (data.error) {
         errorAlertUsers('Error al actualizar usuario');

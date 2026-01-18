@@ -42,8 +42,8 @@ export default function ModalDeleteCategory({ category }: Props) {
         <h3 className="font-bold text-lg">Eliminar Categoria</h3>
         <p className="py-4">¿Estás seguro de que deseas eliminar esta categoria?</p>
         <div className="modal-action">
-          <button className="btn btn-error">Eliminar</button>
           <button type="button" className="btn" onClick={closeModal}>Cancelar</button>
+          <button className="btn btn-error">Eliminar</button>
         </div>
       </form>
       <form method="dialog" className="modal-backdrop">

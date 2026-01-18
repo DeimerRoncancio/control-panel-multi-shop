@@ -11,6 +11,7 @@ import ModalCreateCategory from "../components/Modal-create-category";
 import { ToastContainer } from "react-toastify";
 import ModalDeleteCategory from "../components/Modal-delete-category";
 import usePagination from "../../../shared/hooks/usePagination";
+import ModalUpdateCategory from "../components/Modal-update-category";
 
 function Categories() {
   const [categorySelected, setCategorySelected] = useState<Content>({} as Content);
@@ -31,6 +32,7 @@ function Categories() {
   return (
     <>
       <ModalCreateCategory />
+      <ModalUpdateCategory category={categorySelected} />
       <ModalDeleteCategory category={categorySelected} />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">

@@ -4,8 +4,8 @@ import { AiFillProduct } from "react-icons/ai";
 import { IoPricetagsOutline } from "react-icons/io5";
 
 type Props = {
-  categories: Content[] | undefined;
   isLoading: boolean;
+  categories: Content[] | undefined;
   selectCategory: (category: Content) => void;
 }
 
@@ -13,7 +13,6 @@ export default function ListCategories({ categories, isLoading, selectCategory }
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
       <table className="table">
-        {/* head */}
         <thead>
           <tr>
             <th>Nombre de categoria</th>
@@ -62,10 +61,11 @@ export default function ListCategories({ categories, isLoading, selectCategory }
                     p-2 shadow-sm w-36 gap-2">
                       <li>
                         <ButtonModal
-                          idModal="update_product"
+                          idModal="update_category"
                           className="text-xs btn btn-sm btn-warning"
+                          onClick={() => selectCategory(category)}
                         >
-                          Editar Producto
+                          Editar Categoria
                         </ButtonModal>
                       </li>
                       <li>
