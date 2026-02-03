@@ -24,7 +24,7 @@ const axiosPostFormDataBearer = async ({ url, data, token }: PropsFormData) => {
 
     return response;
   } catch (error: AxiosError | any) {
-    throw error;
+    return (error as AxiosError).response;
   }
 };
 

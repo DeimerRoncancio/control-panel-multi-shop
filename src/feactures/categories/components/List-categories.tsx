@@ -63,7 +63,7 @@ export default function ListCategories({ categories, isLoading, selectCategory }
                       <li>
                         <ButtonModal
                           idModal="update_category"
-                          className="text-xs btn btn-sm btn-warning"
+                          className="text-xs btn btn-sm"
                           onClick={() => selectCategory(category)}
                         >
                           Editar Categoria
