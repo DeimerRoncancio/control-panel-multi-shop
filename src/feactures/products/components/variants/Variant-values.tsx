@@ -71,7 +71,7 @@ export default function VariantValues({ type, setValue, errors, handleTextValue,
             <input
               type="text"
               placeholder="Escribe un valor y presiona Enter"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-gray-700"
               value={inputValue}
               onChange={(e) => {
                 setInputValue(e.target.value)
@@ -108,7 +108,7 @@ export default function VariantValues({ type, setValue, errors, handleTextValue,
                   errors(true);
                 }}
                 prefixed
-                className="input input-bordered w-full"
+                className="input input-bordered w-full bg-gray-700"
               />
               <div className="w-full h-20 rounded-lg border" style={{ backgroundColor: colorValue }}></div>
               <button

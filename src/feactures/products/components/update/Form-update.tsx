@@ -33,7 +33,7 @@ export function FormUpdate({ control, fieldErrors, clearErrors, register }: Form
                   id="product-name"
                   type="text"
                   defaultValue="Mando X-BOX Series X"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-gray-700"
                   style={ fieldErrors.productName && { borderColor: "#fb2c36" } }
                 />
                 {fieldErrors.productName && (
@@ -50,7 +50,7 @@ export function FormUpdate({ control, fieldErrors, clearErrors, register }: Form
                 <textarea
                   {...register('description')}
                   id="product-description"
-                  className="textarea textarea-bordered h-32 w-full"
+                  className="textarea textarea-bordered h-32 w-full bg-gray-700"
                   defaultValue="Mando personalizado, purpura para consola X-BOX"
                   style={ fieldErrors.description && { borderColor: "#fb2c36" } }
                 />
@@ -79,7 +79,7 @@ export function FormUpdate({ control, fieldErrors, clearErrors, register }: Form
                         decimalSeparator=","
                         decimalScale={2}
                         fixedDecimalScale={true}
-                        className="input input-bordered w-full pl-8"
+                        className="input input-bordered w-full pl-8 bg-gray-700"
                         style={fieldErrors.price && { borderColor: '#fb2c36' }}
                         onValueChange={(values) => {
                           field.onChange(values.formattedValue);

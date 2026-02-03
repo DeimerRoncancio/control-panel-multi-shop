@@ -34,11 +34,11 @@ export function ProductId() {
     categoriesLoading,
     data: { productData, categoriesData, imagesToRemove },
     remove: { removeImages, removeVariants },
+    isUpdating,
     sendProduct
   } = useProducts();
 
   const onSubmit: SubmitHandler<ProductType> = (data) => sendProduct(data);
-
   const handleVariantSelected = (variant: VariantType) => setVariantSelected(variant);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function ProductId() {
         className="min-h-screen transition-colors duration-300"
       >
         <div className="shadow-lg">
-          <HeaderProduct />
+          <HeaderProduct isUpdating={isUpdating} />
         </div>
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">

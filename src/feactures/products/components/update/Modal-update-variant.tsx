@@ -77,7 +77,7 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
             <span className="font-normal">Nombre de la Variante</span>
             <input
               type="text"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-gray-700"
               placeholder="Ej: Color, Tamaño, Material"
               {...register("name")}
             />
@@ -89,7 +89,7 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
             <span className="font-normal">Tag de la Variante</span>
             <input
               type="text"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-gray-700"
               placeholder="Ej: color, size, material"
               {...register("tag")}
             />
@@ -100,7 +100,7 @@ export default function ModalUpdateVariant({ variant, setValue: setProductValue,
           <div>
             <label className="flex flex-col gap-2">
               <span className="font-normal">Tipo de Variante</span>
-              <select className="select select-bordered w-full" {...register("type")}>
+              <select className="select select-bordered w-full bg-gray-700" {...register("type")}>
                 <option value="select">Seleccionar</option>
                 <option value="text">Texto</option>
                 <option value="color">Color</option>

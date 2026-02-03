@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router';
 
-export function HeaderProduct() {
+type Props = {
+  isUpdating: boolean;
+}
+
+export function HeaderProduct({ isUpdating }: Props) {
   const navigate = useNavigate();
 
   return (
@@ -35,9 +39,14 @@ export function HeaderProduct() {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            className="btn btn-primary bg-purple-500 border-none"
+            className="btn w-40 btn-primary bg-purple-500 border-none"
+            disabled={isUpdating}
           >
-            Guardar Cambios
+            {isUpdating ? (
+                <span className="loading loading-spinner"></span>
+            ) : (
+              'Actualizar Producto'
+            )}
           </button>
         </div>
       </div>

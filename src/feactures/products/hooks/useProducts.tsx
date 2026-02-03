@@ -3,7 +3,6 @@ import { RequestProductID } from "../interface/response-productid";
 import axiosGetBearer from "../../../shared/requests/protectedRoutes/get";
 import Cookies from 'js-cookie';
 import { useParams } from "react-router";
-import envs from "../../../configs/envs";
 import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
 import axiosPutFormDataBearer from "../../../shared/requests/protectedRoutes/put";
@@ -25,13 +24,15 @@ export default function useProducts() {
   const removeVariants = (variantIds: string[]) =>
     setVariantsToRemove((prevVariants) => [...prevVariants, ...variantIds]);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending: isUpdating } = useMutation({
     mutationFn: axiosPutFormDataBearer,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data?.status !== 201 && data?.status !== 200)
+        return errorAlert({ message: 'Error al actualizar el producto' });
+
       successAlert("Producto actualizado con éxito")
       queryClient.invalidateQueries({ queryKey: ["products"] });
-    },
-    onError: (error: any) => errorAlert({ message: 'Error al actualizar el producto' + error.message }),
+    }
   });
 
   const sendProduct = (data: ProductType) => {
@@ -65,10 +66,9 @@ export default function useProducts() {
         formData.append(`variants[${index}].listValues[${valueIndex}]`, value);
       });
     });
-
-
+  
     mutate({
-      url: `${envs.API}/app/products/${id}`,
+      url: `/app/products/${id}`,
       data: formData,
       token: token || '',
     });
@@ -101,6 +101,7 @@ export default function useProducts() {
     data: { productData, categoriesData, imagesToRemove },
     categoriesLoading,
     remove: { removeImages, removeVariants },
+    isUpdating,
     sendProduct
   };
 }

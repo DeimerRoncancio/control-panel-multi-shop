@@ -90,7 +90,7 @@ function ModalProductCreate({ categories }: Props) {
               type="text"
               defaultValue=""
               placeholder="Ej: Mando X-BOX Series X"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full bg-gray-700"
             />
             {errors.productName && (
               <p className="text-sm text-error">
@@ -103,7 +103,7 @@ function ModalProductCreate({ categories }: Props) {
             <textarea
               {...register('description')}
               id="product-description"
-              className="textarea textarea-bordered h-20 w-full"
+              className="textarea textarea-bordered h-20 w-full bg-gray-700"
               placeholder="Describe las características del producto"
               style={errors.description && { borderColor: "#fb2c36" }}
             />
@@ -130,7 +130,7 @@ function ModalProductCreate({ categories }: Props) {
                     decimalScale={2}
                     fixedDecimalScale={true}
                     placeholder="00,0"
-                    className="input input-bordered w-full pl-8"
+                    className="input input-bordered w-full pl-8 bg-gray-700"
                     onValueChange={(values) => {
                       field.onChange(values.formattedValue);
                       clearErrors('price');
@@ -157,7 +157,7 @@ function ModalProductCreate({ categories }: Props) {
                   <input
                     type="checkbox"
                     id={`category-${category.categoryName}`}
-                    className="checkbox checkbox-primary"
+                    className="checkbox checkbox-primary bg-gray-700"
                     value={category.categoryName}
                     {...register('categoriesList')}
                   />
@@ -196,7 +196,7 @@ function ModalProductCreate({ categories }: Props) {
                     }}
                   />
                   <div className="text-center">
-                    <div className="mb-3 group-hover:scale-110 transition-transform">
+                    <div className="mb-3 group-hover:scale-110 transition-transform ">
                       <svg className="w-12 h-12 mx-auto text-gray-400 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                       </svg>

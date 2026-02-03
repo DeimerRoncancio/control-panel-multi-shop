@@ -71,11 +71,12 @@ export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUser
                   </div>
                 </td>
                 <td>
-                  {user?.phoneNumber ? user.phoneNumber : 'No phone number'}
+                  {user?.phoneNumber ? "+57 " + user.phoneNumber : 'No phone number'}
                 </td>
                 <td>{user?.email ? user.email : 'No email'}</td>
                 <th>
-                  <details className={`dropdown dropdown-center ${index === users.length - 1 && 'dropdown-top'}`}>
+                  <details className={`dropdown dropdown-center ${users.length == 1 && 'dropdown-left'}
+                  ${index === users.length - 1 && 'dropdown-top'}`}>
                     <summary className="btn m-1">Detalles</summary>
                     <ul className="menu dropdown-content bg-base-100 rounded-box z-1 border border-gray-700
                     p-2 shadow-sm w-44 space-y-2">

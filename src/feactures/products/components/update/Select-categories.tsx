@@ -38,7 +38,7 @@ export function SelectCategories({ categories, loading, watch, register }: Selec
                   <input
                     type="checkbox"
                     id={`category-${category.categoryName}`}
-                    className="checkbox checkbox-primary"
+                    className="checkbox checkbox-primary bg-gray-700"
                     value={category.categoryName}
                     {...register('categoriesList')}
                   />
