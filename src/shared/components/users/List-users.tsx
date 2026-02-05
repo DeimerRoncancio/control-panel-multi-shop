@@ -58,7 +58,10 @@ export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUser
                   <div className="flex items-center gap-3">
                     <div className="mask mask-squircle h-12 w-12 relative overflow-hidden flex
                     items-center justify-center bg-gray-700 text-xl font-bold">
-                      <p>{user?.name?.charAt(0) ?? ''}</p>
+                      <img
+                          src={`https://ui-avatars.com/api/?name=${user.name.charAt(0)}+${user.lastnames.charAt(0)}&background=random`}
+                          alt="user"
+                        />
                     </div>
                     <div>
                       <div className="font-bold">

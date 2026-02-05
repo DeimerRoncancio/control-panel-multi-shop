@@ -15,7 +15,6 @@ export interface GetUserRequest {
 export interface Content {
   id: string;
   name: string;
-  imageUser: ImageUser | null;
   secondName: null | string;
   lastnames: string;
   phoneNumber: number | null;
@@ -26,6 +25,7 @@ export interface Content {
   roles: Role[];
   admin: boolean;
   enabled: boolean;
+  createdAt: Date;
 }
 
 export interface ImageUser {

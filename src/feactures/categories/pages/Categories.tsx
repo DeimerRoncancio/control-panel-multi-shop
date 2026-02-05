@@ -16,13 +16,14 @@ import ModalUpdateCategory from "../components/Modal-update-category";
 function Categories() {
   const [categorySelected, setCategorySelected] = useState<Content>({} as Content);
   const { pagination, setSearchParams } = usePagination();
+  const {page, size} = pagination;
 
   const { data: categoriesData } = useQuery<CategoriesRequest>({
-    queryKey: ['categories', pagination],
+    queryKey: ['categories', page, size],
     queryFn: async () => {
       return axiosGet({
         url: '/app/categories',
-        params: { page: Number(pagination.page), size: Number(pagination.size) }
+        params: { page: Number(page), size: Number(size) }
       });
     }
   });
@@ -54,7 +55,7 @@ function Categories() {
           isLoading={false}
         />
         <Pagination
-          page={pagination.page}
+          page={page}
           setPagination={setSearchParams}
           data={categoriesData}
         />

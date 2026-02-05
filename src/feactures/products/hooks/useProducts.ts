@@ -7,7 +7,7 @@ import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
 import axiosPutFormDataBearer from "../../../shared/requests/protectedRoutes/put";
 import { ProductType } from "../../../shared/zod/products/product.zod";
-import { CategoriesRequest } from "../../categories/interfaces/categories-response";
+import { Content } from "../../categories/interfaces/categories-response";
 import { useState } from "react";
 
 export default function useProducts() {
@@ -75,7 +75,7 @@ export default function useProducts() {
   };
 
   const { data: productData } = useQuery<RequestProductID>({
-    queryKey: ['products'],
+    queryKey: ['products', id],
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
@@ -85,7 +85,7 @@ export default function useProducts() {
     },
   });
 
-  const { data: categoriesData, isLoading: categoriesLoading } = useQuery<CategoriesRequest>({
+  const { data: categoriesData, isLoading: categoriesLoading } = useQuery<Content[]>({
     queryKey: ['categories'],
     queryFn: async () => {
       const token = Cookies.get('accessToken');

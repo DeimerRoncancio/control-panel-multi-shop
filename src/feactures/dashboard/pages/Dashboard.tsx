@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import {
   FaBoxOpen,
   FaLayerGroup,
@@ -9,8 +10,56 @@ import {
   FaCalendarAlt,
   FaTrophy,
 } from 'react-icons/fa';
+import { RequestProductID } from '../../products/interface/response-productid';
+import { useNavigate } from 'react-router';
+import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
+import Cookie from 'js-cookie';
+import { Content } from '../../../shared/interfaces/get-users-request';
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const cookie = Cookie.get('accessToken');
+
+  const { data: products = [] } = useQuery<RequestProductID[]>({
+    queryKey: ['latest-products'],
+    queryFn: async () => {
+      return await axiosGetBearer({
+        url: '/app/products/latest-products',
+        token: cookie || ''
+      })
+    },
+  });
+
+  const {data: users = []} = useQuery<Content[]>({
+    queryKey: ['latest-users'],
+    queryFn: async () => {
+      return await axiosGetBearer({
+        url: '/app/users/latest-users',
+        token: cookie || ''
+      })
+    },
+  })
+
+  const { data: categories = [] } = useQuery<{ id: string; categoryName: string; createdAt: string; }[]>({
+    queryKey: ['latest-categories'],
+    queryFn: async () => {
+      return await axiosGetBearer({
+        url: '/app/categories/latest-categories',
+        token: cookie || ''
+      })
+    },
+  });
+
+  const { data } = useQuery({
+    queryKey: ['dashboard-stats'],
+    queryFn: async () => {
+      return await axiosGetBearer({ 
+        url: '/app/quantity', 
+        token: cookie || ''
+      });
+    }
+  })
+
   return (
     <div className="w-full h-full p-8 bg-base-100 overflow-y-auto">
       {/* Welcome Section */}
@@ -28,7 +77,7 @@ function Dashboard() {
         <div className="card bg-primary text-primary-content shadow-xl">
           <div className="card-body flex-row items-center justify-between">
             <div>
-              <h2 className="card-title text-3xl font-bold">128</h2>
+              <h2 className="card-title text-3xl font-bold">{data?.products || 0}</h2>
               <p className="opacity-90">Productos Activos</p>
             </div>
             <FaBoxOpen className="text-5xl opacity-80" />
@@ -38,7 +87,7 @@ function Dashboard() {
         <div className="card bg-secondary text-secondary-content shadow-xl">
           <div className="card-body flex-row items-center justify-between">
             <div>
-              <h2 className="card-title text-3xl font-bold">24</h2>
+              <h2 className="card-title text-3xl font-bold">{data?.categories || 0}</h2>
               <p className="opacity-90">Categorías</p>
             </div>
             <FaLayerGroup className="text-5xl opacity-80" />
@@ -48,7 +97,7 @@ function Dashboard() {
         <div className="card bg-accent text-accent-content shadow-xl">
           <div className="card-body flex-row items-center justify-between">
             <div>
-              <h2 className="card-title text-3xl font-bold">1,250</h2>
+              <h2 className="card-title text-3xl font-bold">{data?.users || 0}</h2>
               <p className="opacity-90">Usuarios Registrados</p>
             </div>
             <FaUsers className="text-5xl opacity-80" />
@@ -83,7 +132,9 @@ function Dashboard() {
         <div className="xl:col-span-2">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold">Últimos Productos Agregados</h3>
-            <button className="btn btn-link btn-sm no-underline text-base-content/60 hover:text-primary">
+            <button className="btn btn-link btn-sm no-underline text-base-content/60 hover:text-primary"
+              onClick={() => navigate('/products')}
+            >
               Ver catálogo completo
             </button>
           </div>
@@ -99,49 +150,50 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <tr key={item} className="hover:bg-base-100 transition-colors">
+                {products.map((item) => (
+                  <tr key={item.id} className="hover:bg-base-100 transition-colors">
                     <td>
                       <div className="flex items-center gap-3">
                         <div className="avatar">
                           <div className="mask mask-squircle w-12 h-12 bg-base-300">
                             <img
-                              src={`https://placehold.co/100x100?text=Prod${item}`}
+                              src={`${item.productImages[0]?.imageUrl}`}
                               alt="Producto"
                             />
                           </div>
                         </div>
                         <div>
-                          <div className="font-bold">Nike Air Max {item}00</div>
+                          <div className="font-bold">{item.productName}</div>
                           <div className="text-xs opacity-50">
-                            Ref: NK-{2024 + item}
+                            {item.description.split(' ').slice(0, 5).join(' ')}...
                           </div>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <span className="badge badge-ghost badge-sm">
-                        Deportivos
-                      </span>
+                      {item.categories.length > 0 ? (
+                        <span className="badge badge-soft badge-sm">
+                          {item.categories[0].categoryName}
+                        </span>
+                      ) : (
+                        <span className="badge badge-ghost badge-sm">
+                          Sin Categoría
+                        </span>
+                      )}
                     </td>
                     <td className="font-semibold text-primary">
-                      ${(120 + item * 10).toFixed(2)}
+                      $ {new Intl.NumberFormat("es-ES").format(item.price)}
                     </td>
                     <td>
-                      <div className="flex gap-1">
-                        <div
-                          className="w-3 h-3 rounded-full bg-red-500"
-                          title="Rojo"
-                        ></div>
-                        <div
-                          className="w-3 h-3 rounded-full bg-blue-500"
-                          title="Azul"
-                        ></div>
-                        <div
-                          className="w-3 h-3 rounded-full bg-black"
-                          title="Negro"
-                        ></div>
-                      </div>
+                      {
+                        item.variants.length === 0 ? (
+                          <span className="text-xs opacity-50">Sin variantes</span>
+                        ) : (
+                          <span className="badge badge-accent badge-soft badge-sm">
+                            {item.variants.length} variantes
+                          </span>
+                        )
+                      }
                     </td>
                   </tr>
                 ))}
@@ -198,27 +250,24 @@ function Dashboard() {
             <h3 className="text-xl font-bold mb-4">Categorías Recientes</h3>
             <div className="bg-base-200 rounded-2xl p-4">
               <div className="flex flex-col gap-3">
-                {[
-                  { name: 'Nueva Colección Verano', date: 'Hace 2 horas', color: 'primary' },
-                  { name: 'Accesorios Tech', date: 'Hace 1 día', color: 'secondary' },
-                  { name: 'Ofertas Flash', date: 'Hace 2 días', color: 'accent' },
-                ].map((cat, idx) => (
+                {categories.map((cat, idx) => (
                   <div key={idx} className="flex items-center justify-between p-3 bg-base-100 rounded-xl">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg bg-${cat.color}/10 text-${cat.color}`}>
+                      <div className={`p-2 rounded-lg bg-accent/10 text-accent`}>
                         <FaLayerGroup />
                       </div>
                       <div>
-                        <div className="font-bold text-sm">{cat.name}</div>
+                        <div className="font-bold text-sm">{cat.categoryName}</div>
                         <div className="text-xs opacity-50 flex items-center gap-1">
-                          <FaCalendarAlt className="text-[10px]" /> {cat.date}
+                          <FaCalendarAlt className="text-[10px]" /> {cat.createdAt.split('T')[0]}
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <button className="btn btn-ghost btn-sm btn-block mt-3 text-xs uppercase tracking-wide opacity-50 hover:opacity-100">
+              <button className="btn btn-ghost btn-sm btn-block mt-3 text-xs uppercase tracking-wide opacity-50 hover:opacity-100"
+              onClick={() => navigate("/categories")}>
                 Ver todas las categorías
               </button>
             </div>
@@ -229,26 +278,27 @@ function Dashboard() {
             <h3 className="text-xl font-bold mb-4">Usuarios Recientes</h3>
             <div className="bg-base-200 rounded-2xl p-4">
               <div className="flex flex-col gap-3">
-                {[1, 2, 3, 4].map((u) => (
-                  <div key={u} className="flex items-center gap-3 p-3 bg-base-100 rounded-xl">
+                {users.map((u) => (
+                  <div key={u.id} className="flex items-center gap-3 p-3 bg-base-100 rounded-xl">
                     <div className="avatar">
                       <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                         <img
-                          src={`https://ui-avatars.com/api/?name=User+${u}&background=random`}
+                          src={`https://ui-avatars.com/api/?name=${u.name.charAt(0)}+${u.lastnames.charAt(0)}&background=random`}
                           alt="user"
                         />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-sm truncate">Nuevo Usuario {u}</div>
+                      <div className="font-bold text-sm truncate">{u.name + " " + (u.secondName ?? "") + " " + u.lastnames}</div>
                       <div className="text-xs opacity-50 flex items-center gap-1">
-                        <FaHistory className="text-[10px]" /> Registrado hace {u * 4}h
+                        <FaHistory className="text-[10px]" /> {}{new Date(u.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <button className="btn btn-ghost btn-sm btn-block mt-3 text-xs uppercase tracking-wide opacity-50 hover:opacity-100">
+              <button className="btn btn-ghost btn-sm btn-block mt-3 text-xs uppercase tracking-wide opacity-50 hover:opacity-100"
+              onClick={() => navigate("/users")}>
                 Ver todos los usuarios
               </button>
             </div>
