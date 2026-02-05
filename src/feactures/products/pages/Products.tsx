@@ -55,7 +55,7 @@ function Products() {
             Crear Producto
           </ButtonModal>
         </div>
-        <DetailsProduct totalProducts={data?.totalElements} />
+        <DetailsProduct />
         <SearchProducts />
         <ListProducts
           products={data?.content || []}

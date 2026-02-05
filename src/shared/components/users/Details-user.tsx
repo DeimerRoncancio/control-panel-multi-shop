@@ -1,6 +1,20 @@
 import { FaUserCheck, FaUsers, FaUserTimes } from 'react-icons/fa';
+import axiosGetBearer from '../../requests/protectedRoutes/get';
+import { useQuery } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 
 function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
+  const { data: stats } = useQuery({
+    queryKey: ['user-stats'],
+    queryFn: async () => {
+      const token = Cookies.get('accessToken');
+      return axiosGetBearer({
+        url: `/app/users/stats?isAdmin=${isAdmin}`,
+        token: token || '',
+      });
+    },
+  });
+
   return (
     <div className="stats shadow w-full border border-gray-600">
       <div className="stat">
@@ -10,9 +24,9 @@ function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
         <div className="stat-title">
           {isAdmin ? 'Total Administradores' : 'Total Usuarios'}
         </div>
-        <div className="stat-value text-primary">6</div>
+        <div className="stat-value text-primary">{stats?.totalUsers}</div>
         <div className="stat-desc">
-          {isAdmin ? 'administradores registrados' : 'usuarios registrados'}
+          {isAdmin ? 'Administradores registrados' : 'Usuarios registrados'}
         </div>
       </div>
 
@@ -23,9 +37,9 @@ function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
         <div className="stat-title">
           {isAdmin ? 'Administradores Activos' : 'Usuarios Activos'}
         </div>
-        <div className="stat-value text-success">5</div>
+        <div className="stat-value text-success">{stats?.enabledUsers}</div>
         <div className="stat-desc">
-          {isAdmin ? 'administradores conectados' : 'usuarios conectados'}
+          {isAdmin ? 'Administradores conectados' : 'Usuarios conectados'}
         </div>
       </div>
 
@@ -36,12 +50,13 @@ function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
         <div className="stat-title">
           {isAdmin ? 'Administradores Inactivos' : 'Usuarios Inactivos'}
         </div>
-        <div className="stat-value text-warning">1</div>
+        <div className="stat-value text-warning">{stats?.disabledUsers}</div>
         <div className="stat-desc">
-          {isAdmin ? 'administradores desconectados' : 'usuarios desconectados'}
+          {isAdmin ? 'Administradores desconectados' : 'Usuarios desconectados'}
         </div>
       </div>
     </div>
   );
 }
+
 export default DetailsUser;

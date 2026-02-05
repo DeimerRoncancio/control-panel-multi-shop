@@ -20,7 +20,7 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
             <th>Primeras categorías</th>
             <th>Precio</th>
             <th>Imagenes</th>
-            <th>Descripción</th>
+            <th>Variantes</th>
             <th>Acciones</th>
           </tr>
         </thead>
