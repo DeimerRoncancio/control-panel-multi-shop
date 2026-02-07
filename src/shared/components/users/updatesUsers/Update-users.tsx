@@ -38,8 +38,8 @@ function UpdateUsers({ isAdmin, idUser, user }: Props) {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center my-6">
-      <div className="w-[70%] h-[600%]">
+    <main className="flex flex-col items-center justify-center mt-6">
+      <div className='w-full h-full'>
         <FormUpdate
           pending={isPending}
           user={user}

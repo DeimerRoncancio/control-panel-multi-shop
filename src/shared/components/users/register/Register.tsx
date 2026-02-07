@@ -16,6 +16,7 @@ function Register({ isAdmin }: { isAdmin: boolean }) {
     onSuccess: () => {
       successAlert('Usuario creado con éxito');
       queryClient.invalidateQueries({ queryKey: [`${isAdmin ? 'admins' : 'users'}`] });
+      queryClient.invalidateQueries({ queryKey: ['latest-users'] });
       modal.close();
     },
     onError: (error: AxiosError) => errorAlertUsers(error.message),
@@ -34,14 +35,12 @@ function Register({ isAdmin }: { isAdmin: boolean }) {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center my-6">
-      <div className="w-[70%] h-[600%]">
-        <FormRegister
-          functionUpdate={handleFormDataChange}
-          pending={isPending}
-        />
-      </div>
-    </main>
+    <div>
+      <FormRegister
+        functionUpdate={handleFormDataChange}
+        pending={isPending}
+      />
+    </div>
   );
 }
 

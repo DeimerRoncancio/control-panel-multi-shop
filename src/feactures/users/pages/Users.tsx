@@ -16,8 +16,6 @@ import {
 import UpdateUsers from '../../../shared/components/users/updatesUsers/Update-users';
 import { ListUsers } from '../../../shared/components/users/List-users';
 import Pagination from '../../../shared/components/globalComponents/Pagination';
-import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUsers/Update-avatar';
-import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
 import { SearchProducts } from '../../products/interface/search-products';
 import usePagination from '../../../shared/hooks/usePagination';
@@ -51,9 +49,6 @@ function Users() {
   return (
     <>
       <ToastContainer style={{ zIndex: 1000 }} />
-      <ModalUsersAvatar isAdmin={false}>
-        <FormUpdateAvatar isAdmin={false} user={userUpdate} />
-      </ModalUsersAvatar>
       <ModalUserCreate isAdmin={false} />
       <ModalUsersUpdate isAdmin={false}>
         <UpdateUsers

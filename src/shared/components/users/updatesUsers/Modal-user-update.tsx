@@ -7,7 +7,7 @@ function ModalUsersUpdate({
 }) {
   return (
     <dialog id="update_user" className="modal">
-      <div className="modal-box h-[85vh] w-8/12 max-w-5xl">
+      <div className="modal-box max-h-[95vh]">
         <h3 className="font-bold text-xl text-center">
           {isAdmin ? 'Actualizar Administrador' : 'Actualizar Usuario'}
         </h3>

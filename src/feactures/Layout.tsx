@@ -10,24 +10,29 @@ function Layout() {
   const token = Cookies.get('accessToken');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     setLoading(true);
-    axios(`${envs.API}/app/users/token-validation`, {
+    axios(`${envs.API}/app/users/me`, {
       headers: {
         token: token || '',
+        Authorization: `Bearer ${token || ''}`,
       },
     })
-      .then(() => {})
+      .then((response) => {
+        if (response.data.admin === false) navigate('/');
+        setUser(response.data);
+      })
       .catch(() => navigate('/'))
       .finally(() => setLoading(false));
   }, [token, navigate]);
 
   return (
     <main className="w-full h-screen flex flex-col">
-      <Navbar />
+      <Navbar user={user} />
       <div className="flex w-full h-full overflow-y-auto">
-        <Aside />
+        <Aside user={user} />
         <section className="w-[80%] h-full flex flex-col overflow-auto">
           {loading ? (
             <div className="flex items-center justify-center w-full h-full">

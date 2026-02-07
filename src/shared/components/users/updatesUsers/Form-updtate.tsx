@@ -26,7 +26,6 @@ function FormUpdate({
   });
 
   useEffect(() => {
-    // Set initial values in the form based on the user data
     if (user) {
       setValuesUpdate.forEach((value) => {
         const fieldValue = user[value];
@@ -40,134 +39,130 @@ function FormUpdate({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubimit)}>
-      <div className="grid gap-6 mb-6 md:grid-cols-2">
-        <div>
-          <label htmlFor="name" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Primer nombre
-            </span>
+    <form onSubmit={handleSubmit(onSubimit)} className="space-y-4">
+      <p className="mb-4 font-light text-gray-400">Modifica la información del usuario en el sistema.</p>
+
+      <div>
+        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+          Datos Personales
+        </h4>
+        <div className="grid gap-4 mb-6 md:grid-cols-2">
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Primer nombre</span>
             <input
-              id="name"
               type="text"
-              className="w-full p-2.5 input input-primary"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
               placeholder="John"
               {...register('name')}
             />
+            <ErrorMessage errors={errors} fieldName="name" />
           </label>
-          <ErrorMessage errors={errors} fieldName="name" />
-        </div>
-        <div>
-          <label htmlFor="secondName" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Segundo nombre
-            </span>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Segundo nombre</span>
             <input
-              id="secondName"
               type="text"
-              className="w-full p-2.5 input input-primary"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
               placeholder="Doe"
               {...register('secondName')}
             />
+            <ErrorMessage errors={errors} fieldName="secondName" />
           </label>
-          <ErrorMessage errors={errors} fieldName="secondName" />
-        </div>
-        <div>
-          <label htmlFor="lastnames" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Apellido
-            </span>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Apellido</span>
             <input
-              id="lastnames"
               type="text"
-              className="w-full p-2.5 input input-primary"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
               placeholder="Sanchez Gavilan"
               {...register('lastnames')}
             />
+            <ErrorMessage errors={errors} fieldName="lastnames" />
           </label>
-          <ErrorMessage errors={errors} fieldName="lastnames" />
-        </div>
-        <div>
-          <label htmlFor="phoneNumber" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Numero de teléfono
-            </span>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Numero de teléfono</span>
             <input
-              id="phoneNumber"
               type="tel"
-              className="w-full p-2.5 input input-primary"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
               placeholder="123-45-678"
               {...register('phoneNumber')}
             />
+            <ErrorMessage errors={errors} fieldName="phoneNumber" />
           </label>
-          <ErrorMessage errors={errors} fieldName="phoneNumber" />
-        </div>
-      </div>
-      <div className="mb-6">
-        <div>
-          <label htmlFor="gender" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Genero
-            </span>
+
+          <label className="flex flex-col md:col-span-2">
+            <span className="mb-2 text-sm font-medium">Genero</span>
             <select
-              id="gender"
               defaultValue=""
-              className="select select-primary w-full p-2.5"
+              className="select select-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
               {...register('gender')}
             >
               <option disabled>Selecciona Genero</option>
               <option value="male">Hombre</option>
               <option value="female">Mujer</option>
             </select>
+            <ErrorMessage errors={errors} fieldName="gender" />
           </label>
-          <ErrorMessage errors={errors} fieldName="gender" />
         </div>
       </div>
-      <div className="mb-6">
-        <label htmlFor="email" className="flex flex-col">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Email
-          </span>
-          <input
-            id="email"
-            type="email"
-            className="w-full p-2.5 input input-primary"
-            placeholder="john.doe@company.com"
-            {...register('email')}
-          />
-        </label>
-        <ErrorMessage errors={errors} fieldName="email" />
+
+      {/* Sección 2: Cuenta y Rol */}
+      <div className="pt-2">
+        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+          Cuenta y Asignación
+        </h4>
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Email</span>
+            <input
+              type="email"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              placeholder="john.doe@company.com"
+              {...register('email')}
+            />
+            <ErrorMessage errors={errors} fieldName="email" />
+          </label>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Rol</span>
+            <select
+              defaultValue=""
+              className="select select-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              {...register('admin')}
+            >
+              <option disabled>Selecciona Rol</option>
+              <option value="true">Administrador</option>
+              <option value="false">Usuario</option>
+            </select>
+            <ErrorMessage errors={errors} fieldName="admin" />
+          </label>
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="admin" className="flex flex-col mb-6">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Rol
-          </span>
-          <select
-            id="admin"
-            defaultValue=""
-            className="select select-primary w-full p-2.5"
-            {...register('admin')}
-          >
-            <option disabled>Selecciona Rol</option>
-            <option value="true">Administrador</option>
-            <option value="false">Usuario</option>
-          </select>
-        </label>
-        <ErrorMessage errors={errors} fieldName="admin" />
+      <div className="mt-8 grid grid-cols-2 gap-4 pt-4">
+        <button
+          type="button"
+          className="btn btn-error btn-outline"
+          onClick={() => {
+            const modal = document.getElementById("update_user") as HTMLDialogElement;
+            if (modal) modal.close();
+          }}
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          className="btn btn-primary shadow-md"
+          disabled={pending}
+        >
+          {pending ? (
+             <span className="loading loading-spinner loading-sm" />
+          ) : (
+            'Actualizar Usuario'
+          )}
+        </button>
       </div>
-
-      <button
-        type="submit"
-        className="text-white text-sm w-[300px] px-5 py-2.5 btn btn-primary"
-      >
-        {pending ? (
-          <span className="loading loading-spinner loading-sm" />
-        ) : (
-          'Actualizar'
-        )}
-      </button>
     </form>
   );
 }

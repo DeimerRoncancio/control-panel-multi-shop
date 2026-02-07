@@ -3,9 +3,7 @@ import { z } from 'zod';
 const RegisterSchema = z
   .object({
     name: z.string().min(1, { message: 'El correo es requerido' }),
-    secondName: z.string().min(1, {
-      message: 'El segundo nombre es requerido',
-    }),
+    secondName: z.string().optional(),
     lastnames: z.string().min(1, { message: 'El apellido es requerido' }),
     phoneNumber: z.string().min(1, {
       message: 'El numero de telefono es requerido',

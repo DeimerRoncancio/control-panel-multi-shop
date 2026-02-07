@@ -29,7 +29,8 @@ export default function ModalCreateCategory() {
     onSuccess: () => {
       closeModal();
       successAlert("Categoría creada con éxito");
-      queryClient.invalidateQueries({ queryKey: ["categories"] })
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["latest-categories"] });
     }
   });
 

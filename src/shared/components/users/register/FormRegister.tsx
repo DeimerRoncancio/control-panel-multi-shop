@@ -19,177 +19,166 @@ function FormRegister({ pending, functionUpdate }: Props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegisterTypeAccess>({ resolver: zodResolver(RegisterSchema) });
 
   const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => functionUpdate(data);
 
   return (
-    <form onSubmit={handleSubmit(onSubimit)}>
-      <div className="grid gap-6 mb-6 md:grid-cols-2">
-        <div>
-          <label htmlFor="name" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Primer nombre
-            </span>
+    <form onSubmit={handleSubmit(onSubimit)} className="space-y-4">
+      <p className="mb-4 font-light text-gray-400">Ingresa la información requerida para registrar el nuevo usuario.</p>
+
+      <div>
+        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+          Datos Personales
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Nombre</span>
             <input
-              id="name"
               type="text"
-              className="w-full p-2.5 input input-primary"
-              placeholder="John"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              placeholder="Ej. John"
               {...register('name')}
             />
+            <ErrorMessage errors={errors} fieldName="name" />
           </label>
-          <ErrorMessage errors={errors} fieldName="name" />
-        </div>
-        <div>
-          <label htmlFor="secondName" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Segundo nombre
-            </span>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Segundo Nombre</span>
             <input
               type="text"
-              id="secondName"
-              className="w-full p-2.5 input input-primary"
-              placeholder="Doe"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              placeholder="Ej. Doe"
               {...register('secondName')}
             />
+            <ErrorMessage errors={errors} fieldName="secondName" />
           </label>
-          <ErrorMessage errors={errors} fieldName="secondName" />
-        </div>
-        <div>
-          <label htmlFor="lastnames" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Apellido
-            </span>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Apellidos</span>
             <input
               type="text"
-              id="company"
-              className="w-full p-2.5 input input-primary"
-              placeholder="Sanchez Gavilan"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              placeholder="Ej. Smith"
               {...register('lastnames')}
             />
+            <ErrorMessage errors={errors} fieldName="lastnames" />
           </label>
-          <ErrorMessage errors={errors} fieldName="lastnames" />
-        </div>
-        <div>
-          <label htmlFor="phoneNumber" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Numero de teléfono
-            </span>
+
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Teléfono</span>
             <input
               type="tel"
-              id="phoneNumber"
-              className="w-full p-2.5 input input-primary"
-              placeholder="123-45-678"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              placeholder="+57 300 000 0000"
               {...register('phoneNumber')}
             />
+            <ErrorMessage errors={errors} fieldName="phoneNumber" />
           </label>
-          <ErrorMessage errors={errors} fieldName="phoneNumber" />
-        </div>
-      </div>
-      <div className="mb-6">
-        <div>
-          <label htmlFor="gender" className="flex flex-col">
-            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Genero
-            </span>
+
+          <label className="flex flex-col md:col-span-2">
+            <span className="mb-2 text-sm font-medium">Género</span>
             <select
-              id="gender"
+              className="select select-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
               defaultValue=""
-              className="select select-primary w-full p-2.5"
               {...register('gender')}
             >
-              <option disabled>Selecciona Genero</option>
+              <option value="" disabled>Selecciona Género</option>
               <option value="male">Hombre</option>
               <option value="female">Mujer</option>
             </select>
+            <ErrorMessage errors={errors} fieldName="gender" />
           </label>
-          <ErrorMessage errors={errors} fieldName="gender" />
         </div>
       </div>
-      <div className="mb-6">
-        <label htmlFor="email" className="flex flex-col">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Email
-          </span>
-          <input
-            type="email"
-            id="email"
-            className="w-full p-2.5 input input-primary"
-            placeholder="john.doe@company.com"
-            {...register('email')}
-          />
-        </label>
-        <ErrorMessage errors={errors} fieldName="email" />
-      </div>
-      <div className="mb-6">
-        <label htmlFor="password" className="flex flex-col">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Contraseña
-          </span>
-          <span className="w-full p-2.5 input input-primary flex">
+
+      {/* Sección 2: Cuenta */}
+      <div className="pt-4">
+        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+          Cuenta y Seguridad
+        </h4>
+        <div className="grid grid-cols-1 gap-4">
+          <label className="flex flex-col">
+            <span className="mb-2 text-sm font-medium">Correo Electrónico</span>
             <input
-              type={viewPassword ? 'text' : 'password'}
-              id="password"
-              className="w-[90%] p-2.5"
-              placeholder="•••••••••"
-              {...register('password')}
+              type="email"
+              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              placeholder="usuario@ejemplo.com"
+              {...register('email')}
             />
-            <button
-              className="w-[10%] z-10 flex items-center justify-end"
-              type="button"
-              onClick={() => setViewPassword(!viewPassword)}
-            >
-              {viewPassword ? (
-                <GrFormViewHide size={30} />
-              ) : (
-                <GrFormView size={30} />
-              )}
-            </button>
-          </span>
-        </label>
-        <ErrorMessage errors={errors} fieldName="password" />
-      </div>
-      <div className="mb-6">
-        <label htmlFor="confirm_password" className="flex flex-col">
-          <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Confirmar contraseña
-          </span>
-          <span className="w-full p-2.5 input input-primary flex">
-            <input
-              type={viewConfirmPassword ? 'text' : 'password'}
-              id="confirm_password"
-              className="w-[90%] p-2.5"
-              placeholder="•••••••••"
-              {...register('confirm_password')}
-            />
-            <button
-              className="w-[10%] z-10 flex items-center justify-end"
-              type="button"
-              onClick={() => setViewConfirmPassword(!viewConfirmPassword)}
-            >
-              {viewConfirmPassword ? (
-                <GrFormViewHide size={30} />
-              ) : (
-                <GrFormView size={30} />
-              )}
-            </button>
-          </span>
-        </label>
-        <ErrorMessage errors={errors} fieldName="confirm_password" />
+            <ErrorMessage errors={errors} fieldName="email" />
+          </label>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label className="flex flex-col relative">
+              <span className="mb-2 text-sm font-medium">Contraseña</span>
+              <div className="relative">
+                <input
+                  type={viewPassword ? 'text' : 'password'}
+                  className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 pr-10 transition duration-200"
+                  placeholder="••••••••"
+                  {...register('password')}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-white transition-colors"
+                  onClick={() => setViewPassword(!viewPassword)}
+                >
+                  {viewPassword ? <GrFormViewHide size={18} /> : <GrFormView size={18} />}
+                </button>
+              </div>
+              <ErrorMessage errors={errors} fieldName="password" />
+            </label>
+
+            <label className="flex flex-col relative">
+              <span className="mb-2 text-sm font-medium">Confirmar Contraseña</span>
+              <div className="relative">
+                <input
+                  type={viewConfirmPassword ? 'text' : 'password'}
+                  className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 pr-10 transition duration-200"
+                  placeholder="••••••••"
+                  {...register('confirm_password')}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-white transition-colors"
+                  onClick={() => setViewConfirmPassword(!viewConfirmPassword)}
+                >
+                  {viewConfirmPassword ? <GrFormViewHide size={18} /> : <GrFormView size={18} />}
+                </button>
+              </div>
+              <ErrorMessage errors={errors} fieldName="confirm_password" />
+            </label>
+          </div>
+        </div>
       </div>
 
-      <button
-        type="submit"
-        className="text-white text-sm w-[300px] sm:w-auto px-5 py-2.5 btn btn-primary"
-      >
-        {pending ? (
-          <span className="loading loading-spinner loading-sm" />
-        ) : (
-          'Crear'
-        )}
-      </button>
+      <div className="mt-8 grid grid-cols-2 gap-4 pt-4">
+        <button
+          type="button"
+          className="btn btn-error btn-outline"
+          onClick={() => {
+            reset();
+            const modal = document.getElementById("create_user") as HTMLDialogElement;
+            if (modal) modal.close();
+          }}
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          disabled={pending}
+          className="btn btn-primary shadow-md"
+        >
+          {pending ? (
+            <span className="loading loading-spinner loading-sm" />
+          ) : (
+            'Registrar Usuario'
+          )}
+        </button>
+      </div>
     </form>
   );
 }
