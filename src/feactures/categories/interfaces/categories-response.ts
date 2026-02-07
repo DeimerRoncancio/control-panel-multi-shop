@@ -18,6 +18,12 @@ export interface Content {
   products: Product[];
 }
 
+export interface CategoriesResponse {
+  id: string;
+  categoryName: string;
+  createdAt: string;
+}
+
 export interface Product {
   id: string;
   productName: string;

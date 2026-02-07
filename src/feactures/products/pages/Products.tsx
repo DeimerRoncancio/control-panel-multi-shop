@@ -10,7 +10,6 @@ import { ButtonModal } from '../../../shared/components/globalComponents/ButtonM
 import Pagination from '../../../shared/components/globalComponents/Pagination';
 import ModalProductCreate from '../components/create/Modal-create-product';
 import ModalProductDelete from '../components/delete/Modal-delete-product';
-import axiosGet from '../../../shared/requests/basicRequests/get';
 import { ToastContainer } from 'react-toastify';
 import usePagination from '../../../shared/hooks/usePagination';
 
@@ -30,18 +29,9 @@ function Products() {
     },
   });
 
-  const { data: categoriesData } = useQuery({
-    queryKey: ['categories'],
-    queryFn: async () => {
-      return axiosGet({
-        url: '/app/categories',
-      });
-    }
-  });
-
   return (
     <>
-      <ModalProductCreate categories={categoriesData?.content || []} />
+      <ModalProductCreate />
       <ModalProductDelete productId={productUpdate?.id || ''} />
       <div className="p-6 text-white rounded-lg shadow-md">
         <div className="flex items-center justify-between mb-4">

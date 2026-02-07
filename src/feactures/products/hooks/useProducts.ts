@@ -7,7 +7,7 @@ import { errorAlert } from "../../../shared/alerts";
 import successAlert from "../../../shared/alerts/login/succes.alert";
 import axiosPutFormDataBearer from "../../../shared/requests/protectedRoutes/put";
 import { ProductType } from "../../../shared/zod/products/product.zod";
-import { Content } from "../../categories/interfaces/categories-response";
+import { CategoriesRequest } from "../../categories/interfaces/categories-response";
 import { useState } from "react";
 
 export default function useProducts() {
@@ -85,7 +85,7 @@ export default function useProducts() {
     },
   });
 
-  const { data: categoriesData, isLoading: categoriesLoading } = useQuery<Content[]>({
+  const { data: categoriesData, isLoading: categoriesLoading } = useQuery<CategoriesRequest>({
     queryKey: ['categories'],
     queryFn: async () => {
       const token = Cookies.get('accessToken');

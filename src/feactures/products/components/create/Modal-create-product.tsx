@@ -1,6 +1,5 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { NumericFormat } from "react-number-format";
-import { Category } from "../../interface/response-products";
 import ProductSchema, { ProductType } from "../../../../shared/zod/products/product.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonModal from "../../../../shared/components/globalComponents/ButtonModal";
@@ -8,17 +7,27 @@ import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import ModalCreateVariant from "./Modal-create-variant";
 import Cookies from "js-cookie";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosPostFormDataBearer from "../../../../shared/requests/protectedRoutes/post";
 import successAlert from "../../../../shared/alerts/login/succes.alert";
 import { errorAlert } from "../../../../shared/alerts";
+import axiosGetBearer from "../../../../shared/requests/protectedRoutes/get";
+import { CategoriesRequest } from "../../../categories/interfaces/categories-response";
 
-type Props = {
-  categories: Category[];
-};
-
-function ModalProductCreate({ categories }: Props) {
+function ModalProductCreate() {
   const modal = document.getElementById("create_product") as HTMLDialogElement;
+
+  const { data: requestCategories } = useQuery<CategoriesRequest>({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const token = Cookies.get('accessToken');
+      return axiosGetBearer({
+        url: '/app/categories',
+        token: token || '',
+        params: { page: 0, size: 20 }
+      });
+    },
+  });
 
   const {
     control,
@@ -52,6 +61,7 @@ function ModalProductCreate({ categories }: Props) {
 
       successAlert("Producto creado con éxito");
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["latest-products"] });
       modal.close();
     }
   })
@@ -161,7 +171,7 @@ function ModalProductCreate({ categories }: Props) {
             <div>
               <span>Categorías</span>
               <div className="grid grid-cols-1 mt-4 xl:grid-cols-2 max-h-50 overflow-y-auto rounded-lg">
-                {categories?.map((category) => (
+                {requestCategories?.content?.map((category) => (
                   <label
                     htmlFor={`category-${category.categoryName}`}
                     key={category.categoryName}
@@ -224,14 +234,14 @@ function ModalProductCreate({ categories }: Props) {
                 {newImages?.map((file, index) => (
                   <div className="relative group" key={file.name}>
                     <div className="aspect-square bg-gray-100 rounded-lg outline-2 outline-success
-                  overflow-hidden transition-colors">
+                    overflow-hidden transition-colors">
                       <img
                         src={URL.createObjectURL(file)}
                         alt="Imagen del producto"
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute hover:opacity-100 opacity-0 inset-0 flex items-center 
-                    justify-center gap-2 transition-all z-100">
+                      justify-center gap-2 transition-all z-100">
                         <div className="absolute bg-[#1c1c1c7c] h-full w-full -z-10 rounded-lg"></div>
                         <button className="btn btn-sm btn-error" onClick={(evt) => {
                           evt.preventDefault();
