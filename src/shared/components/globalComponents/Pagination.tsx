@@ -1,11 +1,12 @@
 import { SetURLSearchParams } from 'react-router';
 import { CategoriesRequest } from '../../../feactures/categories/interfaces/categories-response';
 import { GetUserRequest } from '../../interfaces/get-users-request';
+import { TransactionsResponse } from '../../../feactures/transactions/interfaces/transactions-response';
 
 type Props = {
   page: number;
   setPagination: SetURLSearchParams;
-  data: CategoriesRequest | GetUserRequest | undefined;
+  data: CategoriesRequest | GetUserRequest | TransactionsResponse | undefined;
 }
 
 function Pagination({ page, setPagination, data }: Props) {

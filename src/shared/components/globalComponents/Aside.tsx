@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router';
 import { FaStore, FaUsers } from 'react-icons/fa';
 import { BiSolidCategory } from 'react-icons/bi';
-import { RiAdminFill } from "react-icons/ri";
+import { RiAdminFill, RiBillFill } from "react-icons/ri";
 import { AiFillHome } from 'react-icons/ai';
 import { Content } from '../../interfaces/get-users-request';
 
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { path: '/categories', label: 'Categorías', icon: BiSolidCategory },
   { path: '/users', label: 'Usuarios', icon: FaUsers },
   { path: '/admins', label: 'Administradores', icon: RiAdminFill },
+  { path: '/transactions', label: 'Transacciones', icon: RiBillFill },
 ];
 
 type Props = {
