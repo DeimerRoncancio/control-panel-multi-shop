@@ -20,10 +20,10 @@ const axiosPutFormDataBearer = async ({ url, data, token, headers = {} }: AxiosP
     const response = await axios.put(`${envs.API}${url}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
         ...headers,
       },
     });
+    
     return response;
   } catch (error) {
     return (error as AxiosError).response;

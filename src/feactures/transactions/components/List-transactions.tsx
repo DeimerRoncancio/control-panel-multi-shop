@@ -1,3 +1,4 @@
+import { RiBillLine } from "react-icons/ri";
 import { Transaction } from "../interfaces/transactions-response";
 
 interface Props {
@@ -37,6 +38,17 @@ export default function ListTransactions({ transactions, isLoading }: Props) {
           </tr>
         </thead>
         <tbody>
+          {transactions.length === 0 && !isLoading && (
+            <tr>
+              <td colSpan={6} className="text-center py-10">
+                <div className="flex flex-col items-center justify-center text-gray-500">
+                  <RiBillLine size={40} />
+                  <p className="text-lg font-medium">No se encontraron transacciones</p>
+                  <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
+                </div>
+              </td>
+            </tr>
+          )}
           {transactions.map((t) => (
             <tr key={t.id} className="hover:bg-base-200/50">
               <td className="font-mono text-xs opacity-70">{t.id.substring(0, 8)}...</td>
@@ -48,13 +60,12 @@ export default function ListTransactions({ transactions, isLoading }: Props) {
               <td className="font-bold text-success">${t.amount.toFixed(2)}</td>
               <td>
                 <div
-                  className={`badge gap-2 ${
-                    t.status === 'completed'
+                  className={`badge gap-2 ${t.status === 'completed'
                       ? 'badge-success badge-outline'
                       : t.status === 'pending'
-                      ? 'badge-warning badge-outline'
-                      : 'badge-error badge-outline'
-                  }`}
+                        ? 'badge-warning badge-outline'
+                        : 'badge-error badge-outline'
+                    }`}
                 >
                   {t.status === 'completed' ? 'Completada' : t.status === 'pending' ? 'Pendiente' : 'Cancelada'}
                 </div>

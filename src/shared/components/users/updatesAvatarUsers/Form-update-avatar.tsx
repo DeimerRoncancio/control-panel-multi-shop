@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 import { useQueryClient } from '@tanstack/react-query';
 import { createHandleChange } from '../../../helpers/images';
 import { Content } from '../../../interfaces/get-users-request';
-import envs from '../../../../configs/envs';
 import successAlertUsers from '../../../alerts/users/succes';
 import { errorAlertUsers } from '../../../alerts/users/error';
 import axiosPutFormDataBearer from '../../../requests/protectedRoutes/put';
@@ -33,7 +32,7 @@ export default function FormUpdateAvatar({
 
     axiosPutFormDataBearer({
       data: formData,
-      url: `${envs.API}/app/users/update/profile-image/${user?.id}`,
+      url: `/app/users/update/profile-image/${user?.id}`,
       token: Cookies.get('accessToken') || '',
     })
       .then(() => {

@@ -1,3 +1,4 @@
+import { MdOutlineCategory } from "react-icons/md";
 import ButtonModal from "../../../shared/components/globalComponents/ButtonModal";
 import { Content } from "../interfaces/categories-response";
 import { AiFillProduct } from "react-icons/ai";
@@ -22,6 +23,17 @@ export default function ListCategories({ categories, isLoading, selectCategory }
           </tr>
         </thead>
         <tbody>
+          {categories?.length === 0 && !isLoading && (
+            <tr>
+              <td colSpan={6} className="text-center py-10">
+                <div className="flex flex-col items-center justify-center text-gray-500">
+                  <MdOutlineCategory size={40} />
+                  <p className="text-lg font-medium">No se encontraron categorías</p>
+                  <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
+                </div>
+              </td>
+            </tr>
+          )}
           {isLoading ? (
             <tr>
               <td colSpan={4} className="text-center">

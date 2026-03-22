@@ -37,12 +37,11 @@ export default function useProducts() {
 
   const sendProduct = (data: ProductType) => {
     const token = Cookies.get('accessToken');
-    let integerPart = "";
 
-    if (data.price.includes(',')) {
-      const lastSeparator = Math.max(data.price.lastIndexOf(","));
-      integerPart = data.price.slice(0, lastSeparator).replace(/\D/g, "");
-    }
+    const lastSeparator = Math.max(data.price.lastIndexOf(","));
+    const integerPart = lastSeparator !== -1 
+      ? data.price.slice(0, lastSeparator).replace(/\D/g, "")
+      : data.price;
 
     const imagesToRemoveString = imagesToRemove.join(', ');
     const variantsToRemoveString = variantsToRemove.join(', ');

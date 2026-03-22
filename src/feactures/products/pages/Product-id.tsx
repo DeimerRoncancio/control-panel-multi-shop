@@ -4,7 +4,6 @@ import { SelectCategories } from '../components/update/Select-categories';
 import { FormUpdate } from '../components/update/Form-update';
 import { HeaderProduct } from '../components/update/Header-product';
 import { UpdateImages } from '../components/update/Update-images';
-// import { setValuesUpdateProduct } from '../helpers/set-values';
 import ProductSchema, { ProductType } from '../../../shared/zod/products/product.zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastContainer } from 'react-toastify';

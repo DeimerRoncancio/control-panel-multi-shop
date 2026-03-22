@@ -106,7 +106,6 @@ export function UpdateImages({ images, imagesToRemove, watch, setValue, removeIm
               </div>
             ))}
 
-            {/* Zona para agregar nueva imagen */}
             <div className="aspect-square">
               <label
                 htmlFor="new-image"
@@ -141,8 +140,6 @@ export function UpdateImages({ images, imagesToRemove, watch, setValue, removeIm
                 </div>
               </label>
             </div>
-
-            {/* Placeholders para más imágenes */}
           </div>
 
           {/* Info y límites */}

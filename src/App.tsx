@@ -7,7 +7,7 @@ import Users from './feactures/users/pages/Users';
 import Admins from './feactures/admins/pages/Admins';
 import Categories from './feactures/categories/pages/Categories';
 import { ProductId } from './feactures/products/pages/Product-id';
-import Transactions from './feactures/transactions/pages/transactions';
+import Transactions from './feactures/transactions/pages/Transactions';
 
 function App() {
   return (

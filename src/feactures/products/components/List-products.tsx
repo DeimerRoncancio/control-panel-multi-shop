@@ -2,6 +2,7 @@ import { CiImageOn } from 'react-icons/ci';
 import { Link } from 'react-router';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
 import { Content } from '../interface/response-products';
+import { MdOutlineStorefront } from 'react-icons/md';
 
 type Props = {
   products: Content[];
@@ -25,6 +26,17 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
           </tr>
         </thead>
         <tbody>
+          {products.length === 0 && !isLoading && (
+            <tr>
+              <td colSpan={6} className="text-center py-10">
+                <div className="flex flex-col items-center justify-center text-gray-500">
+                <MdOutlineStorefront size={40} />
+                <p className="text-lg font-medium">No se encontraron productos</p>
+                <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
+              </div>
+              </td>
+            </tr>
+          )}
           {isLoading ? (
             <tr>
               <td colSpan={4} className="text-center">

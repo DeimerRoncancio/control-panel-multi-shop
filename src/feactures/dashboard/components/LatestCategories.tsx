@@ -8,7 +8,7 @@ type Props = {
 export default function LatestCategories({ categories }: Props) {
   return (
     <div className="flex flex-col gap-3">
-      {categories.map((cat, idx) => (
+      {categories.length > 0 ? categories.map((cat, idx) => (
         <div key={idx} className="flex items-center justify-between p-3 bg-base-100 rounded-xl">
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-lg bg-accent/10 text-accent`}>
@@ -17,12 +17,16 @@ export default function LatestCategories({ categories }: Props) {
             <div>
               <div className="font-bold text-sm">{cat.categoryName}</div>
               <div className="text-xs opacity-50 flex items-center gap-1">
-                <FaCalendarAlt className="text-[10px]" /> {cat.createdAt.split('T')[0]}
+                <FaCalendarAlt className="text-[10px]" /> {cat.createdAt?.split('T')[0]}
               </div>
             </div>
           </div>
         </div>
-      ))}
+      )) : (
+        <div className="text-center text-gray-500 my-4  ">
+          No hay categorías disponibles
+        </div>
+      )}
     </div>
   );
 }

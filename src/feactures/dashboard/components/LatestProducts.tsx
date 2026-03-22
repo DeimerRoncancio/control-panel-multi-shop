@@ -1,11 +1,11 @@
 import { RequestProductID } from '../../products/interface/response-productid';
-
+import { MdProductionQuantityLimits } from 'react-icons/md';
 
 type Props = {
   products: RequestProductID[];
 }
 
-export default function LatestProducts({  products }: Props) {
+export default function LatestProducts({ products }: Props) {
   return (
     <table className="table">
       <thead>
@@ -17,7 +17,7 @@ export default function LatestProducts({  products }: Props) {
         </tr>
       </thead>
       <tbody>
-        {products.map((item) => (
+        {products.length > 0 ? products.map((item) => (
           <tr key={item.id} className="hover:bg-base-100 transition-colors">
             <td>
               <div className="flex items-center gap-3">
@@ -52,18 +52,25 @@ export default function LatestProducts({  products }: Props) {
               $ {new Intl.NumberFormat("es-ES").format(item.price)}
             </td>
             <td>
-              {
-                item.variants.length === 0 ? (
-                  <span className="text-xs opacity-50">Sin variantes</span>
-                ) : (
-                  <span className="badge badge-accent badge-soft badge-sm">
-                    {item.variants.length} variantes
-                  </span>
-                )
-              }
+              {item.variants.length === 0 ? (
+                <span className="text-xs opacity-50">Sin variantes</span>
+              ) : (
+                <span className="badge badge-accent badge-soft badge-sm">
+                  {item.variants.length} variantes
+                </span>
+              )}
             </td>
           </tr>
-        ))}
+        )) : (
+          <tr>
+            <td colSpan={6} className="text-center py-10">
+              <div className="flex flex-col items-center justify-center text-gray-500">
+                <MdProductionQuantityLimits size={40} />
+                <p className="text-md font-medium">No se encontraron productos</p>
+              </div>
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   );

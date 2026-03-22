@@ -8,7 +8,7 @@ type Props = {
 export default function LatestUsers({ users }: Props) {
   return (
     <div className="flex flex-col gap-3">
-      {users.map((u) => (
+      {users.length > 0 ? users.map((u) => (
         <div key={u.id} className="flex items-center gap-3 p-3 bg-base-100 rounded-xl">
           <div className="avatar">
             <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -25,7 +25,11 @@ export default function LatestUsers({ users }: Props) {
             </div>
           </div>
         </div>
-      ))}
+      )) : (
+        <div className="text-center text-gray-500">
+          No hay usuarios disponibles
+        </div>
+      )}
     </div>
   )
 }

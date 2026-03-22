@@ -11,7 +11,7 @@ function Navbar({ user }: Props) {
     <nav className="h-16 w-full bg-[#1d232a] border-b border-[#2d2d3b] flex items-center justify-between px-6 z-20 shadow-xl relative">
       <div className="flex flex-col">
         <h1 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text tracking-tight">
-          Hola, {user?.name + ' ' + (user?.secondName ? user?.secondName : user?.lastnames.split(' ')[0])} 👋
+          Hola, {user?.name + ' ' + (user?.secondName ? user?.secondName : user?.lastnames?.split(' ')[0])} 👋
         </h1>
         <span className="text-xs text-gray-500 font-medium">Bienvenido de nuevo a tu panel</span>
       </div>

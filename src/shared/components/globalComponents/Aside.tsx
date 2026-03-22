@@ -68,7 +68,7 @@ function Aside({ user }: Props) {
            </div>
            <div className="flex flex-col">
               <span className="text-xs font-semibold text-white">
-                {user?.name + ' ' + user?.lastnames.split(' ')[0]}
+                {user?.name + ' ' + user?.lastnames?.split(' ')[0]}
               </span>
               <span className="text-[10px] text-gray-500">Online</span>
            </div>

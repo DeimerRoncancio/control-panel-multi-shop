@@ -70,7 +70,10 @@ function ModalProductCreate() {
     const token = Cookies.get('accessToken');
 
     const lastSeparator = Math.max(data.price.lastIndexOf(","));
-    const integerPart = data.price.slice(0, lastSeparator).replace(/\D/g, "");
+    const integerPart = lastSeparator !== -1 
+      ? data.price.slice(0, lastSeparator).replace(/\D/g, "")
+      : data.price;
+
     const formData = new FormData();
 
     formData.append('productName', data.productName);
