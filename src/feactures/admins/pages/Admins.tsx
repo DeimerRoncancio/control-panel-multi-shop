@@ -27,8 +27,8 @@ function Admins() {
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: '/app/users/by-role?isAdmin=true',
-        params: { page: Number(pagination.page), size: Number(pagination.size) },
+        url: '/app/users/by-role',
+        params: { ...pagination, isAdmin: true },
         token: token || '',
       });
     },

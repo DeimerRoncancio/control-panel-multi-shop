@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GrFormView, GrFormViewHide } from 'react-icons/gr';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,14 +7,19 @@ import RegisterSchema, {
   RegisterTypeAccess,
 } from '../../../zod/users/register.zod';
 
+const MAX_IMAGE_SIZE = 1024 * 1024;
+
 type Props = {
   pending: boolean;
-  functionUpdate: (data: RegisterTypeAccess) => void;
+  functionUpdate: (data: RegisterTypeAccess, profileImage: File) => void;
 }
 
 function FormRegister({ pending, functionUpdate }: Props) {
   const [viewPassword, setViewPassword] = useState(false);
   const [viewConfirmPassword, setViewConfirmPassword] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const profileImage = useRef<File | null>(null);
 
   const {
     register,
@@ -23,7 +28,27 @@ function FormRegister({ pending, functionUpdate }: Props) {
     formState: { errors },
   } = useForm<RegisterTypeAccess>({ resolver: zodResolver(RegisterSchema) });
 
-  const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => functionUpdate(data);
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    profileImage.current = file;
+    setPreviewImage(file ? URL.createObjectURL(file) : null);
+
+    if (file && file.size > MAX_IMAGE_SIZE) {
+      setImageError('La imagen debe pesar menos de 1 MB');
+      return;
+    }
+
+    setImageError(null);
+  };
+
+  const onSubimit: SubmitHandler<RegisterTypeAccess> = (data) => {
+    const file = profileImage.current;
+
+    if (!file) return setImageError('La foto de perfil es requerida');
+    if (imageError) return;
+
+    functionUpdate(data, file);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubimit)} className="space-y-4">
@@ -155,12 +180,42 @@ function FormRegister({ pending, functionUpdate }: Props) {
         </div>
       </div>
 
+      <div className="pt-4">
+        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+          Foto de Perfil
+        </h4>
+        <div className="flex items-center gap-4">
+          <label className="btn btn-outline btn-sm">
+            Seleccionar imagen
+            <input
+              hidden
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </label>
+          {previewImage && (
+            <img
+              src={previewImage}
+              alt="Vista previa"
+              className="h-14 w-14 rounded-full object-cover"
+            />
+          )}
+        </div>
+        {imageError && (
+          <p className="mt-2 text-sm text-error">{imageError}</p>
+        )}
+      </div>
+
       <div className="mt-8 grid grid-cols-2 gap-4 pt-4">
         <button
           type="button"
           className="btn btn-error btn-outline"
           onClick={() => {
             reset();
+            profileImage.current = null;
+            setPreviewImage(null);
+            setImageError(null);
             const modal = document.getElementById("create_user") as HTMLDialogElement;
             if (modal) modal.close();
           }}

@@ -6,9 +6,14 @@ const UpdateSchema = z.object({
     message: 'El segundo nombre es requerido',
   }),
   lastnames: z.string().min(1, { message: 'El apellido es requerido' }),
-  phoneNumber: z.string().min(1, {
-    message: 'El numero de telefono es requerido',
-  }),
+  // El backend guarda el teléfono como Long: cualquier letra lo deja en null
+  // y la petición falla.
+  phoneNumber: z
+    .string()
+    .min(1, { message: 'El numero de telefono es requerido' })
+    .refine((value) => /^\d+$/.test(value.replace(/[\s()+-]/g, '')), {
+      message: 'El telefono solo puede tener numeros',
+    }),
   gender: z.enum(['male', 'female'], {
     message: 'El genero es requerido',
   }),

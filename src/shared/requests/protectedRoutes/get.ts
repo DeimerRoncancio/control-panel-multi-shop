@@ -1,10 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import envs from '../../../configs/envs';
-
-type ParamsType = {
-  page: number;
-  size: number;
-};
+import { cleanParams, ParamsType } from '../params';
 
 type GetBearerProps = {
   url: string;
@@ -18,7 +14,7 @@ const axiosGetBearer = async ({ url, token, params }: GetBearerProps) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      params,
+      params: cleanParams(params),
     });
 
     return response.data;

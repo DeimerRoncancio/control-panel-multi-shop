@@ -12,40 +12,25 @@ export interface GetUserRequest {
   empty: boolean;
 }
 
+// Espejo de UserResponseDTO: es lo único que devuelve la API en
+// /app/users, /app/users/by-role, /app/users/search y /app/users/latest-users.
 export interface Content {
   id: string;
   name: string;
+  imageUser: ImageUser | null;
   secondName: null | string;
   lastnames: string;
   phoneNumber: number | null;
   gender: string;
   email: string;
-  password: string;
-  orders: Order[];
-  roles: Role[];
   admin: boolean;
   enabled: boolean;
-  createdAt: Date;
 }
 
 export interface ImageUser {
-  id: string;
   name: string;
   imageUrl: string;
   imageId: string;
-}
-
-export interface Order {
-  id: string;
-  orderName: string;
-  notes: string;
-  orderDate: Date;
-  product: any[];
-}
-
-export interface Role {
-  id: string;
-  role: string;
 }
 
 export interface Pageable {

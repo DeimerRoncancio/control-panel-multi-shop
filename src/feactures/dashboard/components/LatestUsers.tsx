@@ -1,4 +1,4 @@
-import { FaHistory } from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
 import { Content } from "../../../shared/interfaces/get-users-request";
 
 type Props = {
@@ -21,7 +21,7 @@ export default function LatestUsers({ users }: Props) {
           <div className="flex-1 min-w-0">
             <div className="font-bold text-sm truncate">{u.name + " " + (u.secondName ?? "") + " " + u.lastnames}</div>
             <div className="text-xs opacity-50 flex items-center gap-1">
-              <FaHistory className="text-[10px]" /> { }{new Date(u.createdAt).toLocaleDateString()}
+              <FaEnvelope className="text-[10px]" /> {u.email}
             </div>
           </div>
         </div>

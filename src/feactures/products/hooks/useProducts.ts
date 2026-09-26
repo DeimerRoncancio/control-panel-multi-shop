@@ -31,6 +31,8 @@ export default function useProducts() {
         return errorAlert({ message: 'Error al actualizar el producto' });
 
       successAlert("Producto actualizado con éxito")
+      setImagesToRemove([]);
+      setVariantsToRemove([]);
       queryClient.invalidateQueries({ queryKey: ["products"] });
     }
   });
@@ -43,18 +45,17 @@ export default function useProducts() {
       ? data.price.slice(0, lastSeparator).replace(/\D/g, "")
       : data.price;
 
-    const imagesToRemoveString = imagesToRemove.join(', ');
-    const variantsToRemoveString = variantsToRemove.join(', ');
-
     const formData = new FormData();
 
     formData.append('productName', data.productName);
     formData.append('price', parseInt(integerPart).toString());
-    formData.append('categoriesList', data.categoriesList.join(', '));
+    // Spring arma cada List<String> con el parámetro repetido; mandarlo unido
+    // por comas rompe cualquier valor que lleve una coma.
+    data.categoriesList.forEach((category) => formData.append('categoriesList', category));
     data.images?.forEach((file) => formData.append('images', file));
     if (data.description) formData.append('description', data.description);
-    if (imagesToRemove.length > 0) formData.append('imagesToRemove', imagesToRemoveString);
-    if (variantsToRemove.length > 0) formData.append('variantsToRemove', variantsToRemoveString);
+    imagesToRemove.forEach((imageId) => formData.append('imagesToRemove', imageId));
+    variantsToRemove.forEach((variantId) => formData.append('variantsToRemove', variantId));
 
     data.variants?.forEach((variant, index) => {
       if (variant.id) formData.append(`variants[${index}].id`, variant.id);

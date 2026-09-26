@@ -32,15 +32,21 @@ function Users() {
 
       if (searchUsers) {
         return axiosGetBearer({
-          url: `/app/users/search?identifier=${searchUsers.identifier}&isAdmin=false&isEnabled=${searchUsers.isEnabled}&field=${searchUsers.field}`,
-          params: { page: Number(pagination.page), size: Number(pagination.size) },
+          url: '/app/users/search',
+          params: {
+            ...pagination,
+            identifier: searchUsers.identifier,
+            isAdmin: false,
+            isEnabled: searchUsers.isEnabled,
+            field: searchUsers.field,
+          },
           token: token || '',
         });
       }
 
       return axiosGetBearer({
-        url: `/app/users/by-role?isAdmin=false`,
-        params: { page: Number(pagination.page), size: Number(pagination.size) },
+        url: '/app/users/by-role',
+        params: { ...pagination, isAdmin: false },
         token: token || '',
       });
     },

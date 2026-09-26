@@ -79,7 +79,9 @@ function ModalProductCreate() {
     formData.append('productName', data.productName);
     if (data.description) formData.append('description', data.description);
     formData.append('price', parseInt(integerPart).toString());
-    formData.append('categoriesList', data.categoriesList.join(', '));
+    // Spring arma la List<String> con el parámetro repetido; mandarlo unido
+    // por comas rompe cualquier categoría que lleve una coma en el nombre.
+    data.categoriesList.forEach((category) => formData.append('categoriesList', category));
     data.images?.forEach((file) => formData.append('images', file));
 
     data.variants?.forEach((variant, index) => {

@@ -7,10 +7,15 @@ function SearchUsers({ setSearchUsers }: {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data: any) => {
+    const identifier = (data.search || '').trim();
+
+    // El backend exige `identifier`; sin texto no hay búsqueda que enviar.
+    if (!identifier) return setSearchUsers(null);
+
     setSearchUsers({
-      identifier: data.search,
-      isEnabled: data.status.length > 0 ? data.status : null,
-      field: data.searchType,
+      identifier,
+      isEnabled: data.status || null,
+      field: data.searchType || null,
     });
   };
 

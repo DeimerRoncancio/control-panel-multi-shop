@@ -19,9 +19,15 @@ function UpdateUsers({ isAdmin, idUser, user }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: axiosPutBearer,
-    onSuccess: () => {
+    onSuccess: (response) => {
+      // axiosPutBearer devuelve la respuesta de error en vez de lanzarla, así
+      // que el estado hay que revisarlo aquí.
+      if (response?.status !== 200 && response?.status !== 201)
+        return errorAlertUsers('Error al actualizar usuario');
+
       successAlertUsers('Usuario actualizado con éxito');
       queryClient.invalidateQueries({ queryKey: [`${isAdmin ? 'admins' : 'users'}`] });
+      queryClient.invalidateQueries({ queryKey: ['latest-users'] });
       modal?.close();
     },
     onError: () => errorAlertUsers('Error al actualizar usuario'),
@@ -32,7 +38,12 @@ function UpdateUsers({ isAdmin, idUser, user }: Props) {
 
     mutate({
       url: `/app/users/${idUser}`,
-      data: { ...userUpdates },
+      data: {
+        ...userUpdates,
+        // UserDTO.phoneNumber es Long: se manda solo con dígitos.
+        phoneNumber: userUpdates.phoneNumber.replace(/\D/g, ''),
+        admin: userUpdates.admin === 'true',
+      },
       token: token || '',
     });
   };

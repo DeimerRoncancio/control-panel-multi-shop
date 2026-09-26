@@ -1,19 +1,18 @@
 import axios, { AxiosError } from 'axios';
 import envs from '../../../configs/envs';
+import { cleanParams, PAGINATION_DEFAULT, ParamsType } from '../params';
 
 type Props = {
   url: string;
-  params?: ParamsType
+  params?: ParamsType;
 }
 
-type ParamsType = {
-  page: number;
-  size: number;
-}
-
-const axiosGet = async ({ url, params = { page: 0, size: 10 } }: Props) => {
+const axiosGet = async ({ url, params = PAGINATION_DEFAULT }: Props) => {
   try {
-    const response = await axios.get(`${envs.API}${url}`, { params });
+    const response = await axios.get(`${envs.API}${url}`, {
+      params: cleanParams(params),
+    });
+
     return response.data;
   } catch (error) {
     throw new Error(

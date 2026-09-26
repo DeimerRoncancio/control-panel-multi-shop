@@ -18,10 +18,10 @@ export interface Content {
   products: Product[];
 }
 
+// /app/categories/latest-categories devuelve ProductCategoryDTO, que solo
+// trae el nombre.
 export interface CategoriesResponse {
-  id: string;
   categoryName: string;
-  createdAt: string;
 }
 
 export interface Product {

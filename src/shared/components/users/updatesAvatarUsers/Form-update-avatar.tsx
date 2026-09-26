@@ -35,7 +35,10 @@ export default function FormUpdateAvatar({
       url: `/app/users/update/profile-image/${user?.id}`,
       token: Cookies.get('accessToken') || '',
     })
-      .then(() => {
+      .then((response) => {
+        if (response?.status !== 200 && response?.status !== 201)
+          return errorAlertUsers('Error al actualizar el avatar');
+
         successAlertUsers('Avatar actualizado con éxito');
         queryClient.invalidateQueries({
           queryKey: [`${isAdmin ? 'admins' : 'users'}`],

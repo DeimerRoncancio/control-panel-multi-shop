@@ -5,11 +5,12 @@ import Cookies from 'js-cookie';
 
 function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
   const { data: stats } = useQuery({
-    queryKey: ['user-stats'],
+    queryKey: ['user-stats', isAdmin],
     queryFn: async () => {
       const token = Cookies.get('accessToken');
       return axiosGetBearer({
-        url: `/app/users/stats?isAdmin=${isAdmin}`,
+        url: '/app/users/stats',
+        params: { isAdmin },
         token: token || '',
       });
     },

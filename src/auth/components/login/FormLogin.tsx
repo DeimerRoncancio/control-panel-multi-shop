@@ -9,7 +9,6 @@ import AccesLoginSchema, { LoginTypeAccess } from '../../zod/login.zod';
 import { LoginType } from '../../types';
 import ErrorMessage from '../../../shared/components/globalComponents/MessajeError';
 import axiosPost from '../../../shared/requests/basicRequests/post';
-import envs from '../../../configs/envs';
 import { errorAlert } from '../../../shared/alerts';
 import { HorasEnMilisegundos } from '../../helpers';
 
@@ -38,7 +37,7 @@ function FormLogin() {
 
   const onSubimit: SubmitHandler<LoginType> = (data: LoginType) => {
     mutate({
-      url: `${envs.API}/login`,
+      url: '/login',
       data,
     });
 
