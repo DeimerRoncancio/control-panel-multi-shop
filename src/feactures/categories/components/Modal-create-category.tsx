@@ -1,18 +1,31 @@
-import { useRef } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import categorySchema, { CategoryType } from "../../../shared/zod/products/category.zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosPostBearer } from "../../../shared/requests/protectedRoutes/post";
-import Cookies from "js-cookie";
-import successAlert from "../../../shared/alerts/login/succes.alert";
+import { useRef } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
+import { FiGrid } from 'react-icons/fi';
+import categorySchema, {
+  CategoryType,
+} from '../../../shared/zod/products/category.zod';
+import { axiosPostBearer } from '../../../shared/requests/protectedRoutes/post';
+import successAlert from '../../../shared/alerts/login/succes.alert';
+import ModalHeader from '../../../shared/ui/ModalHeader';
+import TextField from '../../../shared/ui/TextField';
+import {
+  outlineButtonClass,
+  primaryButtonClass,
+} from '../../../shared/ui/styles';
 
 export default function ModalCreateCategory() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const closeModal = () => modalRef.current?.close();
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<CategoryType>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CategoryType>({
     resolver: zodResolver(categorySchema),
   });
 
@@ -20,62 +33,59 @@ export default function ModalCreateCategory() {
     mutationFn: async (categoryData: CategoryType) => {
       const token = Cookies.get('accessToken') || '';
 
-      return await axiosPostBearer({
+      return axiosPostBearer({
         url: '/app/categories',
         data: categoryData,
-        token: token
+        token,
       });
     },
     onSuccess: () => {
       closeModal();
-      successAlert("Categoría creada con éxito");
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      queryClient.invalidateQueries({ queryKey: ["latest-categories"] });
-    }
+      successAlert('Categoría creada con éxito');
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['latest-categories'] });
+    },
   });
 
   const onSubmit: SubmitHandler<CategoryType> = (data: CategoryType) => {
     mutate(data);
-  }
+  };
 
   return (
     <dialog id="create_category" className="modal" ref={modalRef}>
       <div className="modal-box">
-        <h3 className="font-semibold text-lg">Crear Nueva Categoría</h3>
-        <p className="mb-4 font-thin">Completa los datos de la categoría que deseas crear</p>
-        <form className="space-y-5 pr-1" onSubmit={handleSubmit(onSubmit)}>
-          <label className="flex flex-col">
-            <span className="font-normal mb-3">Nombre de la Categoría</span>
-            <input
-              type="text"
-              placeholder="Nombre de la categoría"
-              className="input input-bordered w-full bg-gray-700"
-              {...register("categoryName")}
-            />
-            {errors.categoryName && (
-              <span className="text-sm text-red-500 mt-1">
-                {errors.categoryName.message}
-              </span>
-            )}
-          </label>
-          <div className="modal-action flex gap-4 mt-10">
+        <ModalHeader
+          icon={<FiGrid size={20} />}
+          title="Nueva categoría"
+          description="Aparecerá en la barra de la tienda con su propio color."
+          onClose={closeModal}
+        />
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            label="Nombre de la categoría"
+            placeholder="Por ejemplo: Hogar"
+            error={errors.categoryName?.message}
+            {...register('categoryName')}
+          />
+          <div className="flex justify-end gap-2.5 border-t border-line pt-4">
             <button
               type="button"
-              className="btn"
+              className={outlineButtonClass}
               onClick={closeModal}
             >
               Cancelar
             </button>
-            <button type="submit" className="btn btn-primary">
-              Crear Categoría
+            <button type="submit" className={primaryButtonClass}>
+              Crear categoría
             </button>
           </div>
         </form>
       </div>
       <form method="dialog" className="modal-backdrop">
-        <button onClick={closeModal}>cerrar</button>
+        <button type="submit" onClick={closeModal}>
+          cerrar
+        </button>
       </form>
     </dialog>
   );
 }
-

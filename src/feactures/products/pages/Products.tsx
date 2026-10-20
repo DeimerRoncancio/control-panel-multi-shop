@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import { ToastContainer } from 'react-toastify';
+import { FiPlus } from 'react-icons/fi';
 import DetailsProduct from '../components/Details-product';
 import { ListProducts } from '../components/List-products';
 import SearchProducts from '../components/Search-poducts';
@@ -10,8 +12,9 @@ import { ButtonModal } from '../../../shared/components/globalComponents/ButtonM
 import Pagination from '../../../shared/components/globalComponents/Pagination';
 import ModalProductCreate from '../components/create/Modal-create-product';
 import ModalProductDelete from '../components/delete/Modal-delete-product';
-import { ToastContainer } from 'react-toastify';
 import usePagination from '../../../shared/hooks/usePagination';
+import PageHeader from '../../../shared/ui/PageHeader';
+import { pageClass, primaryButtonClass } from '../../../shared/ui/styles';
 
 function Products() {
   const [productUpdate, setProductUpdate] = useState<Content | null>(null);
@@ -24,7 +27,10 @@ function Products() {
       return axiosGetBearer({
         url: '/app/products',
         token: token || '',
-        params: { page: Number(pagination.page), size: Number(pagination.size) }
+        params: {
+          page: Number(pagination.page),
+          size: Number(pagination.size),
+        },
       });
     },
   });
@@ -33,18 +39,21 @@ function Products() {
     <>
       <ModalProductCreate />
       <ModalProductDelete productId={productUpdate?.id || ''} />
-      <div className="p-6 text-white rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold">Gestion de Productos</h1>
-            <p className="mt-2 text-sm text-gray-400 mb-4">
-              Administra los productos de la aplicacion.
-            </p>
-          </div>
-          <ButtonModal idModal="create_product" className="btn btn-success">
-            Crear Producto
-          </ButtonModal>
-        </div>
+      <div className={pageClass}>
+        <PageHeader
+          eyebrow="Catálogo"
+          title="Productos"
+          description="Crea, edita y organiza los productos de la tienda."
+          actions={
+            <ButtonModal
+              idModal="create_product"
+              className={primaryButtonClass}
+            >
+              <FiPlus size={16} />
+              Crear producto
+            </ButtonModal>
+          }
+        />
         <DetailsProduct />
         <SearchProducts />
         <ListProducts

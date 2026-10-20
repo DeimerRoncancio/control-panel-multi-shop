@@ -1,21 +1,27 @@
-import ButtonModal from "../../../shared/components/globalComponents/ButtonModal";
-import SearchTransactions from "../components/SearchTransactions";
-import TransactionsDetails from "../components/TransactionsDetails";
+import { FiPlus } from 'react-icons/fi';
+import ButtonModal from '../../../shared/components/globalComponents/ButtonModal';
+import SearchTransactions from '../components/SearchTransactions';
+import TransactionsDetails from '../components/TransactionsDetails';
+import PageHeader from '../../../shared/ui/PageHeader';
+import { pageClass, primaryButtonClass } from '../../../shared/ui/styles';
 
 export default function Transactions() {
   return (
-    <div className="p-6 text-white rounded-lg shadow-md">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-2xl font-bold">Gestion de Transacciones</h1>
-          <p className="mt-2 text-sm text-gray-400 mb-4">
-            Administra las transacciones de la aplicacion.
-          </p>
-        </div>
-        <ButtonModal idModal="create_transaction" className="btn btn-success">
-          Crear Transacción
-        </ButtonModal>
-      </div>
+    <div className={pageClass}>
+      <PageHeader
+        eyebrow="Ventas"
+        title="Transacciones"
+        description="Pagos y pedidos hechos en la tienda."
+        actions={
+          <ButtonModal
+            idModal="create_transaction"
+            className={primaryButtonClass}
+          >
+            <FiPlus size={16} />
+            Crear transacción
+          </ButtonModal>
+        }
+      />
       <TransactionsDetails />
       <SearchTransactions />
     </div>

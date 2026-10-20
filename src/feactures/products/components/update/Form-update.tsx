@@ -5,8 +5,15 @@ import {
   UseFormClearErrors,
   UseFormRegister,
 } from 'react-hook-form';
+import { NumericFormat } from 'react-number-format';
+import { FiAlertCircle } from 'react-icons/fi';
 import { ProductType } from '../../../../shared/zod/products/product.zod';
-import { NumericFormat } from "react-number-format";
+import {
+  cardClass,
+  formSectionTitleClass,
+  inputClass,
+  labelTextClass,
+} from '../../../../shared/ui/styles';
 
 type FormUpdateProps = {
   control: Control<ProductType>;
@@ -15,89 +22,81 @@ type FormUpdateProps = {
   register: UseFormRegister<ProductType>;
 };
 
-export function FormUpdate({ control, fieldErrors, clearErrors, register }: FormUpdateProps) {
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+
   return (
-    <div className="xl:col-span-2 space-y-6 border rounded-lg border-gray-600 flex flex-col">
-      <div className="card  shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title text-xl">Información Principal</h2>
+    <span className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-error">
+      <FiAlertCircle size={13} />
+      {message}
+    </span>
+  );
+}
 
-          <div className="space-y-4">
-            <div className="form-control">
-              <label htmlFor="product-name" className="flex flex-col">
-                <span className="label-text text-start font-semibold mb-3">
-                  Nombre del Producto
-                </span>
-                <input
-                  {...register('productName')}
-                  id="product-name"
-                  type="text"
-                  defaultValue="Mando X-BOX Series X"
-                  className="input input-bordered w-full bg-gray-700"
-                  style={ fieldErrors.productName && { borderColor: "#fb2c36" } }
+export function FormUpdate({
+  control,
+  fieldErrors,
+  clearErrors,
+  register,
+}: FormUpdateProps) {
+  const errorBorder = 'border-error focus:border-error focus:ring-error/15';
+
+  return (
+    <div className={`${cardClass} p-5 sm:p-6`}>
+      <h2 className={formSectionTitleClass}>Información principal</h2>
+
+      <div className="flex flex-col gap-4">
+        <label htmlFor="product-name" className="flex flex-col">
+          <span className={labelTextClass}>Nombre del producto</span>
+          <input
+            {...register('productName')}
+            id="product-name"
+            type="text"
+            defaultValue="Mando X-BOX Series X"
+            className={`${inputClass} ${fieldErrors.productName ? errorBorder : ''}`}
+          />
+          <FieldError message={fieldErrors.productName?.message} />
+        </label>
+
+        <label htmlFor="product-description" className="flex flex-col">
+          <span className={labelTextClass}>Descripción</span>
+          <textarea
+            {...register('description')}
+            id="product-description"
+            className={`${inputClass} h-32 py-2.5 leading-relaxed ${fieldErrors.description ? errorBorder : ''}`}
+            defaultValue="Mando personalizado, purpura para consola X-BOX"
+          />
+          <FieldError message={fieldErrors.description?.message} />
+        </label>
+
+        <label htmlFor="price" className="flex flex-col">
+          <span className={labelTextClass}>Precio (COP)</span>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3.5 top-1/2 z-10 -translate-y-1/2 text-sm font-extrabold text-ink">
+              $
+            </span>
+            <Controller
+              name="price"
+              control={control}
+              render={({ field }) => (
+                <NumericFormat
+                  {...field}
+                  id="price"
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  decimalScale={2}
+                  fixedDecimalScale
+                  className={`${inputClass} pl-8 font-bold tabular-nums ${fieldErrors.price ? errorBorder : ''}`}
+                  onValueChange={(values) => {
+                    field.onChange(values.formattedValue);
+                    clearErrors('price');
+                  }}
                 />
-                {fieldErrors.productName && (
-                  <span className="text-red-500 text-sm mt-1">
-                    {fieldErrors.productName.message}
-                  </span>
-                )}
-              </label>
-            </div>
-
-            <div className="form-control">
-              <label htmlFor="product-description" className="flex flex-col">
-                <span className="label-text font-semibold mb-3">Descripción</span>
-                <textarea
-                  {...register('description')}
-                  id="product-description"
-                  className="textarea textarea-bordered h-32 w-full bg-gray-700"
-                  defaultValue="Mando personalizado, purpura para consola X-BOX"
-                  style={ fieldErrors.description && { borderColor: "#fb2c36" } }
-                />
-                {fieldErrors.description && (
-                  <span className="text-red-500 text-sm mt-1">
-                    {fieldErrors.description.message}
-                  </span>
-                )}
-              </label>
-            </div>
-
-            <div className="form-control">
-              <label htmlFor="price" className="flex flex-col">
-                <span className="label-text font-semibold mb-3">Precio (COP)</span>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 z-50 -translate-y-1/2 font-semibold text-white">
-                    $
-                  </span>
-                  <Controller 
-                    name="price"
-                    control={control}
-                    render={({ field }) => (
-                      <NumericFormat
-                        {...field}
-                        thousandSeparator="."
-                        decimalSeparator=","
-                        decimalScale={2}
-                        fixedDecimalScale={true}
-                        className="input input-bordered w-full pl-8 bg-gray-700"
-                        style={fieldErrors.price && { borderColor: '#fb2c36' }}
-                        onValueChange={(values) => {
-                          field.onChange(values.formattedValue);
-                          clearErrors('price');
-                        }}
-                      />
-                    )}
-                  />
-                </div>
-                {fieldErrors.price && (
-                  <span className="text-red-500 text-sm mt-1">
-                    {fieldErrors.price.message}
-                  </span>
-                )}
-              </label>
-            </div>
+              )}
+            />
           </div>
-        </div>
+          <FieldError message={fieldErrors.price?.message} />
+        </label>
       </div>
     </div>
   );

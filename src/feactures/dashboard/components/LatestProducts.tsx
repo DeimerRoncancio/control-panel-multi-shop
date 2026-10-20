@@ -1,15 +1,17 @@
 import { RequestProductID } from '../../products/interface/response-productid';
-import { MdProductionQuantityLimits } from 'react-icons/md';
+import CategoryBadge from '../../../shared/ui/CategoryBadge';
+import PriceTag from '../../../shared/ui/PriceTag';
+import EmptyState from '../../../shared/ui/EmptyState';
 
 type Props = {
   products: RequestProductID[];
-}
+};
 
 export default function LatestProducts({ products }: Props) {
   return (
     <table className="table">
       <thead>
-        <tr className="text-base-content/70 border-b-base-content/10">
+        <tr>
           <th>Producto</th>
           <th>Categoría</th>
           <th>Precio</th>
@@ -17,57 +19,54 @@ export default function LatestProducts({ products }: Props) {
         </tr>
       </thead>
       <tbody>
-        {products.length > 0 ? products.map((item) => (
-          <tr key={item.id} className="hover:bg-base-100 transition-colors">
-            <td>
-              <div className="flex items-center gap-3">
-                <div className="avatar">
-                  <div className="mask mask-squircle w-12 h-12 bg-base-300">
+        {products.length > 0 ? (
+          products.map((item) => (
+            <tr key={item.id}>
+              <td>
+                <div className="flex items-center gap-3">
+                  <span className="block h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-cream p-1">
                     <img
                       src={`${item.productImages[0]?.imageUrl}`}
-                      alt="Producto"
+                      alt=""
+                      className="h-full w-full object-contain mix-blend-darken"
                     />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="font-extrabold text-ink">
+                      {item.productName}
+                    </div>
+                    <div className="max-w-56 truncate text-xs text-ink-muted">
+                      {item.description}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div className="font-bold">{item.productName}</div>
-                  <div className="text-xs opacity-50">
-                    {item.description.split(' ').slice(0, 5).join(' ')}...
-                  </div>
-                </div>
-              </div>
-            </td>
-            <td>
-              {item.categories.length > 0 ? (
-                <span className="badge badge-soft badge-sm">
-                  {item.categories[0].categoryName}
-                </span>
-              ) : (
-                <span className="badge badge-ghost badge-sm">
-                  Sin Categoría
-                </span>
-              )}
-            </td>
-            <td className="font-semibold text-primary">
-              $ {new Intl.NumberFormat("es-ES").format(item.price)}
-            </td>
-            <td>
-              {item.variants.length === 0 ? (
-                <span className="text-xs opacity-50">Sin variantes</span>
-              ) : (
-                <span className="badge badge-accent badge-soft badge-sm">
-                  {item.variants.length} variantes
-                </span>
-              )}
-            </td>
-          </tr>
-        )) : (
+              </td>
+              <td>
+                {item.categories.length > 0 ? (
+                  <CategoryBadge name={item.categories[0].categoryName} />
+                ) : (
+                  <span className="text-xs text-ink-muted">Sin categoría</span>
+                )}
+              </td>
+              <td>
+                <PriceTag price={item.price} />
+              </td>
+              <td>
+                {item.variants.length === 0 ? (
+                  <span className="text-xs text-ink-muted">Sin variantes</span>
+                ) : (
+                  <span className="rounded-full bg-lilac px-2.5 py-0.5 text-xs font-bold text-lilac-strong">
+                    {item.variants.length}{' '}
+                    {item.variants.length === 1 ? 'variante' : 'variantes'}
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))
+        ) : (
           <tr>
-            <td colSpan={6} className="text-center py-10">
-              <div className="flex flex-col items-center justify-center text-gray-500">
-                <MdProductionQuantityLimits size={40} />
-                <p className="text-md font-medium">No se encontraron productos</p>
-              </div>
+            <td colSpan={4}>
+              <EmptyState title="No se encontraron productos" />
             </td>
           </tr>
         )}

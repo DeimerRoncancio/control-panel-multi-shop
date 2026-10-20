@@ -1,81 +1,95 @@
-import { RiBillLine } from "react-icons/ri";
-import { Transaction } from "../interfaces/transactions-response";
+import { Transaction } from '../interfaces/transactions-response';
+import EmptyState from '../../../shared/ui/EmptyState';
+import PriceTag from '../../../shared/ui/PriceTag';
+import { cardClass } from '../../../shared/ui/styles';
 
 interface Props {
   transactions: Transaction[];
   isLoading: boolean;
 }
 
+const statuses = {
+  completed: { label: 'Completada', className: 'bg-mint text-success' },
+  pending: { label: 'Pendiente', className: 'bg-sun-soft text-ink' },
+  cancelled: { label: 'Cancelada', className: 'bg-rose text-error' },
+};
+
 export default function ListTransactions({ transactions, isLoading }: Props) {
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-10">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="flex items-center justify-center py-10">
+        <span className="loading loading-spinner loading-lg" />
       </div>
     );
   }
 
   if (!transactions || transactions.length === 0) {
     return (
-      <div className="text-center py-10 text-gray-400">
-        No hay transacciones disponibles
+      <div className={cardClass}>
+        <EmptyState
+          title="No hay transacciones disponibles"
+          description="Cuando haya pagos aparecerán aquí."
+        />
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto border border-gray-600 rounded-lg">
+    <div className={`${cardClass} overflow-x-auto p-3`}>
       <table className="table w-full">
         <thead>
-          <tr className="bg-base-200">
+          <tr>
             <th>ID</th>
             <th>Cliente</th>
-            <th>Email</th>
+            <th>Correo</th>
             <th>Monto</th>
             <th>Estado</th>
             <th>Fecha</th>
-            <th>Acciones</th>
+            <th className="text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {transactions.length === 0 && !isLoading && (
-            <tr>
-              <td colSpan={6} className="text-center py-10">
-                <div className="flex flex-col items-center justify-center text-gray-500">
-                  <RiBillLine size={40} />
-                  <p className="text-lg font-medium">No se encontraron transacciones</p>
-                  <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
-                </div>
-              </td>
-            </tr>
-          )}
-          {transactions.map((t) => (
-            <tr key={t.id} className="hover:bg-base-200/50">
-              <td className="font-mono text-xs opacity-70">{t.id.substring(0, 8)}...</td>
-              <td>
-                <div className="font-bold">{t.customerName}</div>
-                <div className="text-xs opacity-50">{t.customerPhone}</div>
-              </td>
-              <td>{t.customerEmail}</td>
-              <td className="font-bold text-success">${t.amount.toFixed(2)}</td>
-              <td>
-                <div
-                  className={`badge gap-2 ${t.status === 'completed'
-                      ? 'badge-success badge-outline'
-                      : t.status === 'pending'
-                        ? 'badge-warning badge-outline'
-                        : 'badge-error badge-outline'
-                    }`}
-                >
-                  {t.status === 'completed' ? 'Completada' : t.status === 'pending' ? 'Pendiente' : 'Cancelada'}
-                </div>
-              </td>
-              <td className="text-sm">{new Date(t.date).toLocaleDateString()}</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">Detalles</button>
-              </th>
-            </tr>
-          ))}
+          {transactions.map((t) => {
+            const status = statuses[t.status] ?? statuses.cancelled;
+
+            return (
+              <tr key={t.id}>
+                <td className="font-mono text-xs font-bold text-ink-muted">
+                  #{t.id.substring(0, 8).toUpperCase()}
+                </td>
+                <td>
+                  <div className="font-extrabold text-ink">
+                    {t.customerName}
+                  </div>
+                  <div className="text-xs text-ink-muted">
+                    {t.customerPhone}
+                  </div>
+                </td>
+                <td className="text-sm text-ink-soft">{t.customerEmail}</td>
+                <td>
+                  <PriceTag price={t.amount} />
+                </td>
+                <td>
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${status.className}`}
+                  >
+                    {status.label}
+                  </span>
+                </td>
+                <td className="text-sm text-ink-soft">
+                  {new Date(t.date).toLocaleDateString('es-CO')}
+                </td>
+                <td className="text-right">
+                  <button
+                    type="button"
+                    className="h-8 rounded-full border border-line px-3 text-xs font-bold text-ink transition-colors hover:border-ink"
+                  >
+                    Detalles
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

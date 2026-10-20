@@ -1,55 +1,50 @@
 import { useNavigate } from 'react-router';
+import { FiArrowLeft, FiSave } from 'react-icons/fi';
+import { primaryButtonClass } from '../../../../shared/ui/styles';
 
 type Props = {
   isUpdating: boolean;
-}
+  productName?: string;
+};
 
-export function HeaderProduct({ isUpdating }: Props) {
+export function HeaderProduct({ isUpdating, productName }: Props) {
   const navigate = useNavigate();
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button type="button" className="btn btn-ghost btn-sm" onClick={() => navigate("/products")}>
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold bg-purple-500 bg-clip-text text-transparent">
-              Editar Producto
-            </h1>
-            <p className="text-sm opacity-70">
-              Modificando: Mando X-BOX Series X
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            className="btn w-40 btn-primary bg-purple-500 border-none"
-            disabled={isUpdating}
-          >
-            {isUpdating ? (
-                <span className="loading loading-spinner"></span>
-            ) : (
-              'Actualizar Producto'
-            )}
-          </button>
+    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="flex min-w-0 items-center gap-3">
+        <button
+          type="button"
+          aria-label="Volver a productos"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-base-100 text-ink transition-colors hover:border-ink"
+          onClick={() => navigate('/products')}
+        >
+          <FiArrowLeft size={18} />
+        </button>
+        <div className="min-w-0">
+          <p className="text-xs font-extrabold uppercase tracking-[0.08em] text-brand">
+            Editar producto
+          </p>
+          <h1 className="truncate text-2xl font-extrabold text-ink">
+            {productName || 'Cargando…'}
+          </h1>
         </div>
       </div>
+
+      <button
+        type="submit"
+        className={`${primaryButtonClass} min-w-44`}
+        disabled={isUpdating}
+      >
+        {isUpdating ? (
+          <span className="loading loading-spinner loading-sm text-white" />
+        ) : (
+          <>
+            <FiSave size={16} />
+            Guardar cambios
+          </>
+        )}
+      </button>
     </div>
   );
 }

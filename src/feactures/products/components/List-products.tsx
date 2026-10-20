@@ -1,45 +1,52 @@
-import { CiImageOn } from 'react-icons/ci';
 import { Link } from 'react-router';
+import { FiEdit2, FiImage, FiMoreHorizontal, FiTrash2 } from 'react-icons/fi';
 import { ButtonModal } from '../../../shared/components/globalComponents/ButtonModal';
 import { Content } from '../interface/response-products';
-import { MdOutlineStorefront } from 'react-icons/md';
+import CategoryBadge from '../../../shared/ui/CategoryBadge';
+import EmptyState from '../../../shared/ui/EmptyState';
+import PriceTag from '../../../shared/ui/PriceTag';
+import {
+  actionsButtonClass,
+  cardClass,
+  menuDangerRowClass,
+  menuPanelClass,
+  menuRowClass,
+} from '../../../shared/ui/styles';
 
 type Props = {
   products: Content[];
   isLoading: boolean;
   setProductUpdate: React.Dispatch<React.SetStateAction<Content | null>>;
-}
+};
 
 export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
+    <div className={`${cardClass} overflow-x-auto p-3`}>
       <table className="table">
-        {/* head */}
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Primeras categorías</th>
+            <th>Categorías</th>
             <th>Precio</th>
-            <th>Imagenes</th>
+            <th>Imágenes</th>
             <th>Variantes</th>
-            <th>Acciones</th>
+            <th className="text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {products.length === 0 && !isLoading && (
             <tr>
-              <td colSpan={6} className="text-center py-10">
-                <div className="flex flex-col items-center justify-center text-gray-500">
-                <MdOutlineStorefront size={40} />
-                <p className="text-lg font-medium">No se encontraron productos</p>
-                <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
-              </div>
+              <td colSpan={6}>
+                <EmptyState
+                  title="No se encontraron productos"
+                  description="Intenta ajustar los filtros de búsqueda."
+                />
               </td>
             </tr>
           )}
           {isLoading ? (
             <tr>
-              <td colSpan={4} className="text-center">
+              <td colSpan={6} className="py-10 text-center">
                 <span className="loading loading-spinner loading-lg" />
               </td>
             </tr>
@@ -48,85 +55,90 @@ export function ListProducts({ products, isLoading, setProductUpdate }: Props) {
               <tr key={product.id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className="avatar relative">
-                      <div className="mask mask-squircle h-12 w-12 relative overflow-hidden">
-                        <img
-                          src={`${product.productImages[0]?.imageUrl}`}
-                          alt="Avatar Tailwind CSS Component"
-                          className="transition-all duration-200"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Link
-                        className="font-bold hover:underline w-48"
-                        to={`/products/${product.id}`}
-                      >
-                        {product.productName}
-                      </Link>
-                    </div>
+                    <span className="block h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-cream p-1">
+                      <img
+                        src={`${product.productImages[0]?.imageUrl}`}
+                        alt=""
+                        className="h-full w-full object-contain mix-blend-darken"
+                      />
+                    </span>
+                    <Link
+                      className="line-clamp-2 max-w-56 font-extrabold text-ink transition-colors hover:text-brand"
+                      to={`/products/${product.id}`}
+                    >
+                      {product.productName}
+                    </Link>
                   </div>
                 </td>
                 <td>
-                  <div className="flex flex-col gap-1">
-                    {product?.categories.slice(0, 2).map((category) => (
-                      <span
-                        key={category.categoryName}
-                        className="text-sm badge badge-primary p-2 rounded-lg max-w-[120px]"
-                      >
-                        <p className="truncate">
-                          {category.categoryName}
-                        </p> 
-                      </span>
-                    ))}
+                  <div className="flex max-w-56 flex-wrap gap-1">
+                    {product?.categories
+                      .slice(0, 2)
+                      .map((category) => (
+                        <CategoryBadge
+                          key={category.categoryName}
+                          name={category.categoryName}
+                        />
+                      ))}
                     {product.categories.length > 2 && (
-                      <span className="text-sm badge badge-secondary p-2 rounded-lg">
+                      <span className="rounded-full bg-cream px-2.5 py-0.5 text-xs font-bold text-ink-soft">
                         +{product.categories.length - 2} más
                       </span>
                     )}
                   </div>
                 </td>
-                <td className='w-28'>$ {new Intl.NumberFormat("es-ES").format(product.price)}</td>
                 <td>
-                  <div className="flex gap-2">
-                    <CiImageOn size={20} /> {product.productImages.length}
-                  </div>
+                  <PriceTag price={product.price} />
                 </td>
                 <td>
-                  <div className="text-sm text-gray-400">
-                    {product.variants.length > 0 ? (
-                      <span className='badge badge-primary badge-soft'>{product.variants.length} variantes</span>
-                    ) : (
-                      <span className='text-sm'>No hay variantes</span>
-                    )}
-                  </div>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-soft">
+                    <FiImage size={16} className="text-ink-muted" />
+                    {product.productImages.length}
+                  </span>
                 </td>
-                <th>
-                  <details className={`dropdown dropdown-center ${products.length == 1 && 'dropdown-left'}
-                  ${index === products.length - 1 && 'dropdown-top'}`}>
-                    <summary className="btn m-1">Detalles</summary>
-                    <ul className="menu dropdown-content bg-base-100 border border-gray-700 rounded-box z-1
-                    p-2 shadow-sm w-36 gap-2">
+                <td>
+                  {product.variants.length > 0 ? (
+                    <span className="rounded-full bg-lilac px-2.5 py-0.5 text-xs font-bold text-lilac-strong">
+                      {product.variants.length}{' '}
+                      {product.variants.length === 1 ? 'variante' : 'variantes'}
+                    </span>
+                  ) : (
+                    <span className="text-sm text-ink-muted">
+                      Sin variantes
+                    </span>
+                  )}
+                </td>
+                <td className="text-right">
+                  <details
+                    className={`dropdown dropdown-end ${index === products.length - 1 && products.length > 1 ? 'dropdown-top' : ''}`}
+                  >
+                    <summary className={actionsButtonClass}>
+                      <FiMoreHorizontal size={16} />
+                      Acciones
+                    </summary>
+                    <ul className={menuPanelClass}>
                       <li>
                         <Link
                           to={`/products/${product.id}`}
-                          className="text-[12px] btn btn-sm"
+                          className={menuRowClass}
                         >
-                          Editar Producto
+                          <FiEdit2 size={15} className="text-brand" />
+                          Editar producto
                         </Link>
                       </li>
                       <li>
                         <ButtonModal
                           onClick={() => setProductUpdate(product)}
                           idModal="delete_product"
-                          className="text-xs btn btn-sm btn-error"
+                          className={menuDangerRowClass}
                         >
-                          Eliminar Producto
+                          <FiTrash2 size={15} />
+                          Eliminar producto
                         </ButtonModal>
                       </li>
                     </ul>
                   </details>
-                </th>
+                </td>
               </tr>
             ))
           )}

@@ -1,67 +1,76 @@
-import { MdEdit, MdDelete } from 'react-icons/md';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { VariantType } from '../../../../shared/zod/products/variant.zod';
 import ButtonModal from '../../../../shared/components/globalComponents/ButtonModal';
 
 type Props = {
   variant: VariantType;
   setVariantSelected: () => void;
-}
+};
+
+const iconButton =
+  'grid h-9 w-9 place-items-center rounded-full text-ink-soft transition-colors';
 
 export default function VariantItem({ variant, setVariantSelected }: Props) {
   return (
     <div
-      className={`card bg-base-200 border border-base-300 hover:border-primary/50
-      ${!variant.id && 'border-success hover:border-success/50'} 
-      transition-colors duration-200`}
+      className={`rounded-xl border p-4 transition-colors ${
+        variant.id
+          ? 'border-line hover:border-brand/40'
+          : 'border-success bg-mint/40'
+      }`}
     >
-      <div className="card-body p-3 sm:p-4">
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex flex-col gap-0.5">
-            <div className="flex items-center gap-2">
-              <h3 className="font-bold text-base text-base-content">
-                {variant.name}
-              </h3>
-              <span className={`badge badge-xs badge-primary`}>
-                {variant.type === 'color' ? 'Color' : 'Texto'}
-              </span>
-            </div>
-            <div className="text-xs text-base-content/80">
-              <span className="opacity-70">Tag: </span>
-              <span className="font-medium">{variant.tag}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-1">
-            <ButtonModal idModal='update_variant' className="btn btn-square btn-md btn-ghost hover:bg-base-300 text-base-content/70 rounded-lg"
-              onClick={setVariantSelected}
-            >
-              <MdEdit size={16} />
-            </ButtonModal>
-            <ButtonModal idModal='delete_variant' className="btn btn-square btn-md btn-ghost hover:bg-error/10 hover:text-error rounded-lg"
-              onClick={setVariantSelected}
-            >
-              <MdDelete size={16} />
-            </ButtonModal>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {variant.listValues.map((val) => (
-            <span
-              key={val}
-              className="flex items-center px-3 py-1 rounded-md border border-primary bg-base-100 text-primary text-xs
-              font-medium shadow-sm hover:shadow-md transition-shadow cursor-default"
-            >
-              {variant.type === 'color' && (
-                <span
-                  className="inline-block w-4 h-4 rounded-full border border-primary mr-1"
-                  style={{ backgroundColor: val }}
-                />
-              )}
-              {val}
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-extrabold text-ink">{variant.name}</h3>
+            <span className="rounded-full bg-lilac px-2 py-0.5 text-[11px] font-bold text-lilac-strong">
+              {variant.type === 'color' ? 'Color' : 'Texto'}
             </span>
-          ))}
+            {!variant.id && (
+              <span className="rounded-full bg-success px-2 py-0.5 text-[11px] font-bold text-white">
+                Nueva
+              </span>
+            )}
+          </div>
+          <p className="mt-0.5 text-xs text-ink-muted">
+            Etiqueta:{' '}
+            <span className="font-bold text-ink-soft">{variant.tag}</span>
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
+          <ButtonModal
+            idModal="update_variant"
+            className={`${iconButton} hover:bg-brand-soft hover:text-brand`}
+            onClick={setVariantSelected}
+          >
+            <FiEdit2 size={15} />
+          </ButtonModal>
+          <ButtonModal
+            idModal="delete_variant"
+            className={`${iconButton} hover:bg-error/10 hover:text-error`}
+            onClick={setVariantSelected}
+          >
+            <FiTrash2 size={15} />
+          </ButtonModal>
         </div>
       </div>
+
+      <div className="flex flex-wrap gap-1.5">
+        {variant.listValues.map((val) => (
+          <span
+            key={val}
+            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-base-100 px-3 py-1 text-xs font-bold text-ink"
+          >
+            {variant.type === 'color' && (
+              <span
+                className="h-3.5 w-3.5 rounded-full ring-1 ring-line"
+                style={{ backgroundColor: val }}
+              />
+            )}
+            {val}
+          </span>
+        ))}
+      </div>
     </div>
-  )
+  );
 }

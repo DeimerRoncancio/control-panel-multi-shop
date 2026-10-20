@@ -1,18 +1,39 @@
-import { SubmitHandler, useForm, UseFormSetValue, UseFormWatch, useWatch } from "react-hook-form";
-import VariantValues from "../variants/Variant-values";
-import { VariantSchema, VariantType } from "../../../../shared/zod/products/variant.zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ProductType } from "../../../../shared/zod/products/product.zod";
-import { useState } from "react";
-import { initialValues } from "../../helpers/variant-initial-values";
+import {
+  SubmitHandler,
+  useForm,
+  UseFormSetValue,
+  UseFormWatch,
+  useWatch,
+} from 'react-hook-form';
+import VariantValues from '../variants/Variant-values';
+import {
+  VariantSchema,
+  VariantType,
+} from '../../../../shared/zod/products/variant.zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProductType } from '../../../../shared/zod/products/product.zod';
+import { useState } from 'react';
+import { initialValues } from '../../helpers/variant-initial-values';
+import { FiLayers } from 'react-icons/fi';
+import ModalHeader from '../../../../shared/ui/ModalHeader';
+import {
+  formFooterClass,
+  inputClass,
+  labelTextClass,
+  outlineButtonClass,
+  primaryButtonClass,
+} from '../../../../shared/ui/styles';
 
 type Props = {
   setValue: UseFormSetValue<ProductType>;
   watch: UseFormWatch<ProductType>;
-}
+};
 
-export default function ModalCreateVariant({  setValue: setProductValue, watch: productWatch}: Props) {
-  const modal = document.getElementById("create_variant") as HTMLDialogElement;
+export default function ModalCreateVariant({
+  setValue: setProductValue,
+  watch: productWatch,
+}: Props) {
+  const modal = document.getElementById('create_variant') as HTMLDialogElement;
   const [textValues, setTextValues] = useState<string[]>([]);
   const [colorValues, setColorValues] = useState<string[]>([]);
 
@@ -24,82 +45,95 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
     setError,
     clearErrors,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<VariantType>({
     resolver: zodResolver(VariantSchema),
-    defaultValues: initialValues
+    defaultValues: initialValues,
   });
 
-  const variants = productWatch("variants") || [];
-  const type = useWatch({ name: "type", control });
+  const variants = productWatch('variants') || [];
+  const type = useWatch({ name: 'type', control });
 
   const onSubmit: SubmitHandler<VariantType> = (data) => {
-    setProductValue("variants", [ ...variants, data ]);
+    setProductValue('variants', [...variants, data]);
     modal.close();
     setColorValues([]);
     setTextValues([]);
     reset();
-  }
+  };
 
   const handleError = (clear?: boolean, val?: string) => {
     if (clear) {
-      clearErrors("listValues");
+      clearErrors('listValues');
       return;
     }
-    setError("listValues", { type: "manual", message: val });
-  }
+    setError('listValues', { type: 'manual', message: val });
+  };
 
   const handleTextValue = (val?: string[]): string[] => {
-    val && setTextValues([ ...val ]);
+    val && setTextValues([...val]);
     return textValues;
-  }
+  };
 
   const handleColorValue = (val?: string[]): string[] => {
-    val && setColorValues([ ...val ]);
+    val && setColorValues([...val]);
     return colorValues;
-  }
+  };
 
   return (
     <dialog id="create_variant" className="modal">
       <div className="modal-box max-h-[95vh]">
-        <h3 className="font-semibold text-lg">Crear Nuevo Producto</h3>
-        <p className="mb-4 font-thin">Completa los datos del producto que deseas crear</p>
-        <form className="space-y-5 pr-1" onSubmit={handleSubmit(onSubmit)}>
-          <label className="flex flex-col gap-2">
-            <span className="font-normal">Nombre de la Variante</span>
+        <ModalHeader
+          icon={<FiLayers size={19} />}
+          title="Nueva variante"
+          description="Por ejemplo talla o color, con sus valores."
+          onClose={() => {
+            modal.close();
+            reset();
+          }}
+        />
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <label className="flex flex-col">
+            <span className={labelTextClass}>Nombre de la Variante</span>
             <input
               type="text"
-              className="input input-bordered w-full"
+              className={inputClass}
               placeholder="Ej: Color, Tamaño, Material"
-              {...register("name")}
+              {...register('name')}
             />
             {errors.name && (
-              <span className="text-sm text-red-500">{errors.name.message}</span>
+              <span className="mt-1 text-xs font-semibold text-error">
+                {errors.name.message}
+              </span>
             )}
           </label>
-          <label className="flex flex-col gap-2">
-            <span className="font-normal">Tag de la Variante</span>
+          <label className="flex flex-col">
+            <span className={labelTextClass}>Tag de la Variante</span>
             <input
               type="text"
-              className="input input-bordered w-full"
+              className={inputClass}
               placeholder="Ej: color, size, material"
-              {...register("tag")}
+              {...register('tag')}
             />
             {errors.tag && (
-              <span className="text-sm text-red-500">{errors.tag.message}</span>
+              <span className="mt-1 text-xs font-semibold text-error">
+                {errors.tag.message}
+              </span>
             )}
           </label>
           <div>
-            <label className="flex flex-col gap-2">
-              <span className="font-normal">Tipo de Variante</span>
-              <select className="select select-bordered w-full" {...register("type")}>
+            <label className="flex flex-col">
+              <span className={labelTextClass}>Tipo de Variante</span>
+              <select className={inputClass} {...register('type')}>
                 <option value="select">Seleccionar</option>
                 <option value="text">Texto</option>
                 <option value="color">Color</option>
               </select>
             </label>
             {type === 'select' && (
-              <p className={`text-sm text-gray-400 mt-2 ${errors.type && 'text-red-500'}`}>
+              <p
+                className={`mt-2 text-xs text-ink-muted ${errors.type && 'font-semibold text-error'}`}
+              >
                 Selecciona un tipo de variante
               </p>
             )}
@@ -111,18 +145,23 @@ export default function ModalCreateVariant({  setValue: setProductValue, watch: 
               handleColorValue={handleColorValue}
             />
           </div>
-          {errors.listValues && type !== "select" && (
-            <span className="text-sm text-red-500">{errors.listValues.message}</span>
+          {errors.listValues && type !== 'select' && (
+            <span className="mt-1 text-xs font-semibold text-error">
+              {errors.listValues.message}
+            </span>
           )}
-          <div className="modal-action mt-10 grid grid-cols-2 gap-4">
-            <button type="button" className="btn btn-error btn-soft"
-            onClick={() => {
-              modal.close();
-              reset();
-            }}>
+          <div className={formFooterClass}>
+            <button
+              type="button"
+              className={outlineButtonClass}
+              onClick={() => {
+                modal.close();
+                reset();
+              }}
+            >
               Cancelar
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className={primaryButtonClass}>
               Crear Variante
             </button>
           </div>

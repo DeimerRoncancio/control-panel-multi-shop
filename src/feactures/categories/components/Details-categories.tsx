@@ -1,8 +1,8 @@
-import { AiFillProduct } from "react-icons/ai";
-import { FaBoxOpen } from "react-icons/fa";
-import axiosGetBearer from "../../../shared/requests/protectedRoutes/get";
-import { useQuery } from "@tanstack/react-query";
-import Cookies from "js-cookie";
+import { useQuery } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
+import { FiAlertCircle, FiGrid } from 'react-icons/fi';
+import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
+import StatCard from '../../../shared/ui/StatCard';
 
 export default function DetailsCategories() {
   const { data: stats } = useQuery({
@@ -17,23 +17,20 @@ export default function DetailsCategories() {
   });
 
   return (
-    <div className="stats shadow w-full border border-gray-600">
-      <div className="stat">
-        <div className="stat-figure text-primary">
-          <FaBoxOpen size={35} />
-        </div>
-        <div className="stat-title">Total Categorias</div>
-        <div className="stat-value text-primary">{stats?.totalCategories || 0}</div>
-        <div className="stat-desc">Categorias registradas</div>
-      </div>
-      <div className="stat">
-        <div className="stat-figure text-success">
-          <AiFillProduct size={35} />
-        </div>
-        <div className="stat-title">Categorias sin productos</div>
-        <div className="stat-value text-success">{stats?.obsoleteCategories || 0}</div>
-        <div className="stat-desc">Categorias en desuso</div>
-      </div>
+    <div className="grid gap-3 sm:grid-cols-2">
+      <StatCard
+        label="Total categorías"
+        value={stats?.totalCategories || 0}
+        hint="Categorías registradas"
+        icon={FiGrid}
+      />
+      <StatCard
+        label="Sin productos"
+        value={stats?.obsoleteCategories || 0}
+        hint="Categorías en desuso"
+        icon={FiAlertCircle}
+        tone="sun"
+      />
     </div>
   );
 }

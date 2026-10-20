@@ -1,31 +1,36 @@
-import { useQuery } from "@tanstack/react-query";
-import ButtonModal from "../../../shared/components/globalComponents/ButtonModal";
-import axiosGet from "../../../shared/requests/basicRequests/get";
-import DetailsCategories from "../components/Details-categories";
-import ListCategories from "../components/List-categories";
-import SearchCategories from "../components/Search-categories";
-import { useState } from "react";
-import Pagination from "../../../shared/components/globalComponents/Pagination";
-import { CategoriesRequest, Content } from "../interfaces/categories-response";
-import ModalCreateCategory from "../components/Modal-create-category";
-import { ToastContainer } from "react-toastify";
-import ModalDeleteCategory from "../components/Modal-delete-category";
-import usePagination from "../../../shared/hooks/usePagination";
-import ModalUpdateCategory from "../components/Modal-update-category";
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { FiPlus } from 'react-icons/fi';
+import ButtonModal from '../../../shared/components/globalComponents/ButtonModal';
+import axiosGet from '../../../shared/requests/basicRequests/get';
+import DetailsCategories from '../components/Details-categories';
+import ListCategories from '../components/List-categories';
+import SearchCategories from '../components/Search-categories';
+import Pagination from '../../../shared/components/globalComponents/Pagination';
+import { CategoriesRequest, Content } from '../interfaces/categories-response';
+import ModalCreateCategory from '../components/Modal-create-category';
+import ModalDeleteCategory from '../components/Modal-delete-category';
+import usePagination from '../../../shared/hooks/usePagination';
+import ModalUpdateCategory from '../components/Modal-update-category';
+import PageHeader from '../../../shared/ui/PageHeader';
+import { pageClass, primaryButtonClass } from '../../../shared/ui/styles';
 
 function Categories() {
-  const [categorySelected, setCategorySelected] = useState<Content>({} as Content);
+  const [categorySelected, setCategorySelected] = useState<Content>(
+    {} as Content
+  );
   const { pagination, setSearchParams } = usePagination();
-  const {page, size} = pagination;
+  const { page, size } = pagination;
 
   const { data: categoriesData } = useQuery<CategoriesRequest>({
     queryKey: ['categories', page, size],
     queryFn: async () => {
       return axiosGet({
         url: '/app/categories',
-        params: { page: Number(page), size: Number(size) }
+        params: { page: Number(page), size: Number(size) },
       });
-    }
+    },
   });
 
   const selectCategory = (category: Content) => setCategorySelected(category);
@@ -35,18 +40,21 @@ function Categories() {
       <ModalCreateCategory />
       <ModalUpdateCategory category={categorySelected} />
       <ModalDeleteCategory category={categorySelected} />
-      <div className="p-6 text-white rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold">Gestion de Categorias</h1>
-            <p className="mt-2 text-sm text-gray-400 mb-4">
-              Administra las categorias de la aplicacion.
-            </p>
-          </div>
-          <ButtonModal idModal="create_category" className="btn btn-success">
-            Crear Categoria
-          </ButtonModal>
-        </div>
+      <div className={pageClass}>
+        <PageHeader
+          eyebrow="Catálogo"
+          title="Categorías"
+          description="Cada categoría tiene su color en la tienda y agrupa productos."
+          actions={
+            <ButtonModal
+              idModal="create_category"
+              className={primaryButtonClass}
+            >
+              <FiPlus size={16} />
+              Crear categoría
+            </ButtonModal>
+          }
+        />
         <DetailsCategories />
         <SearchCategories />
         <ListCategories

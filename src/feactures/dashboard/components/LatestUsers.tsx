@@ -1,35 +1,44 @@
-import { FaEnvelope } from "react-icons/fa";
-import { Content } from "../../../shared/interfaces/get-users-request";
+import { FiMail } from 'react-icons/fi';
+import { Content } from '../../../shared/interfaces/get-users-request';
+import UserAvatar from '../../../shared/ui/UserAvatar';
 
 type Props = {
-  users: Content[]
-}
+  users: Content[];
+};
 
 export default function LatestUsers({ users }: Props) {
+  if (users.length === 0)
+    return (
+      <p className="my-4 text-center text-sm text-ink-muted">
+        No hay usuarios disponibles
+      </p>
+    );
+
   return (
-    <div className="flex flex-col gap-3">
-      {users.length > 0 ? users.map((u) => (
-        <div key={u.id} className="flex items-center gap-3 p-3 bg-base-100 rounded-xl">
-          <div className="avatar">
-            <div className="w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-              <img
-                src={`https://ui-avatars.com/api/?name=${u.name.charAt(0)}+${u.lastnames.charAt(0)}&background=random`}
-                alt="user"
-              />
-            </div>
+    <ul className="flex flex-col gap-2">
+      {users.map((u) => (
+        <li
+          key={u.id}
+          className="flex items-center gap-3 rounded-xl border border-line p-2.5"
+        >
+          <UserAvatar
+            name={u.name}
+            lastnames={u.lastnames}
+            imageUrl={u.imageUser?.imageUrl}
+          />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-extrabold text-ink">
+              {`${u.name} ${u.secondName ?? ''} ${u.lastnames}`.replace(
+                /\s+/g,
+                ' '
+              )}
+            </p>
+            <p className="flex items-center gap-1 truncate text-xs text-ink-muted">
+              <FiMail size={11} className="shrink-0 text-brand" /> {u.email}
+            </p>
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-bold text-sm truncate">{u.name + " " + (u.secondName ?? "") + " " + u.lastnames}</div>
-            <div className="text-xs opacity-50 flex items-center gap-1">
-              <FaEnvelope className="text-[10px]" /> {u.email}
-            </div>
-          </div>
-        </div>
-      )) : (
-        <div className="text-center text-gray-500">
-          No hay usuarios disponibles
-        </div>
-      )}
-    </div>
-  )
+        </li>
+      ))}
+    </ul>
+  );
 }

@@ -1,93 +1,132 @@
-import { MdOutlineCategory } from "react-icons/md";
-import ButtonModal from "../../../shared/components/globalComponents/ButtonModal";
-import { Content } from "../interfaces/categories-response";
-import { AiFillProduct } from "react-icons/ai";
-import { IoPricetagsOutline } from "react-icons/io5";
+import { FiEdit2, FiMoreHorizontal, FiTrash2 } from 'react-icons/fi';
+import ButtonModal from '../../../shared/components/globalComponents/ButtonModal';
+import { Content } from '../interfaces/categories-response';
+import { categoryStyle } from '../../../shared/helpers/category-color';
+import EmptyState from '../../../shared/ui/EmptyState';
+import {
+  actionsButtonClass,
+  cardClass,
+  menuDangerRowClass,
+  menuPanelClass,
+  menuRowClass,
+} from '../../../shared/ui/styles';
 
 type Props = {
   isLoading: boolean;
   categories: Content[] | undefined;
   selectCategory: (category: Content) => void;
-}
+};
 
-export default function ListCategories({ categories, isLoading, selectCategory }: Props) {
+export default function ListCategories({
+  categories,
+  isLoading,
+  selectCategory,
+}: Props) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
+    <div className={`${cardClass} overflow-x-auto p-3`}>
       <table className="table">
         <thead>
           <tr>
-            <th>Nombre de categoria</th>
-            <th>Productos de categoria</th>
-            <th>Productos totales</th>
-            <th>Acciones</th>
+            <th>Categoría</th>
+            <th>Productos</th>
+            <th>Total</th>
+            <th className="text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {categories?.length === 0 && !isLoading && (
             <tr>
-              <td colSpan={6} className="text-center py-10">
-                <div className="flex flex-col items-center justify-center text-gray-500">
-                  <MdOutlineCategory size={40} />
-                  <p className="text-lg font-medium">No se encontraron categorías</p>
-                  <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
-                </div>
+              <td colSpan={4}>
+                <EmptyState
+                  title="No se encontraron categorías"
+                  description="Intenta ajustar los filtros de búsqueda."
+                />
               </td>
             </tr>
           )}
           {isLoading ? (
             <tr>
-              <td colSpan={4} className="text-center">
+              <td colSpan={4} className="py-10 text-center">
                 <span className="loading loading-spinner loading-lg" />
               </td>
             </tr>
           ) : (
             categories?.map((category, index) => (
-              <tr key={category.id}>
+              <tr
+                key={category.id}
+                style={categoryStyle(category.categoryName)}
+              >
                 <td>
-                  <p className="flex items-center gap-2">
-                    <IoPricetagsOutline size={20} />
-                    {category.categoryName}
-                  </p>
+                  <span className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-(--cat-soft)">
+                      <span className="h-3 w-3 rounded-full bg-(--cat)" />
+                    </span>
+                    <span className="font-extrabold text-ink">
+                      {category.categoryName}
+                    </span>
+                  </span>
                 </td>
                 <td>
-                  <div className="w-80 h-full flex flex-wrap gap-2">
+                  <div className="flex max-w-md flex-wrap gap-1.5">
                     {category.products.slice(0, 3).map((product) => (
-                      <div key={product.id} className="badge badge-primary">{product.productName}</div>
+                      <span
+                        key={product.id}
+                        className="max-w-44 truncate rounded-full border border-line px-2.5 py-0.5 text-xs font-semibold text-ink-soft"
+                      >
+                        {product.productName}
+                      </span>
                     ))}
-                    {category.products.length > 3
-                      && <div className="badge badge-secondary">+{category.products.length - 3} más</div>}
-                    {category.products.length === 0 && <p className="text-gray-400">No hay productos</p>}
+                    {category.products.length > 3 && (
+                      <span className="rounded-full bg-(--cat-soft) px-2.5 py-0.5 text-xs font-bold text-(--cat)">
+                        +{category.products.length - 3} más
+                      </span>
+                    )}
+                    {category.products.length === 0 && (
+                      <span className="text-sm text-ink-muted">
+                        No hay productos
+                      </span>
+                    )}
                   </div>
                 </td>
                 <td>
-                  <p className="flex items-center gap-2">
-                    <AiFillProduct size={20} />
-                    {category.products.length < 1 ? 'Sin' : category.products.length}
-                    {' '} Producto(s)
-                  </p>
+                  <span className="text-sm font-bold text-ink tabular-nums">
+                    {category.products.length < 1
+                      ? 'Sin'
+                      : category.products.length}{' '}
+                    <span className="font-semibold text-ink-muted">
+                      {category.products.length === 1
+                        ? 'producto'
+                        : 'productos'}
+                    </span>
+                  </span>
                 </td>
-                <td>
-                  <details className={`dropdown dropdown-center ${categories.length == 1 && 'dropdown-left'}
-                  ${index === categories.length - 1 && 'dropdown-top'}`}>
-                    <summary className="btn m-1">Detalles</summary>
-                    <ul className="menu dropdown-content bg-base-100 border border-gray-700 rounded-box z-1
-                    p-2 shadow-sm w-36 gap-2">
+                <td className="text-right">
+                  <details
+                    className={`dropdown dropdown-end ${index === categories.length - 1 && categories.length > 1 ? 'dropdown-top' : ''}`}
+                  >
+                    <summary className={actionsButtonClass}>
+                      <FiMoreHorizontal size={16} />
+                      Acciones
+                    </summary>
+                    <ul className={menuPanelClass}>
                       <li>
                         <ButtonModal
                           idModal="update_category"
-                          className="text-xs btn btn-sm"
+                          className={menuRowClass}
                           onClick={() => selectCategory(category)}
                         >
-                          Editar Categoria
+                          <FiEdit2 size={15} className="text-brand" />
+                          Editar categoría
                         </ButtonModal>
                       </li>
                       <li>
                         <ButtonModal
                           idModal="delete_category"
-                          className="text-xs btn btn-sm btn-error"
+                          className={menuDangerRowClass}
                           onClick={() => selectCategory(category)}
                         >
-                          Eliminar Categoria
+                          <FiTrash2 size={15} />
+                          Eliminar categoría
                         </ButtonModal>
                       </li>
                     </ul>

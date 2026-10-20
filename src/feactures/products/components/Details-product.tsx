@@ -1,39 +1,39 @@
 import { useQuery } from '@tanstack/react-query';
-import { AiFillProduct } from 'react-icons/ai';
-import { FaBoxOpen } from 'react-icons/fa6';
-import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import Cookie from 'js-cookie';
+import { FiBox, FiLayers } from 'react-icons/fi';
+import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
+import StatCard from '../../../shared/ui/StatCard';
 
 function DetailsProduct() {
-  const { data: stats } = useQuery<{ totalProducts: number, productsWithVariants: number }>({
+  const { data: stats } = useQuery<{
+    totalProducts: number;
+    productsWithVariants: number;
+  }>({
     queryKey: ['product-stats'],
     queryFn: async () => {
       const cookie = Cookie.get('accessToken');
-      return await axiosGetBearer({
+      return axiosGetBearer({
         url: '/app/products/stats',
         token: cookie || '',
       });
     },
-  })
+  });
 
   return (
-    <div className="stats shadow w-full border border-gray-600">
-      <div className="stat">
-        <div className="stat-figure text-primary">
-          <FaBoxOpen size={35} />
-        </div>
-        <div className="stat-title">Total Productos</div>
-        <div className="stat-value text-primary">{stats?.totalProducts || 0}</div>
-        <div className="stat-desc">Productos registrados</div>
-      </div>
-      <div className="stat">
-        <div className="stat-figure text-success">
-          <AiFillProduct size={35} />
-        </div>
-        <div className="stat-title">Productos variables</div>
-        <div className="stat-value text-success">{stats?.productsWithVariants || 0}</div>
-        <div className="stat-desc">Productos versátiles</div>
-      </div>
+    <div className="grid gap-3 sm:grid-cols-2">
+      <StatCard
+        label="Total productos"
+        value={stats?.totalProducts || 0}
+        hint="Productos registrados"
+        icon={FiBox}
+      />
+      <StatCard
+        label="Con variantes"
+        value={stats?.productsWithVariants || 0}
+        hint="Tallas, colores u otras opciones"
+        icon={FiLayers}
+        tone="lilac"
+      />
     </div>
   );
 }

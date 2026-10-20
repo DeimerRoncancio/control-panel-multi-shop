@@ -4,7 +4,9 @@ import { SelectCategories } from '../components/update/Select-categories';
 import { FormUpdate } from '../components/update/Form-update';
 import { HeaderProduct } from '../components/update/Header-product';
 import { UpdateImages } from '../components/update/Update-images';
-import ProductSchema, { ProductType } from '../../../shared/zod/products/product.zod';
+import ProductSchema, {
+  ProductType,
+} from '../../../shared/zod/products/product.zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ToastContainer } from 'react-toastify';
 import useProducts from '../hooks/useProducts';
@@ -16,7 +18,9 @@ import ModalDeleteVariant from '../components/delete/Modal-delete-variant';
 import ModalUpdateVariant from '../components/update/Modal-update-variant';
 
 export function ProductId() {
-  const [variantSelected, setVariantSelected] = useState<VariantType>({} as VariantType);
+  const [variantSelected, setVariantSelected] = useState<VariantType>(
+    {} as VariantType
+  );
 
   const {
     control,
@@ -34,11 +38,12 @@ export function ProductId() {
     data: { productData, categoriesData, imagesToRemove },
     remove: { removeImages, removeVariants },
     isUpdating,
-    sendProduct
+    sendProduct,
   } = useProducts();
 
   const onSubmit: SubmitHandler<ProductType> = (data) => sendProduct(data);
-  const handleVariantSelected = (variant: VariantType) => setVariantSelected(variant);
+  const handleVariantSelected = (variant: VariantType) =>
+    setVariantSelected(variant);
 
   useEffect(() => {
     if (productData) reset(toUpdateProductType({ product: productData }));
@@ -46,16 +51,16 @@ export function ProductId() {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="min-h-screen transition-colors duration-300"
-      >
-        <div className="shadow-lg">
-          <HeaderProduct isUpdating={isUpdating} />
+      <form onSubmit={handleSubmit(onSubmit)} className="min-h-full">
+        <div className="sticky top-0 z-20 border-b border-line bg-base-100/95 backdrop-blur">
+          <HeaderProduct
+            isUpdating={isUpdating}
+            productName={productData?.productName}
+          />
         </div>
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            <div className="xl:col-span-2 space-y-6 rounded-lg flex flex-col">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div className="flex flex-col gap-6 xl:col-span-2">
               <FormUpdate
                 clearErrors={clearErrors}
                 control={control}
@@ -86,7 +91,11 @@ export function ProductId() {
         </div>
       </form>
       <ModalCreateVariant setValue={setValue} watch={watch} />
-      <ModalUpdateVariant variant={variantSelected} setValue={setValue} watch={watch} />
+      <ModalUpdateVariant
+        variant={variantSelected}
+        setValue={setValue}
+        watch={watch}
+      />
       <ModalDeleteVariant
         variant={variantSelected}
         watch={watch}

@@ -1,21 +1,38 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
-import ProductSchema, { ProductType } from "../../../../shared/zod/products/product.zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import ButtonModal from "../../../../shared/components/globalComponents/ButtonModal";
-import { FaEye } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import ModalCreateVariant from "./Modal-create-variant";
-import Cookies from "js-cookie";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axiosPostFormDataBearer from "../../../../shared/requests/protectedRoutes/post";
-import successAlert from "../../../../shared/alerts/login/succes.alert";
-import { errorAlert } from "../../../../shared/alerts";
-import axiosGetBearer from "../../../../shared/requests/protectedRoutes/get";
-import { CategoriesRequest } from "../../../categories/interfaces/categories-response";
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { NumericFormat } from 'react-number-format';
+import ProductSchema, {
+  ProductType,
+} from '../../../../shared/zod/products/product.zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import ButtonModal from '../../../../shared/components/globalComponents/ButtonModal';
+import {
+  FiBox,
+  FiCheck,
+  FiEye,
+  FiPlus,
+  FiTrash2,
+  FiUploadCloud,
+} from 'react-icons/fi';
+import ModalCreateVariant from './Modal-create-variant';
+import Cookies from 'js-cookie';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axiosPostFormDataBearer from '../../../../shared/requests/protectedRoutes/post';
+import successAlert from '../../../../shared/alerts/login/succes.alert';
+import { errorAlert } from '../../../../shared/alerts';
+import axiosGetBearer from '../../../../shared/requests/protectedRoutes/get';
+import { CategoriesRequest } from '../../../categories/interfaces/categories-response';
+import ModalHeader from '../../../../shared/ui/ModalHeader';
+import { categoryStyle } from '../../../../shared/helpers/category-color';
+import {
+  formSectionTitleClass,
+  inputClass,
+  labelTextClass,
+  outlineButtonClass,
+  primaryButtonClass,
+} from '../../../../shared/ui/styles';
 
 function ModalProductCreate() {
-  const modal = document.getElementById("create_product") as HTMLDialogElement;
+  const modal = document.getElementById('create_product') as HTMLDialogElement;
 
   const { data: requestCategories } = useQuery<CategoriesRequest>({
     queryKey: ['categories'],
@@ -24,7 +41,7 @@ function ModalProductCreate() {
       return axiosGetBearer({
         url: '/app/categories',
         token: token || '',
-        params: { page: 0, size: 20 }
+        params: { page: 0, size: 20 },
       });
     },
   });
@@ -47,10 +64,10 @@ function ModalProductCreate() {
       categoriesList: [],
       images: [],
       variants: [],
-    }
+    },
   });
 
-  const newImages = watch("images");
+  const newImages = watch('images');
   const queryClient = useQueryClient();
 
   const { mutate, isPending: loading } = useMutation({
@@ -59,20 +76,21 @@ function ModalProductCreate() {
       if (data?.status !== 200)
         return errorAlert({ message: 'No se pudo crear el producto' });
 
-      successAlert("Producto creado con éxito");
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      queryClient.invalidateQueries({ queryKey: ["latest-products"] });
+      successAlert('Producto creado con éxito');
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['latest-products'] });
       modal.close();
-    }
-  })
+    },
+  });
 
   const onSubmit: SubmitHandler<ProductType> = (data) => {
     const token = Cookies.get('accessToken');
 
-    const lastSeparator = Math.max(data.price.lastIndexOf(","));
-    const integerPart = lastSeparator !== -1 
-      ? data.price.slice(0, lastSeparator).replace(/\D/g, "")
-      : data.price;
+    const lastSeparator = Math.max(data.price.lastIndexOf(','));
+    const integerPart =
+      lastSeparator !== -1
+        ? data.price.slice(0, lastSeparator).replace(/\D/g, '')
+        : data.price;
 
     const formData = new FormData();
 
@@ -81,7 +99,9 @@ function ModalProductCreate() {
     formData.append('price', parseInt(integerPart).toString());
     // Spring arma la List<String> con el parámetro repetido; mandarlo unido
     // por comas rompe cualquier categoría que lleve una coma en el nombre.
-    data.categoriesList.forEach((category) => formData.append('categoriesList', category));
+    data.categoriesList.forEach((category) =>
+      formData.append('categoriesList', category)
+    );
     data.images?.forEach((file) => formData.append('images', file));
 
     data.variants?.forEach((variant, index) => {
@@ -99,267 +119,309 @@ function ModalProductCreate() {
       data: formData,
       token: token || '',
     });
-  }
+  };
+
+  const closeModal = () => {
+    reset();
+    modal.close();
+  };
+
+  const errorText =
+    'mt-1 flex items-center gap-1.5 text-xs font-semibold text-error';
 
   return (
     <>
       <dialog id="create_product" className="modal">
-        <div className="modal-box max-h-[95vh]">
-          <h3 className="font-semibold text-lg">Crear Nuevo Producto</h3>
-          <p className="mb-4 font-thin">Completa los datos del producto que deseas crear</p>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 pr-1">
-            <label htmlFor="product-name" className="flex flex-col">
-              <span className="font-normal mb-3">
-                Nombre del Producto
-              </span>
-              <input
-                {...register('productName')}
-                id="product-name"
-                type="text"
-                defaultValue=""
-                placeholder="Ej: Mando X-BOX Series X"
-                className="input input-bordered w-full bg-gray-700"
-              />
-              {errors.productName && (
-                <p className="text-sm text-error">
-                  {errors.productName.message}
-                </p>
-              )}
-            </label>
-            <label htmlFor="product-description" className="flex flex-col">
-              <span className="mb-3">Descripción</span>
-              <textarea
-                {...register('description')}
-                id="product-description"
-                className="textarea textarea-bordered h-20 w-full bg-gray-700"
-                placeholder="Describe las características del producto"
-                style={errors.description && { borderColor: "#fb2c36" }}
-              />
-            </label>
-            {errors.description && (
-              <p className="mt-1 text-sm text-error">
-                {errors.description.message}
-              </p>
-            )}
-            <label htmlFor="price" className="flex flex-col">
-              <span className="label-text font-normal mb-3">Precio (COP)</span>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 z-50 -translate-y-1/2 font-semibold text-white">
-                  $
-                </span>
-                <Controller
-                  name="price"
-                  control={control}
-                  render={({ field }) => (
-                    <NumericFormat
-                      {...field}
-                      thousandSeparator="."
-                      decimalSeparator=","
-                      decimalScale={2}
-                      fixedDecimalScale={true}
-                      placeholder="00,0"
-                      className="input input-bordered w-full pl-8 bg-gray-700"
-                      onValueChange={(values) => {
-                        field.onChange(values.formattedValue);
-                        clearErrors('price');
-                      }}
-                    />
-                  )}
+        <div className="modal-box max-h-[95vh] w-full max-w-3xl">
+          <ModalHeader
+            icon={<FiBox size={20} />}
+            title="Nuevo producto"
+            description="Completa los datos, elige categorías y sube al menos una foto."
+            onClose={closeModal}
+          />
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-6"
+          >
+            <section className="flex flex-col gap-4">
+              <h4 className={formSectionTitleClass}>Información principal</h4>
+              <label htmlFor="new-product-name" className="flex flex-col">
+                <span className={labelTextClass}>Nombre del producto</span>
+                <input
+                  {...register('productName')}
+                  id="new-product-name"
+                  type="text"
+                  defaultValue=""
+                  placeholder="Ej: Mando X-BOX Series X"
+                  className={inputClass}
                 />
-              </div>
-            </label>
-            {errors.price && (
-              <p className="mt-1 text-sm text-error">
-                {errors.price.message}
-              </p>
-            )}
-            <div>
-              <span>Categorías</span>
-              <div className="grid grid-cols-1 mt-4 xl:grid-cols-2 max-h-50 overflow-y-auto rounded-lg">
+                {errors.productName && (
+                  <p className={errorText}>{errors.productName.message}</p>
+                )}
+              </label>
+              <label
+                htmlFor="new-product-description"
+                className="flex flex-col"
+              >
+                <span className={labelTextClass}>Descripción</span>
+                <textarea
+                  {...register('description')}
+                  id="new-product-description"
+                  className={`${inputClass} h-24 py-2.5 leading-relaxed ${errors.description ? 'border-error' : ''}`}
+                  placeholder="Describe las características del producto"
+                />
+                {errors.description && (
+                  <p className={errorText}>{errors.description.message}</p>
+                )}
+              </label>
+              <label htmlFor="new-product-price" className="flex flex-col">
+                <span className={labelTextClass}>Precio (COP)</span>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-3.5 top-1/2 z-10 -translate-y-1/2 text-sm font-extrabold text-ink">
+                    $
+                  </span>
+                  <Controller
+                    name="price"
+                    control={control}
+                    render={({ field }) => (
+                      <NumericFormat
+                        {...field}
+                        id="new-product-price"
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale
+                        placeholder="0,00"
+                        className={`${inputClass} pl-8 font-bold tabular-nums`}
+                        onValueChange={(values) => {
+                          field.onChange(values.formattedValue);
+                          clearErrors('price');
+                        }}
+                      />
+                    )}
+                  />
+                </div>
+                {errors.price && (
+                  <p className={errorText}>{errors.price.message}</p>
+                )}
+              </label>
+            </section>
+
+            <section>
+              <h4 className={formSectionTitleClass}>Categorías</h4>
+              <div className="grid max-h-52 grid-cols-1 gap-2 overflow-y-auto sm:grid-cols-2">
                 {requestCategories?.content?.map((category) => (
                   <label
-                    htmlFor={`category-${category.categoryName}`}
+                    htmlFor={`new-category-${category.categoryName}`}
                     key={category.categoryName}
-                    className="label cursor-pointer justify-start gap-3 hover:bg-base-200 rounded-lg p-2 transition-colors"
+                    style={categoryStyle(category.categoryName)}
+                    className="flex cursor-pointer items-center gap-3 rounded-lg border border-line px-3.5 py-2.5 text-sm transition-colors hover:border-ink-muted has-checked:border-(--cat) has-checked:bg-(--cat-soft)"
                   >
                     <input
                       type="checkbox"
-                      id={`category-${category.categoryName}`}
-                      className="checkbox checkbox-primary bg-gray-700"
+                      id={`new-category-${category.categoryName}`}
+                      className="peer sr-only"
                       value={category.categoryName}
                       {...register('categoriesList')}
                     />
-                    <span className="">{category.categoryName}</span>
+                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border-2 border-line bg-base-100 text-transparent transition-colors peer-checked:border-(--cat) peer-checked:bg-(--cat) peer-checked:text-white">
+                      <FiCheck size={13} strokeWidth={3.5} />
+                    </span>
+                    <span className="flex-1 font-bold text-ink">
+                      {category.categoryName}
+                    </span>
+                    <span className="h-2.5 w-2.5 rounded-full bg-(--cat)" />
                   </label>
                 ))}
               </div>
-            </div>
-            {errors.categoriesList && (
-              <p className="mt-1 text-sm text-error">
-                {errors.categoriesList.message}
-              </p>
-            )}
-            <div>
-              <span>Imágenes del productos</span>
-              <div className="grid mt-4 grid-cols-3 gap-6">
-                <div className="aspect-square">
-                  <label
-                    htmlFor="new-image"
-                    className="w-full h-full border-2 border-dashed border-gray-300 rounded-lg flex 
-                  flex-col items-center justify-center cursor-pointer hover:border-primary 
-                  hover:bg-primary/5 transition-all group"
-                  >
-                    <input
-                      id="new-image"
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) => {
-                        if (!e.target.files) return;
-                        const currentFiles = watch("images") || [];
-                        const newFiles = Array.from(e.target.files || []);
-                        setValue("images", [...currentFiles, ...newFiles]);
-                        e.target.value = "";
-                      }}
-                    />
-                    <div className="text-center">
-                      <div className="mb-3 group-hover:scale-110 transition-transform ">
-                        <svg className="w-12 h-12 mx-auto text-gray-400 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                      </div>
-                      <p className="text-sm font-medium text-gray-600 group-hover:text-primary mb-1">
-                        Agregar imagen
-                      </p>
-                      <p className="text-xs text-gray-400">PNG, JPG hasta 10MB</p>
-                    </div>
-                  </label>
-                </div>
+              {errors.categoriesList && (
+                <p className={errorText}>{errors.categoriesList.message}</p>
+              )}
+            </section>
+
+            <section>
+              <h4 className={formSectionTitleClass}>Imágenes del producto</h4>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <label
+                  htmlFor="new-image"
+                  className="group flex aspect-square cursor-pointer flex-col items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-line p-3 text-center transition-colors hover:border-brand hover:bg-brand-soft/50"
+                >
+                  <input
+                    id="new-image"
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => {
+                      if (!e.target.files) return;
+                      const currentFiles = watch('images') || [];
+                      const newFiles = Array.from(e.target.files || []);
+                      setValue('images', [...currentFiles, ...newFiles]);
+                      e.target.value = '';
+                    }}
+                  />
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-cream text-ink transition-colors group-hover:bg-brand group-hover:text-white">
+                    <FiUploadCloud size={18} />
+                  </span>
+                  <span className="text-sm font-bold text-ink group-hover:text-brand">
+                    Agregar imagen
+                  </span>
+                  <span className="text-[11px] text-ink-muted">
+                    PNG, JPG hasta 10 MB
+                  </span>
+                </label>
                 {newImages?.map((file, index) => (
-                  <div className="relative group" key={file.name}>
-                    <div className="aspect-square bg-gray-100 rounded-lg outline-2 outline-success
-                    overflow-hidden transition-colors">
+                  <div className="group" key={file.name}>
+                    <div className="relative aspect-square overflow-hidden rounded-xl border border-success bg-cream">
                       <img
                         src={URL.createObjectURL(file)}
-                        alt="Imagen del producto"
-                        className="w-full h-full object-cover"
+                        alt=""
+                        className="h-full w-full object-contain mix-blend-darken"
                       />
-                      <div className="absolute hover:opacity-100 opacity-0 inset-0 flex items-center 
-                      justify-center gap-2 transition-all z-100">
-                        <div className="absolute bg-[#1c1c1c7c] h-full w-full -z-10 rounded-lg"></div>
-                        <button className="btn btn-sm btn-error" onClick={(evt) => {
-                          evt.preventDefault();
-                          const currentFiles = watch("images") || [];
-                          setValue("images", currentFiles.filter((_, i) => i !== index));
-                        }}>
-                          <MdDelete size={20} />
+                      {index === 0 && (
+                        <span className="absolute left-2 top-2 rounded-full bg-brand px-2 py-0.5 text-[10px] font-extrabold uppercase text-white">
+                          Portada
+                        </span>
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center gap-2 bg-ink/45 opacity-0 transition-opacity group-hover:opacity-100">
+                        <button
+                          type="button"
+                          aria-label="Quitar imagen"
+                          className="grid h-9 w-9 place-items-center rounded-full bg-base-100 text-ink transition-colors hover:bg-error hover:text-white"
+                          onClick={(evt) => {
+                            evt.preventDefault();
+                            const currentFiles = watch('images') || [];
+                            setValue(
+                              'images',
+                              currentFiles.filter((_, i) => i !== index)
+                            );
+                          }}
+                        >
+                          <FiTrash2 size={16} />
                         </button>
-                        <ButtonModal idModal="" className="btn btn-sm btn-primary">
-                          <FaEye size={20} />
+                        <ButtonModal
+                          idModal=""
+                          className="grid h-9 w-9 place-items-center rounded-full bg-base-100 text-ink transition-colors hover:bg-brand hover:text-white"
+                        >
+                          <FiEye size={16} />
                         </ButtonModal>
                       </div>
                     </div>
-                    {/* Badge de imagen */}
-                    <div className="badge badge-neutral badge-sm absolute bottom-2 left-2 w-[122px] overflow-hidden">
-                      <div className="truncate">{file.name}</div>
-                    </div>
+                    <p className="mt-1.5 truncate text-xs font-semibold text-ink-muted">
+                      {file.name}
+                    </p>
                   </div>
                 ))}
               </div>
-            </div>
-            {errors.images && (
-              <p className="mt-1 text-sm text-error">
-                {errors.images.message}
-              </p>
-            )}
+              {errors.images && (
+                <p className={errorText}>{errors.images.message}</p>
+              )}
+            </section>
 
-            {/* Variantes */}
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <span className="font-normal">Variantes del producto</span>
+            <section>
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h4 className={`${formSectionTitleClass} mb-0`}>
+                  Variantes del producto
+                </h4>
                 <ButtonModal
                   idModal="create_variant"
-                  className="btn btn-sm btn-primary btn-outline"
+                  className={`${outlineButtonClass} h-9 px-4`}
                 >
-                  Agregar Variante
+                  <FiPlus size={15} />
+                  Agregar variante
                 </ButtonModal>
               </div>
 
-              <div className="space-y-3">
+              <div className="flex flex-col gap-2">
                 {watch('variants')?.map((variant, index) => (
                   <div
+                    // eslint-disable-next-line react/no-array-index-key
                     key={index}
-                    className="collapse collapse-arrow bg-base-200 border border-base-300"
+                    className="flex items-start justify-between gap-3 rounded-xl border border-line p-3"
                   >
-                    <input type="checkbox" />
-                    <div className="collapse-title flex justify-between items-center pr-12">
-                      <span className="font-medium">
-                        {variant.name} <span className="text-xs font-normal opacity-70">({variant.type})</span>
-                      </span>
-                    </div>
-                    <div className="collapse-content flex flex-col gap-2">
-                      <div className="flex gap-2 text-sm text-gray-400">
-                        <span>Tag: {variant.tag}</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
+                    <div className="min-w-0">
+                      <p className="flex flex-wrap items-center gap-2">
+                        <span className="font-extrabold text-ink">
+                          {variant.name}
+                        </span>
+                        <span className="rounded-full bg-lilac px-2 py-0.5 text-[11px] font-bold text-lilac-strong">
+                          {variant.type === 'color' ? 'Color' : 'Texto'}
+                        </span>
+                        <span className="text-xs text-ink-muted">
+                          Etiqueta: {variant.tag}
+                        </span>
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
                         {variant.listValues.map((val) => (
-                          <span key={val} className="badge badge-neutral">
-                            {variant.type === 'color' ? (
-                              <div className="w-4 h-4 rounded-full mr-2" style={{ backgroundColor: val }}></div>
-                            ) : null}
+                          <span
+                            key={val}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-0.5 text-xs font-bold text-ink"
+                          >
+                            {variant.type === 'color' && (
+                              <span
+                                className="h-3.5 w-3.5 rounded-full ring-1 ring-line"
+                                style={{ backgroundColor: val }}
+                              />
+                            )}
                             {val}
                           </span>
                         ))}
                       </div>
-                      <div className="flex justify-end mt-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const current = watch('variants') || [];
-                            setValue('variants', current.filter((_, i) => i !== index));
-                          }}
-                          className="btn btn-xs btn-error btn-outline self-end"
-                        >
-                          Eliminar
-                        </button>
-                      </div>
                     </div>
+                    <button
+                      type="button"
+                      aria-label="Quitar variante"
+                      onClick={() => {
+                        const current = watch('variants') || [];
+                        setValue(
+                          'variants',
+                          current.filter((_, i) => i !== index)
+                        );
+                      }}
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-soft transition-colors hover:bg-error/10 hover:text-error"
+                    >
+                      <FiTrash2 size={15} />
+                    </button>
                   </div>
                 ))}
                 {(!watch('variants') || watch('variants')?.length === 0) && (
-                  <div className="text-gray-500 text-sm italic py-4 text-center bg-base-200/50 rounded-lg">
+                  <p className="rounded-xl border-2 border-dashed border-line py-4 text-center text-sm font-semibold text-ink-muted">
                     No hay variantes agregadas
-                  </div>
+                  </p>
                 )}
               </div>
               {errors.variants && (
-                <p className="mt-1 text-sm text-error">
-                  {errors.variants.message}
-                </p>
+                <p className={errorText}>{errors.variants.message}</p>
               )}
-            </div>
+            </section>
 
-            <div className="modal-action grid grid-cols-2 gap-4 mt-15">
-              <button type="button" className="btn btn-error btn-outline"
-                onClick={() => {
-                  reset();
-                  modal.close();
-                }
-                }>
+            <div className="flex flex-wrap justify-end gap-2.5 border-t border-line pt-4">
+              <button
+                type="button"
+                className={outlineButtonClass}
+                onClick={closeModal}
+              >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
+              <button
+                type="submit"
+                className={`${primaryButtonClass} min-w-40`}
+                disabled={loading}
+              >
                 {loading ? (
-                  <span className="loading loading-spinner loading-sm" />
+                  <span className="loading loading-spinner loading-sm text-white" />
                 ) : (
-                  'Crear Producto'
+                  'Crear producto'
                 )}
               </button>
             </div>
           </form>
         </div>
-        <form method="dialog" className="modal-backdrop" onClick={() => reset()}>
+        <form
+          method="dialog"
+          className="modal-backdrop"
+          onClick={() => reset()}
+        >
           <button type="submit">cerrar</button>
         </form>
       </dialog>
