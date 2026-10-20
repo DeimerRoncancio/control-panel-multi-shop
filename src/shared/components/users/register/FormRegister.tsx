@@ -6,13 +6,21 @@ import ErrorMessage from '../../globalComponents/MessajeError';
 import RegisterSchema, {
   RegisterTypeAccess,
 } from '../../../zod/users/register.zod';
+import {
+  inputClass,
+  labelTextClass,
+  formSectionTitleClass,
+  formFooterClass,
+  outlineButtonClass,
+  primaryButtonClass,
+} from '../../../ui/styles';
 
 const MAX_IMAGE_SIZE = 1024 * 1024;
 
 type Props = {
   pending: boolean;
   functionUpdate: (data: RegisterTypeAccess, profileImage: File) => void;
-}
+};
 
 function FormRegister({ pending, functionUpdate }: Props) {
   const [viewPassword, setViewPassword] = useState(false);
@@ -52,18 +60,14 @@ function FormRegister({ pending, functionUpdate }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubimit)} className="space-y-4">
-      <p className="mb-4 font-light text-gray-400">Ingresa la información requerida para registrar el nuevo usuario.</p>
-
       <div>
-        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-          Datos Personales
-        </h4>
+        <h4 className={formSectionTitleClass}>Datos Personales</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Nombre</span>
+            <span className={labelTextClass}>Nombre</span>
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="Ej. John"
               {...register('name')}
             />
@@ -71,10 +75,10 @@ function FormRegister({ pending, functionUpdate }: Props) {
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Segundo Nombre</span>
+            <span className={labelTextClass}>Segundo Nombre</span>
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="Ej. Doe"
               {...register('secondName')}
             />
@@ -82,10 +86,10 @@ function FormRegister({ pending, functionUpdate }: Props) {
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Apellidos</span>
+            <span className={labelTextClass}>Apellidos</span>
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="Ej. Smith"
               {...register('lastnames')}
             />
@@ -93,10 +97,10 @@ function FormRegister({ pending, functionUpdate }: Props) {
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Teléfono</span>
+            <span className={labelTextClass}>Teléfono</span>
             <input
               type="tel"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="+57 300 000 0000"
               {...register('phoneNumber')}
             />
@@ -104,13 +108,15 @@ function FormRegister({ pending, functionUpdate }: Props) {
           </label>
 
           <label className="flex flex-col md:col-span-2">
-            <span className="mb-2 text-sm font-medium">Género</span>
+            <span className={labelTextClass}>Género</span>
             <select
-              className="select select-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               defaultValue=""
               {...register('gender')}
             >
-              <option value="" disabled>Selecciona Género</option>
+              <option value="" disabled>
+                Selecciona Género
+              </option>
               <option value="male">Hombre</option>
               <option value="female">Mujer</option>
             </select>
@@ -121,15 +127,13 @@ function FormRegister({ pending, functionUpdate }: Props) {
 
       {/* Sección 2: Cuenta */}
       <div className="pt-4">
-        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-          Cuenta y Seguridad
-        </h4>
+        <h4 className={formSectionTitleClass}>Cuenta y Seguridad</h4>
         <div className="grid grid-cols-1 gap-4">
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Correo Electrónico</span>
+            <span className={labelTextClass}>Correo Electrónico</span>
             <input
               type="email"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="usuario@ejemplo.com"
               {...register('email')}
             />
@@ -138,40 +142,48 @@ function FormRegister({ pending, functionUpdate }: Props) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label className="flex flex-col relative">
-              <span className="mb-2 text-sm font-medium">Contraseña</span>
+              <span className={labelTextClass}>Contraseña</span>
               <div className="relative">
                 <input
                   type={viewPassword ? 'text' : 'password'}
-                  className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 pr-10 transition duration-200"
+                  className={`${inputClass} pr-11`}
                   placeholder="••••••••"
                   {...register('password')}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-white transition-colors"
+                  className="absolute inset-y-0 right-3 flex items-center text-ink-muted transition-colors hover:text-brand"
                   onClick={() => setViewPassword(!viewPassword)}
                 >
-                  {viewPassword ? <GrFormViewHide size={18} /> : <GrFormView size={18} />}
+                  {viewPassword ? (
+                    <GrFormViewHide size={18} />
+                  ) : (
+                    <GrFormView size={18} />
+                  )}
                 </button>
               </div>
               <ErrorMessage errors={errors} fieldName="password" />
             </label>
 
             <label className="flex flex-col relative">
-              <span className="mb-2 text-sm font-medium">Confirmar Contraseña</span>
+              <span className={labelTextClass}>Confirmar Contraseña</span>
               <div className="relative">
                 <input
                   type={viewConfirmPassword ? 'text' : 'password'}
-                  className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 pr-10 transition duration-200"
+                  className={`${inputClass} pr-11`}
                   placeholder="••••••••"
                   {...register('confirm_password')}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-white transition-colors"
+                  className="absolute inset-y-0 right-3 flex items-center text-ink-muted transition-colors hover:text-brand"
                   onClick={() => setViewConfirmPassword(!viewConfirmPassword)}
                 >
-                  {viewConfirmPassword ? <GrFormViewHide size={18} /> : <GrFormView size={18} />}
+                  {viewConfirmPassword ? (
+                    <GrFormViewHide size={18} />
+                  ) : (
+                    <GrFormView size={18} />
+                  )}
                 </button>
               </div>
               <ErrorMessage errors={errors} fieldName="confirm_password" />
@@ -181,11 +193,9 @@ function FormRegister({ pending, functionUpdate }: Props) {
       </div>
 
       <div className="pt-4">
-        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-          Foto de Perfil
-        </h4>
+        <h4 className={formSectionTitleClass}>Foto de Perfil</h4>
         <div className="flex items-center gap-4">
-          <label className="btn btn-outline btn-sm">
+          <label className={`${outlineButtonClass} h-9 cursor-pointer px-4`}>
             Seleccionar imagen
             <input
               hidden
@@ -202,21 +212,21 @@ function FormRegister({ pending, functionUpdate }: Props) {
             />
           )}
         </div>
-        {imageError && (
-          <p className="mt-2 text-sm text-error">{imageError}</p>
-        )}
+        {imageError && <p className="mt-2 text-sm text-error">{imageError}</p>}
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 pt-4">
+      <div className={formFooterClass}>
         <button
           type="button"
-          className="btn btn-error btn-outline"
+          className={outlineButtonClass}
           onClick={() => {
             reset();
             profileImage.current = null;
             setPreviewImage(null);
             setImageError(null);
-            const modal = document.getElementById("create_user") as HTMLDialogElement;
+            const modal = document.getElementById(
+              'create_user'
+            ) as HTMLDialogElement;
             if (modal) modal.close();
           }}
         >
@@ -225,10 +235,10 @@ function FormRegister({ pending, functionUpdate }: Props) {
         <button
           type="submit"
           disabled={pending}
-          className="btn btn-primary shadow-md"
+          className={`${primaryButtonClass} min-w-40`}
         >
           {pending ? (
-            <span className="loading loading-spinner loading-sm" />
+            <span className="loading loading-spinner loading-sm text-white" />
           ) : (
             'Registrar Usuario'
           )}

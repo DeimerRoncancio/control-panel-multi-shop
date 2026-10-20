@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import { ToastContainer } from 'react-toastify';
+import { FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import ModalUsersUpdate from '../../../shared/components/users/updatesUsers/Modal-user-update';
@@ -19,12 +20,14 @@ import Pagination from '../../../shared/components/globalComponents/Pagination';
 import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
 import { SearchProducts } from '../../products/interface/search-products';
 import usePagination from '../../../shared/hooks/usePagination';
+import PageHeader from '../../../shared/ui/PageHeader';
+import { pageClass, primaryButtonClass } from '../../../shared/ui/styles';
 
 function Users() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
   const [searchUsers, setsearchUsers] = useState<SearchProducts | null>(null);
   const { pagination, setSearchParams } = usePagination();
-  
+
   const { data, isLoading } = useQuery<GetUserRequest>({
     queryKey: ['users', pagination, searchUsers],
     queryFn: async () => {
@@ -66,18 +69,18 @@ function Users() {
       <DeleteUsers isAdmin={false}>
         <FormDeleteUsers id={userUpdate?.id!} isAdmin={false} />
       </DeleteUsers>
-      <div className="p-6 text-white rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold">Gestion de Usuarios</h1>
-            <p className="mt-2 text-sm text-gray-400 mb-4">
-              Administra los usuarios de la aplicacion.
-            </p>
-          </div>
-          <ButtonModal idModal="create_user" className="btn btn-success">
-            Crear Usuario
-          </ButtonModal>
-        </div>
+      <div className={pageClass}>
+        <PageHeader
+          eyebrow="Personas"
+          title="Usuarios"
+          description="Clientes con cuenta en la tienda."
+          actions={
+            <ButtonModal idModal="create_user" className={primaryButtonClass}>
+              <FiPlus size={16} />
+              Crear usuario
+            </ButtonModal>
+          }
+        />
         <DetailsUser isAdmin={false} />
         <SearchUsers setSearchUsers={setsearchUsers} />
         <ListUsers

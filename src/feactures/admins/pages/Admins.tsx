@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import { ToastContainer } from 'react-toastify';
+import { FiPlus } from 'react-icons/fi';
 import { useState } from 'react';
 import axiosGetBearer from '../../../shared/requests/protectedRoutes/get';
 import ModalUsersUpdate from '../../../shared/components/users/updatesUsers/Modal-user-update';
@@ -17,6 +18,8 @@ import ModalUsersAvatar from '../../../shared/components/users/updatesAvatarUser
 import FormUpdateAvatar from '../../../shared/components/users/updatesAvatarUsers/Form-update-avatar';
 import { FormDeleteUsers } from '../../../shared/components/users/deleteUsers/Form-delete-users';
 import usePagination from '../../../shared/hooks/usePagination';
+import PageHeader from '../../../shared/ui/PageHeader';
+import { pageClass, primaryButtonClass } from '../../../shared/ui/styles';
 
 function Admins() {
   const [userUpdate, setUserUpdate] = useState<Content | null>(null);
@@ -47,18 +50,18 @@ function Admins() {
         <FormDeleteUsers id={userUpdate?.id!} isAdmin />
       </DeleteUsers>
       <ToastContainer />
-      <div className="p-6 text-white rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold">Gestion de Administradores</h1>
-            <p className="mt-2 text-sm text-gray-400 mb-4">
-              Administra los usuarios de la aplicacion.
-            </p>
-          </div>
-          <ButtonModal idModal="create_user" className="btn btn-success">
-            Crear Administrador
-          </ButtonModal>
-        </div>
+      <div className={pageClass}>
+        <PageHeader
+          eyebrow="Personas"
+          title="Administradores"
+          description="Personas con acceso a este panel."
+          actions={
+            <ButtonModal idModal="create_user" className={primaryButtonClass}>
+              <FiPlus size={16} />
+              Crear administrador
+            </ButtonModal>
+          }
+        />
         <DetailsUser isAdmin />
         <SearchUsers setSearchUsers={() => {}} />
         <ListUsers

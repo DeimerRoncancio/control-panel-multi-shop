@@ -6,6 +6,14 @@ import { Content } from '../../../interfaces/get-users-request';
 import { setValuesUpdate } from '../../../helpers/set-values-update';
 import UpdateSchema, { UpdateTypeAccess } from '../../../zod/users/update.zod';
 import UserUpdate from '../../../interfaces/user-update';
+import {
+  inputClass,
+  labelTextClass,
+  formSectionTitleClass,
+  formFooterClass,
+  outlineButtonClass,
+  primaryButtonClass,
+} from '../../../ui/styles';
 
 function FormUpdate({
   pending,
@@ -40,18 +48,14 @@ function FormUpdate({
 
   return (
     <form onSubmit={handleSubmit(onSubimit)} className="space-y-4">
-      <p className="mb-4 font-light text-gray-400">Modifica la información del usuario en el sistema.</p>
-
       <div>
-        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-          Datos Personales
-        </h4>
+        <h4 className={formSectionTitleClass}>Datos Personales</h4>
         <div className="grid gap-4 mb-6 md:grid-cols-2">
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Primer nombre</span>
+            <span className={labelTextClass}>Primer nombre</span>
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="John"
               {...register('name')}
             />
@@ -59,10 +63,10 @@ function FormUpdate({
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Segundo nombre</span>
+            <span className={labelTextClass}>Segundo nombre</span>
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="Doe"
               {...register('secondName')}
             />
@@ -70,10 +74,10 @@ function FormUpdate({
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Apellido</span>
+            <span className={labelTextClass}>Apellido</span>
             <input
               type="text"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="Sanchez Gavilan"
               {...register('lastnames')}
             />
@@ -81,10 +85,10 @@ function FormUpdate({
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Numero de teléfono</span>
+            <span className={labelTextClass}>Numero de teléfono</span>
             <input
               type="tel"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="123-45-678"
               {...register('phoneNumber')}
             />
@@ -92,10 +96,10 @@ function FormUpdate({
           </label>
 
           <label className="flex flex-col md:col-span-2">
-            <span className="mb-2 text-sm font-medium">Genero</span>
+            <span className={labelTextClass}>Genero</span>
             <select
               defaultValue=""
-              className="select select-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               {...register('gender')}
             >
               <option disabled>Selecciona Genero</option>
@@ -109,15 +113,13 @@ function FormUpdate({
 
       {/* Sección 2: Cuenta y Rol */}
       <div className="pt-2">
-        <h4 className="border-b border-gray-700 pb-2 mb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-          Cuenta y Asignación
-        </h4>
+        <h4 className={formSectionTitleClass}>Cuenta y Asignación</h4>
         <div className="grid gap-4 md:grid-cols-2">
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Email</span>
+            <span className={labelTextClass}>Email</span>
             <input
               type="email"
-              className="input input-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               placeholder="john.doe@company.com"
               {...register('email')}
             />
@@ -125,10 +127,10 @@ function FormUpdate({
           </label>
 
           <label className="flex flex-col">
-            <span className="mb-2 text-sm font-medium">Rol</span>
+            <span className={labelTextClass}>Rol</span>
             <select
               defaultValue=""
-              className="select select-bordered w-full bg-gray-800 focus:bg-gray-700 transition duration-200"
+              className={inputClass}
               {...register('admin')}
             >
               <option disabled>Selecciona Rol</option>
@@ -140,12 +142,14 @@ function FormUpdate({
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 pt-4">
+      <div className={formFooterClass}>
         <button
           type="button"
-          className="btn btn-error btn-outline"
+          className={outlineButtonClass}
           onClick={() => {
-            const modal = document.getElementById("update_user") as HTMLDialogElement;
+            const modal = document.getElementById(
+              'update_user'
+            ) as HTMLDialogElement;
             if (modal) modal.close();
           }}
         >
@@ -153,11 +157,11 @@ function FormUpdate({
         </button>
         <button
           type="submit"
-          className="btn btn-primary shadow-md"
+          className={`${primaryButtonClass} min-w-40`}
           disabled={pending}
         >
           {pending ? (
-             <span className="loading loading-spinner loading-sm" />
+            <span className="loading loading-spinner loading-sm text-white" />
           ) : (
             'Actualizar Usuario'
           )}

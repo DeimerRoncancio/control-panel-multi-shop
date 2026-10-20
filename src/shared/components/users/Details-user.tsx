@@ -1,7 +1,8 @@
-import { FaUserCheck, FaUsers, FaUserTimes } from 'react-icons/fa';
-import axiosGetBearer from '../../requests/protectedRoutes/get';
 import { useQuery } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import { FiUserCheck, FiUsers, FiUserX } from 'react-icons/fi';
+import axiosGetBearer from '../../requests/protectedRoutes/get';
+import StatCard from '../../ui/StatCard';
 
 function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
   const { data: stats } = useQuery({
@@ -16,46 +17,30 @@ function DetailsUser({ isAdmin }: { isAdmin: boolean }) {
     },
   });
 
+  const noun = isAdmin ? 'Administradores' : 'Usuarios';
+
   return (
-    <div className="stats shadow w-full border border-gray-600">
-      <div className="stat">
-        <div className="stat-figure text-primary">
-          <FaUsers size={35} />
-        </div>
-        <div className="stat-title">
-          {isAdmin ? 'Total Administradores' : 'Total Usuarios'}
-        </div>
-        <div className="stat-value text-primary">{stats?.totalUsers}</div>
-        <div className="stat-desc">
-          {isAdmin ? 'Administradores registrados' : 'Usuarios registrados'}
-        </div>
-      </div>
-
-      <div className="stat">
-        <div className="stat-figure text-success">
-          <FaUserCheck size={35} />
-        </div>
-        <div className="stat-title">
-          {isAdmin ? 'Administradores Activos' : 'Usuarios Activos'}
-        </div>
-        <div className="stat-value text-success">{stats?.enabledUsers}</div>
-        <div className="stat-desc">
-          {isAdmin ? 'Administradores conectados' : 'Usuarios conectados'}
-        </div>
-      </div>
-
-      <div className="stat">
-        <div className="stat-figure text-warning">
-          <FaUserTimes size={35} />
-        </div>
-        <div className="stat-title">
-          {isAdmin ? 'Administradores Inactivos' : 'Usuarios Inactivos'}
-        </div>
-        <div className="stat-value text-warning">{stats?.disabledUsers}</div>
-        <div className="stat-desc">
-          {isAdmin ? 'Administradores desconectados' : 'Usuarios desconectados'}
-        </div>
-      </div>
+    <div className="grid gap-3 sm:grid-cols-3">
+      <StatCard
+        label={`Total ${noun.toLowerCase()}`}
+        value={stats?.totalUsers ?? 0}
+        hint={`${noun} registrados`}
+        icon={FiUsers}
+      />
+      <StatCard
+        label="Activos"
+        value={stats?.enabledUsers ?? 0}
+        hint="Pueden iniciar sesión"
+        icon={FiUserCheck}
+        tone="success"
+      />
+      <StatCard
+        label="Inactivos"
+        value={stats?.disabledUsers ?? 0}
+        hint="Cuentas deshabilitadas"
+        icon={FiUserX}
+        tone="error"
+      />
     </div>
   );
 }

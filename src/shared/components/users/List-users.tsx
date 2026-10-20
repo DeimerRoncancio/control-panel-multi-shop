@@ -1,5 +1,21 @@
+import {
+  FiEdit2,
+  FiMail,
+  FiMoreHorizontal,
+  FiPhone,
+  FiTrash2,
+} from 'react-icons/fi';
 import { Content } from '../../interfaces/get-users-request';
 import { ButtonModal } from '../globalComponents/ButtonModal';
+import UserAvatar from '../../ui/UserAvatar';
+import EmptyState from '../../ui/EmptyState';
+import {
+  actionsButtonClass,
+  cardClass,
+  menuDangerRowClass,
+  menuPanelClass,
+  menuRowClass,
+} from '../../ui/styles';
 
 type ListUsersProps = {
   users: Content[];
@@ -8,46 +24,42 @@ type ListUsersProps = {
   setUserUpdate: React.Dispatch<React.SetStateAction<Content | null>>;
 };
 
-export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUsersProps) {
+export function ListUsers({
+  users,
+  isAdmin,
+  isLoading,
+  setUserUpdate,
+}: ListUsersProps) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-600 p-4 shadow">
+    <div className={`${cardClass} overflow-x-auto p-3`}>
       <table className="table">
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Correo Electronico</th>
-            <th>Acciones</th>
+            <th>Teléfono</th>
+            <th>Correo electrónico</th>
+            <th>Estado</th>
+            <th className="text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {users.length === 0 && !isLoading && (
             <tr>
-              <td colSpan={4} className="text-center py-10">
-              <div className="flex flex-col items-center justify-center text-gray-500">
-                <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-12 h-12 mb-2"
-                >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+              <td colSpan={5}>
+                <EmptyState
+                  title={
+                    isAdmin
+                      ? 'No se encontraron administradores'
+                      : 'No se encontraron usuarios'
+                  }
+                  description="Intenta ajustar los filtros de búsqueda."
                 />
-                </svg>
-                <p className="text-lg font-medium">No se encontraron usuarios</p>
-                <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
-              </div>
               </td>
             </tr>
           )}
           {isLoading ? (
             <tr>
-              <td colSpan={4} className="text-center">
+              <td colSpan={5} className="py-10 text-center">
                 <span className="loading loading-spinner loading-lg" />
               </td>
             </tr>
@@ -56,58 +68,87 @@ export function ListUsers({ users, isAdmin, isLoading, setUserUpdate }: ListUser
               <tr key={user.id}>
                 <td>
                   <div className="flex items-center gap-3">
-                    <div className="mask mask-squircle h-12 w-12 relative overflow-hidden flex
-                    items-center justify-center bg-gray-700 text-xl font-bold">
-                      <img
-                          src={`https://ui-avatars.com/api/?name=${user.name.charAt(0)}+${user.lastnames.charAt(0)}&background=random`}
-                          alt="user"
-                        />
-                    </div>
+                    <UserAvatar
+                      name={user.name}
+                      lastnames={user.lastnames}
+                      imageUrl={user.imageUser?.imageUrl}
+                    />
                     <div>
-                      <div className="font-bold">
-                        {`${user?.name ?? ''} ${user?.secondName ?? ''}`}
-                      </div>
-                      <div className="text-sm opacity-50">
+                      <div className="font-extrabold text-ink">{`${user?.name ?? ''} ${user?.secondName ?? ''}`}</div>
+                      <div className="text-sm text-ink-muted">
                         {user?.lastnames ?? ''}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td>
-                  {user?.phoneNumber ? "+57 " + user.phoneNumber : 'No phone number'}
+                  {user?.phoneNumber ? (
+                    <span className="inline-flex items-center gap-1.5 text-sm text-ink-soft tabular-nums">
+                      <FiPhone size={14} className="text-brand" />
+                      +57 {user.phoneNumber}
+                    </span>
+                  ) : (
+                    <span className="text-sm text-ink-muted">Sin teléfono</span>
+                  )}
                 </td>
-                <td>{user?.email ? user.email : 'No email'}</td>
-                <th>
-                  <details className={`dropdown dropdown-center ${users.length == 1 && 'dropdown-left'}
-                  ${index === users.length - 1 && 'dropdown-top'}`}>
-                    <summary className="btn m-1">Detalles</summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-1 border border-gray-700
-                    p-2 shadow-sm w-44 space-y-2">
+                <td>
+                  {user?.email ? (
+                    <span className="inline-flex items-center gap-1.5 text-sm text-ink-soft">
+                      <FiMail size={14} className="text-brand" />
+                      {user.email}
+                    </span>
+                  ) : (
+                    <span className="text-sm text-ink-muted">Sin correo</span>
+                  )}
+                </td>
+                <td>
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                      user.enabled
+                        ? 'bg-mint text-success'
+                        : 'bg-rose text-error'
+                    }`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${user.enabled ? 'bg-success' : 'bg-error'}`}
+                    />
+                    {user.enabled ? 'Activo' : 'Inactivo'}
+                  </span>
+                </td>
+                <td className="text-right">
+                  <details
+                    className={`dropdown dropdown-end ${index === users.length - 1 && users.length > 1 ? 'dropdown-top' : ''}`}
+                  >
+                    <summary className={actionsButtonClass}>
+                      <FiMoreHorizontal size={16} />
+                      Acciones
+                    </summary>
+                    <ul className={`${menuPanelClass} w-56`}>
                       <li>
                         <ButtonModal
                           onClick={() => setUserUpdate(user)}
                           idModal="update_user"
-                          className="text-[12px] btn btn-sm"
+                          className={menuRowClass}
                         >
-                          {isAdmin
-                            ? 'Editar Administrador'
-                            : 'Editar Usuario'}
+                          <FiEdit2 size={15} className="text-brand" />
+                          {isAdmin ? 'Editar administrador' : 'Editar usuario'}
                         </ButtonModal>
                       </li>
                       <li>
                         <ButtonModal
                           onClick={() => setUserUpdate(user)}
                           idModal="delete_user"
-                          className="text-[12px] btn btn-error btn-sm"
+                          className={menuDangerRowClass}
                         >
+                          <FiTrash2 size={15} />
                           {isAdmin
-                            ? 'Eliminar Administrador'
-                            : 'Eliminar Usuario'}
+                            ? 'Eliminar administrador'
+                            : 'Eliminar usuario'}
                         </ButtonModal>
                       </li>
                     </ul>
                   </details>
-                </th>
+                </td>
               </tr>
             ))
           )}

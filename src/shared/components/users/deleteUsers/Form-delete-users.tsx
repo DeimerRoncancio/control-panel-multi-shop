@@ -4,15 +4,18 @@ import { useQueryClient } from '@tanstack/react-query';
 import axiosDeleteBearer from '../../../requests/protectedRoutes/delete';
 import { errorAlertUsers } from '../../../alerts/users/error';
 import successAlertUsers from '../../../alerts/users/succes';
+import { dangerButtonClass, outlineButtonClass } from '../../../ui/styles';
 
 type Props = {
   id: string;
   isAdmin: boolean;
-}
+};
 
 export function FormDeleteUsers({ id, isAdmin }: Props) {
   const queryClient = useQueryClient();
-  const modal = document.getElementById('delete_user') as HTMLDialogElement | null;
+  const modal = document.getElementById(
+    'delete_user'
+  ) as HTMLDialogElement | null;
   const [loading, setLoading] = useState(false);
 
   const handleDelete = () => {
@@ -24,7 +27,9 @@ export function FormDeleteUsers({ id, isAdmin }: Props) {
     })
       .then(() => {
         successAlertUsers('Usuario eliminado con éxito');
-        queryClient.invalidateQueries({ queryKey: [`${isAdmin ? 'admins' : 'users'}`] });
+        queryClient.invalidateQueries({
+          queryKey: [`${isAdmin ? 'admins' : 'users'}`],
+        });
         modal?.close();
       })
       .catch(() => errorAlertUsers('Error al eliminar usuario'))
@@ -33,26 +38,26 @@ export function FormDeleteUsers({ id, isAdmin }: Props) {
 
   return (
     <>
-      <p className="py-4">
-        ¿Estás seguro de que deseas eliminar este{' '}
-        {isAdmin ? 'administrador' : 'usuario'}?
+      <p className="mb-4 text-sm text-ink-soft">
+        ¿Seguro que quieres eliminar este{' '}
+        {isAdmin ? 'administrador' : 'usuario'}? Perderá el acceso a su cuenta.
       </p>
-      <div className="modal-action">
+      <div className="flex justify-end gap-2.5 border-t border-line pt-4">
         <form method="dialog">
-          <button type="submit" className="btn btn-success">
+          <button type="submit" className={outlineButtonClass}>
             Cancelar
           </button>
         </form>
         <button
           disabled={loading}
           type="button"
-          className="btn btn-error w-[100px]"
+          className={`${dangerButtonClass} min-w-32`}
           onClick={handleDelete}
         >
           {loading ? (
-            <span className="loading loading-spinner loading-sm" />
+            <span className="loading loading-spinner loading-sm text-white" />
           ) : (
-            'Eliminar'
+            'Sí, eliminar'
           )}
         </button>
       </div>

@@ -6,6 +6,8 @@ import { Content } from '../../../interfaces/get-users-request';
 import successAlertUsers from '../../../alerts/users/succes';
 import { errorAlertUsers } from '../../../alerts/users/error';
 import axiosPutFormDataBearer from '../../../requests/protectedRoutes/put';
+import { FiImage, FiUploadCloud } from 'react-icons/fi';
+import { outlineButtonClass, primaryButtonClass } from '../../../ui/styles';
 
 export default function FormUpdateAvatar({
   user,
@@ -50,42 +52,46 @@ export default function FormUpdateAvatar({
 
   return (
     <form
-      className="h-full w-full flex flex-col justify-center items-center gap-4"
+      className="flex w-full flex-col items-center gap-4"
       onSubmit={handleSubmit}
     >
-      <div className="w-full flex justify-center items-center mt-4">
-        <img
-          className="w-[250px] h-[250px] object-cover rounded-3xl"
-          src={previewImage || user?.imageUser?.imageUrl}
-          alt=""
-        />
+      <div className="grid h-56 w-56 place-items-center overflow-hidden rounded-full bg-brand-soft ring-4 ring-brand ring-offset-4">
+        {previewImage || user?.imageUser?.imageUrl ? (
+          <img
+            className="h-full w-full object-cover"
+            src={previewImage || user?.imageUser?.imageUrl}
+            alt=""
+          />
+        ) : (
+          <FiImage size={40} className="text-brand" />
+        )}
       </div>
 
-      <label
-        htmlFor="id"
-        className="bg-primary rounded-[5px] px-[7px] py-[13px] w-full flex justify-center items-center text-white font-medium text-md md:w-[70%]"
-      >
-        Agregar Imagenes
-        <input
-          hidden
-          id="id"
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={(e) => createHandleChange(e, setPreviewImage, file)}
-        />
-      </label>
-      <button
-        disabled={loading}
-        type="submit"
-        className="w-[70%] flex justify-center items-center btn btn-secondary"
-      >
-        {loading ? (
-          <span className="loading loading-spinner loading-sm" />
-        ) : (
-          'Actualizar Avatar'
-        )}
-      </button>
+      <div className="flex w-full flex-wrap justify-center gap-2.5 border-t border-line pt-4">
+        <label htmlFor="id" className={`${outlineButtonClass} cursor-pointer`}>
+          <FiUploadCloud size={16} />
+          Elegir imagen
+          <input
+            hidden
+            id="id"
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => createHandleChange(e, setPreviewImage, file)}
+          />
+        </label>
+        <button
+          disabled={loading}
+          type="submit"
+          className={`${primaryButtonClass} min-w-40`}
+        >
+          {loading ? (
+            <span className="loading loading-spinner loading-sm text-white" />
+          ) : (
+            'Guardar foto'
+          )}
+        </button>
+      </div>
     </form>
   );
 }
