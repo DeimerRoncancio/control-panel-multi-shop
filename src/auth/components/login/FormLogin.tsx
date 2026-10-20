@@ -3,7 +3,15 @@ import { Link, useNavigate } from 'react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
-import { MdOutlineMail, MdLockOutline } from 'react-icons/md';
+import { useState } from 'react';
+import {
+  FiArrowRight,
+  FiCheck,
+  FiEye,
+  FiEyeOff,
+  FiLock,
+  FiMail,
+} from 'react-icons/fi';
 import Cookies from 'js-cookie';
 import AccesLoginSchema, { LoginTypeAccess } from '../../zod/login.zod';
 import { LoginType } from '../../types';
@@ -11,8 +19,16 @@ import ErrorMessage from '../../../shared/components/globalComponents/MessajeErr
 import axiosPost from '../../../shared/requests/basicRequests/post';
 import { errorAlert } from '../../../shared/alerts';
 import { HorasEnMilisegundos } from '../../helpers';
+import TextField from '../../../shared/ui/TextField';
+
+const perks = [
+  'Productos, fotos y variantes',
+  'Categorías con su color',
+  'Usuarios y administradores',
+];
 
 function FormLogin() {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,98 +62,137 @@ function FormLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#15191e] relative overflow-hidden">
+    <>
       <ToastContainer />
-
-      {/* Shapes de fondo sutiles */}
-      <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-pink-600/5 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="hero-content flex-col lg:flex-row w-full max-w-5xl gap-12 lg:gap-20 p-6 relative z-10">
-        
-        {/* Left Section - Branding simplificado */}
-        <div className="text-center lg:text-left flex-1 space-y-6">
-          <div className="space-y-4">
-            <h1 className="text-5xl lg:text-7xl font-bold text-white tracking-tight">
-              Nicki <br />
-              <span className="bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
-                Best Deals
-              </span>
-            </h1>
-            <p className="text-lg text-gray-400 leading-relaxed max-w-md mx-auto lg:mx-0 font-light">
-               Panel de administración centralizado. Gestiona tu negocio de dropshipping de forma eficiente.
-            </p>
+      <div className="grid min-h-dvh w-full bg-base-100 lg:grid-cols-[0.95fr_1.05fr]">
+        <section className="relative flex flex-col gap-8 overflow-hidden border-b border-brand/15 bg-brand-soft/70 px-8 py-10 lg:border-b-0 lg:border-r lg:px-14">
+          <div className="relative z-10 flex items-center gap-3">
+            <img
+              src="/svg/logo.svg"
+              alt="Multi Shop"
+              className="-ml-3 h-16 w-auto"
+            />
+            <span className="rounded-full bg-brand px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em] text-white">
+              Panel
+            </span>
           </div>
-        </div>
 
-        {/* Right Section - Login Card optimizada */}
-        <div className="card w-full max-w-md bg-[#1d232a] shadow-xl border border-[#2d2d3b]">
-          <div className="card-body p-8">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center lg:text-left">Iniciar Sesión</h2>
+          <div className="relative z-10 max-w-md lg:mt-auto">
+            <h1 className="text-4xl font-extrabold leading-[1.05] text-ink lg:text-5xl">
+              Gestiona tu tienda <span className="text-brand">desde aquí</span>
+            </h1>
+            <p className="mt-3 text-ink-soft">
+              Panel de administración de Multi Shop.
+            </p>
 
-            <form onSubmit={handleSubmit(onSubimit)} className="flex flex-col gap-5">
-              <div className="form-control space-y-1.5">
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider" htmlFor="email">
-                  Correo Electrónico
-                </label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <MdOutlineMail className="h-5 w-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
-                  </div>
-                  <input
-                    type="email"
-                    className="input w-full pl-10 h-11 bg-[#252538] border-[#2d2d3b] text-gray-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 rounded-lg transition-all"
-                    placeholder="admin@ejemplo.com"
-                    id="email"
-                    {...register('identifier')}
-                  />
-                </div>
+            <ul className="mt-7 flex flex-col gap-3.5">
+              {perks.map((perk) => (
+                <li
+                  key={perk}
+                  className="flex items-center gap-3 font-bold text-ink"
+                >
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand text-white">
+                    <FiCheck size={15} strokeWidth={3} />
+                  </span>
+                  {perk}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="relative z-10 hidden text-sm text-ink-muted lg:mb-auto lg:block">
+            Solo para administradores de la tienda.
+          </p>
+
+          <img
+            src="/svg/simbolo.svg"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute -bottom-6 -right-8 hidden w-56 -rotate-[10deg] lg:block"
+          />
+        </section>
+
+        <section className="flex items-center justify-center px-6 py-10 lg:px-14">
+          <div className="w-full max-w-sm">
+            <h2 className="text-3xl font-extrabold text-ink">Iniciar sesión</h2>
+            <p className="mt-1 text-sm text-ink-muted">
+              Entra con tu cuenta de administrador.
+            </p>
+
+            <form
+              onSubmit={handleSubmit(onSubimit)}
+              className="mt-6 flex flex-col gap-3.5"
+            >
+              <div>
+                <TextField
+                  label="Correo electrónico"
+                  type="email"
+                  id="email"
+                  autoComplete="username"
+                  placeholder="admin@ejemplo.com"
+                  icon={FiMail}
+                  {...register('identifier')}
+                />
                 <ErrorMessage errors={errors} fieldName="identifier" />
               </div>
 
-              <div className="form-control space-y-1.5">
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider" htmlFor="password">
-                  Contraseña
-                </label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                    <MdLockOutline className="h-5 w-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
-                  </div>
-                  <input
-                    type="password"
-                    className="input w-full pl-10 h-11 bg-[#252538] border-[#2d2d3b] text-gray-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 rounded-lg transition-all"
-                    placeholder="••••••••"
-                    id="password"
-                    {...register('password')}
-                  />
-                </div>
-                <div className="flex justify-between items-center pt-1">
-                  <ErrorMessage errors={errors} fieldName="password" />
-                  <Link
-                    to="/register"
-                    className="text-xs text-gray-500 hover:text-purple-400 transition-colors ml-auto"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </Link>
-                </div>
+              <div>
+                <TextField
+                  label="Contraseña"
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  autoComplete="current-password"
+                  placeholder="Tu contraseña"
+                  icon={FiLock}
+                  trailing={
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={
+                        showPassword
+                          ? 'Ocultar contraseña'
+                          : 'Mostrar contraseña'
+                      }
+                      className="grid h-8 w-8 place-items-center rounded-md text-ink-muted transition-colors hover:bg-cream hover:text-brand"
+                    >
+                      {showPassword ? (
+                        <FiEyeOff size={16} />
+                      ) : (
+                        <FiEye size={16} />
+                      )}
+                    </button>
+                  }
+                  {...register('password')}
+                />
+                <ErrorMessage errors={errors} fieldName="password" />
               </div>
+
+              <Link
+                to="/register"
+                className="self-end text-sm font-semibold text-brand underline-offset-4 hover:underline"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
 
               <button
                 disabled={isPending}
                 type="submit"
-                className="btn border-none bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white w-full h-11 rounded-lg text-sm font-bold shadow-lg shadow-purple-900/10 mt-2 tracking-wide uppercase"
+                className="mt-1 flex h-12 items-center justify-center gap-2 rounded-full bg-brand font-bold text-white transition-colors hover:bg-ink disabled:bg-base-300 disabled:text-ink-muted"
               >
                 {isPending ? (
                   <span className="loading loading-dots loading-sm" />
                 ) : (
-                  'Ingresar'
+                  <>
+                    Ingresar
+                    <FiArrowRight size={17} />
+                  </>
                 )}
               </button>
             </form>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }
 

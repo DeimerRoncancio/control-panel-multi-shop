@@ -1,80 +1,153 @@
 import { Link, useLocation } from 'react-router';
-import { FaStore, FaUsers } from 'react-icons/fa';
-import { BiSolidCategory } from 'react-icons/bi';
-import { RiAdminFill, RiBillFill } from "react-icons/ri";
-import { AiFillHome } from 'react-icons/ai';
+import {
+  FiBox,
+  FiChevronRight,
+  FiFileText,
+  FiGrid,
+  FiHome,
+  FiShield,
+  FiUsers,
+  FiX,
+} from 'react-icons/fi';
 import { Content } from '../../interfaces/get-users-request';
+import UserAvatar from '../../ui/UserAvatar';
 
-const NAV_ITEMS = [
-  { path: '/dashboard', label: 'Inicio', icon: AiFillHome },
-  { path: '/products', label: 'Productos', icon: FaStore },
-  { path: '/categories', label: 'Categorías', icon: BiSolidCategory },
-  { path: '/users', label: 'Usuarios', icon: FaUsers },
-  { path: '/admins', label: 'Administradores', icon: RiAdminFill },
-  { path: '/transactions', label: 'Transacciones', icon: RiBillFill },
+const NAV_GROUPS = [
+  {
+    title: 'General',
+    items: [{ path: '/dashboard', label: 'Inicio', icon: FiHome }],
+  },
+  {
+    title: 'Catálogo',
+    items: [
+      { path: '/products', label: 'Productos', icon: FiBox },
+      { path: '/categories', label: 'Categorías', icon: FiGrid },
+    ],
+  },
+  {
+    title: 'Personas',
+    items: [
+      { path: '/users', label: 'Usuarios', icon: FiUsers },
+      { path: '/admins', label: 'Administradores', icon: FiShield },
+    ],
+  },
+  {
+    title: 'Ventas',
+    items: [
+      { path: '/transactions', label: 'Transacciones', icon: FiFileText },
+    ],
+  },
 ];
 
 type Props = {
-  user: Content
-}
+  user: Content;
+  open: boolean;
+  onClose: () => void;
+};
 
-function Aside({ user }: Props) {
+function Aside({ user, open, onClose }: Props) {
   const location = useLocation();
 
   return (
-    <aside className="h-full w-[20%] border-r border-[#343e4f] bg-[#1d232a] text-gray-300 flex flex-col shadow-xl">
-      <nav className="flex-1 py-6 px-3 space-y-2 overflow-y-auto custom-scrollbar">
-        {NAV_ITEMS.map(({ path, label, icon: Icon }) => {
-          const isActive = location.pathname.startsWith(path);
-
-          return (
-            <Link
-              key={path}
-              to={path}
-              className={`
-                relative group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-300
-                ${isActive
-                  ? 'bg-gradient-to-r from-[#3e3c61] to-[#2b2a4a] text-white shadow-lg shadow-purple-900/20 translate-x-1'
-                  : 'hover:bg-[#252538] hover:text-white hover:translate-x-1'
-                }
-              `}
-            >
-              <div className={`
-                p-2 rounded-lg transition-colors duration-300
-                ${isActive 
-                  ? 'bg-purple-600/30 text-purple-300' 
-                  : 'bg-gray-800/40 text-gray-400 group-hover:bg-purple-500/20 group-hover:text-purple-300'
-                }
-              `}>
-                <Icon size={18} />
-              </div>
-
-              <span className={`font-medium tracking-wide ${isActive ? 'font-semibold' : ''}`}>
-                {label}
-              </span>
-
-              {isActive && (
-                <div className="absolute right-4 w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.8)]" />
-              )}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="p-4 border-t border-[#2d2d3b]">
-        <div className="flex items-center gap-3 p-2 rounded-lg bg-[#252538]/50 border border-[#2d2d3b]/50">
-           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white shadow-md">
-             {user?.name?.[0]}{user?.lastnames?.[0]}
-           </div>
-           <div className="flex flex-col">
-              <span className="text-xs font-semibold text-white">
-                {user?.name + ' ' + user?.lastnames?.split(' ')[0]}
-              </span>
-              <span className="text-[10px] text-gray-500">Online</span>
-           </div>
+    <>
+      <div
+        aria-hidden
+        onClick={onClose}
+        className={`fixed inset-0 z-30 bg-ink/50 backdrop-blur-[2px] transition-opacity lg:hidden ${
+          open ? 'visible opacity-100' : 'invisible opacity-0'
+        }`}
+      />
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-line bg-base-100 transition-transform duration-200 lg:static lg:z-auto lg:w-64 lg:translate-x-0 ${
+          open ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <div className="flex h-16 items-center justify-between border-b border-line px-4 lg:hidden">
+          <img
+            src="/svg/logo.svg"
+            alt="Multi Shop"
+            className="-ml-2 h-12 w-auto"
+          />
+          <button
+            type="button"
+            aria-label="Cerrar menú"
+            onClick={onClose}
+            className="grid h-9 w-9 place-items-center rounded-full text-ink-soft transition-colors hover:bg-cream"
+          >
+            <FiX size={20} />
+          </button>
         </div>
-      </div>
-    </aside>
+
+        <nav
+          className="flex-1 overflow-y-auto px-3 py-5"
+          aria-label="Menú del panel"
+        >
+          {NAV_GROUPS.map((group) => (
+            <div key={group.title} className="mb-4">
+              <p className="mb-1.5 px-3 text-[11px] font-extrabold uppercase tracking-[0.12em] text-ink-muted">
+                {group.title}
+              </p>
+              <ul className="flex flex-col gap-0.5">
+                {group.items.map(({ path, label, icon: Icon }) => {
+                  const isActive = location.pathname.startsWith(path);
+
+                  return (
+                    <li key={path}>
+                      <Link
+                        to={path}
+                        onClick={onClose}
+                        aria-current={isActive ? 'page' : undefined}
+                        className={`group relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm transition-colors ${
+                          isActive
+                            ? 'bg-brand-soft font-bold text-brand'
+                            : 'font-semibold text-ink hover:bg-cream hover:text-brand'
+                        }`}
+                      >
+                        {isActive && (
+                          <span
+                            aria-hidden
+                            className="absolute inset-y-2 left-0 w-1 rounded-full bg-brand"
+                          />
+                        )}
+                        <Icon size={18} />
+                        <span className="flex-1">{label}</span>
+                        <FiChevronRight
+                          size={15}
+                          className={`transition-transform group-hover:translate-x-0.5 ${
+                            isActive ? '' : 'text-ink-muted'
+                          }`}
+                        />
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        <div className="border-t border-line p-3">
+          <div className="flex items-center gap-3 rounded-xl bg-cream p-2.5">
+            <UserAvatar
+              name={user?.name}
+              lastnames={user?.lastnames}
+              imageUrl={user?.imageUser?.imageUrl}
+            />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-extrabold text-ink">
+                {user
+                  ? `${user.name} ${user.lastnames?.split(' ')[0] ?? ''}`
+                  : 'Cargando…'}
+              </p>
+              <p className="flex items-center gap-1.5 text-[11px] font-semibold text-success">
+                <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                En línea
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }
 

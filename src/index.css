@@ -1,6 +1,338 @@
 @import 'tailwindcss';
-@plugin "daisyui";
 
-html {
-  scrollbar-gutter: auto !important;
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: 'multishop';
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f5f5f5;
+  --color-base-300: #e5e5e5;
+  --color-base-content: #111111;
+
+  --color-primary: #ff4b14;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #ffd23f;
+  --color-secondary-content: #111111;
+
+  --color-accent: #ff4b14;
+  --color-accent-content: #ffffff;
+
+  --color-neutral: #111111;
+  --color-neutral-content: #ffffff;
+
+  --color-info: #0058a3;
+  --color-info-content: #ffffff;
+  --color-success: #0a8a3c;
+  --color-success-content: #ffffff;
+  --color-warning: #ffd23f;
+  --color-warning-content: #111111;
+  --color-error: #e00751;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 999px;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #111111;
+  --color-ink-soft: #484848;
+  --color-ink-muted: #767676;
+
+  --color-cream: #f5f5f5;
+  --color-line: #dfdfdf;
+  --color-brand: #ff4b14;
+  --color-brand-soft: #fff0e9;
+  --color-brand-dark: #e03a06;
+  --color-brand-tint: #ffc9b3;
+
+  --color-sun: #ffd23f;
+  --color-sun-soft: #fff6cc;
+  --color-mint: #e6f4ec;
+  --color-sky: #eaf2fb;
+  --color-lilac: #f1ecfa;
+  --color-rose: #fde8ef;
+  --color-lilac-strong: #7b4bd6;
+  --color-sky-strong: #2f6fe0;
+
+  --shadow-card-hover: 0 12px 24px -16px rgb(17 17 17 / 0.35);
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: auto !important;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background-color: var(--color-cream);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  select,
+  label[for],
+  input[type='checkbox'] {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn {
+    border-radius: 999px;
+    font-weight: 700;
+    box-shadow: none;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .btn-primary,
+  .btn-success {
+    background-color: var(--color-brand);
+    border-color: var(--color-brand);
+    color: #ffffff;
+  }
+
+  .btn-primary:hover,
+  .btn-success:hover {
+    background-color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+
+  .btn-outline,
+  .btn-ghost.btn-outline {
+    background-color: var(--color-base-100);
+    border-color: var(--color-line);
+    color: var(--color-ink);
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-base-100);
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .btn-error:not(.btn-outline) {
+    background-color: var(--color-error);
+    border-color: var(--color-error);
+    color: #ffffff;
+  }
+
+  .btn-error:not(.btn-outline):hover {
+    background-color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+
+  .btn-error.btn-outline {
+    color: var(--color-error);
+    border-color: color-mix(in oklab, var(--color-error) 40%, transparent);
+  }
+
+  .btn-error.btn-outline:hover {
+    background-color: color-mix(in oklab, var(--color-error) 10%, transparent);
+    border-color: var(--color-error);
+  }
+
+  .btn-ghost:not(.btn-outline):hover {
+    background-color: var(--color-brand-soft);
+    color: var(--color-brand);
+    border-color: transparent;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    border-color: var(--color-line);
+    background-color: var(--color-base-100);
+    color: var(--color-ink);
+    box-shadow: none;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .input:hover,
+  .select:hover,
+  .textarea:hover {
+    border-color: var(--color-ink-muted);
+  }
+
+  .input:focus,
+  .input:focus-within,
+  .select:focus,
+  .select:focus-within,
+  .textarea:focus {
+    border-color: var(--color-brand);
+    outline: none;
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-brand) 15%, transparent);
+  }
+
+  .input::placeholder,
+  .textarea::placeholder,
+  .input input::placeholder {
+    color: var(--color-ink-muted);
+  }
+
+  .checkbox {
+    border-color: var(--color-line);
+    border-radius: 0.375rem;
+  }
+
+  .checkbox:checked {
+    background-color: var(--color-brand);
+    border-color: var(--color-brand);
+    color: #ffffff;
+  }
+
+  .kbd {
+    background-color: var(--color-cream);
+    border-color: var(--color-line);
+    color: var(--color-ink-muted);
+  }
+
+  .badge {
+    border-radius: 999px;
+    font-weight: 700;
+  }
+
+  .badge-primary {
+    background-color: var(--color-brand-soft);
+    border-color: transparent;
+    color: var(--color-brand);
+  }
+
+  .table {
+    color: var(--color-ink);
+  }
+
+  .table thead th {
+    background-color: var(--color-cream);
+    color: var(--color-ink-muted);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .table thead th:first-child {
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+  }
+
+  .table thead th:last-child {
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+  }
+
+  .table tbody tr {
+    border-color: var(--color-line);
+    transition: background-color 0.15s ease;
+  }
+
+  .table tbody tr:hover {
+    background-color: color-mix(in oklab, var(--color-brand-soft) 60%, transparent);
+  }
+
+  .modal-box {
+    border-radius: 1rem;
+    border-top: 4px solid var(--color-brand);
+    background-color: var(--color-base-100);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .modal-box.modal-danger {
+    border-top-color: var(--color-error);
+  }
+
+  .modal-backdrop,
+  .modal::backdrop {
+    background-color: color-mix(in oklab, var(--color-ink) 50%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .card {
+    border-radius: 1rem;
+    background-color: var(--color-base-100);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+
+  .stats {
+    border-radius: 1rem;
+    background-color: var(--color-base-100);
+    border: 1px solid var(--color-line);
+  }
+
+  .stat {
+    border-color: var(--color-line);
+  }
+
+  .stat-title {
+    color: var(--color-ink-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    color: var(--color-ink);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-desc {
+    color: var(--color-ink-muted);
+  }
+
+  .stat-figure {
+    color: var(--color-brand);
+  }
+
+  .loading {
+    color: var(--color-brand);
+  }
+
+  .alert {
+    border-radius: 0.75rem;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

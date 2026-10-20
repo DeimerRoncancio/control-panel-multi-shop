@@ -11,6 +11,7 @@ function Layout() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -29,13 +30,13 @@ function Layout() {
   }, [token, navigate]);
 
   return (
-    <main className="w-full h-screen flex flex-col">
-      <Navbar user={user} />
-      <div className="flex w-full h-full overflow-y-auto">
-        <Aside user={user} />
-        <section className="w-[80%] h-full flex flex-col overflow-auto">
+    <main className="flex h-screen w-full flex-col bg-cream">
+      <Navbar user={user} onOpenMenu={() => setMenuOpen(true)} />
+      <div className="flex min-h-0 w-full flex-1">
+        <Aside user={user} open={menuOpen} onClose={() => setMenuOpen(false)} />
+        <section className="flex min-w-0 flex-1 flex-col overflow-auto">
           {loading ? (
-            <div className="flex items-center justify-center w-full h-full">
+            <div className="flex h-full w-full items-center justify-center">
               <span className="loading loading-spinner loading-lg" />
             </div>
           ) : (
